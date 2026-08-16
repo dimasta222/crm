@@ -482,9 +482,9 @@ def get_average_time_to_close_a_lead(
 		"title": _("Avg. time to close a lead"),
 		"tooltip": _("Average time taken from lead creation to deal closure"),
 		"value": current_avg_lead,
-		"suffix": " days",
+		"suffix": " " + _("days"),
 		"delta": delta_lead,
-		"deltaSuffix": " days",
+		"deltaSuffix": " " + _("days"),
 		"negativeIsBetter": True,
 	}
 
@@ -545,9 +545,9 @@ def get_average_time_to_close_a_deal(
 		"title": _("Avg. time to close a deal"),
 		"tooltip": _("Average time taken from deal creation to deal closure"),
 		"value": current_avg_deal,
-		"suffix": " days",
+		"suffix": " " + _("days"),
 		"delta": delta_deal,
-		"deltaSuffix": " days",
+		"deltaSuffix": " " + _("days"),
 		"negativeIsBetter": True,
 	}
 
@@ -778,9 +778,11 @@ def get_funnel_conversion(from_date: str | None = None, to_date: str | None = No
 	total_leads = query.run(as_dict=True)
 	total_leads_count = total_leads[0].count if total_leads else 0
 
-	result.append({"stage": "Leads", "count": total_leads_count})
+	result.append({"stage": _("Leads"), "count": total_leads_count})
 
 	result += get_deal_status_change_counts(from_date, to_date, deal_conds, deal_filters)
+	for row in result:
+		row["stage"] = _(row.get("stage") or "")
 
 	return {
 		"data": result or [],
@@ -841,6 +843,8 @@ def get_deals_by_stage_axis(
 		query = query.where(CRMDeal.deal_owner == user)
 
 	result = query.run(as_dict=True)
+	for row in result:
+		row["stage"] = _(row.get("stage") or "")
 
 	return {
 		"data": result or [],
@@ -890,13 +894,19 @@ def get_deals_by_stage_donut(
 		query = query.where(CRMDeal.deal_owner == user)
 
 	result = query.run(as_dict=True)
+	category_column = _("Stage")
+	value_column = _("Count")
+	localized_result = [
+		{category_column: _(row.get("stage") or ""), value_column: row.get("count") or 0}
+		for row in result
+	]
 
 	return {
-		"data": result or [],
+		"data": localized_result,
 		"title": _("Deals by stage"),
 		"subtitle": _("Current pipeline distribution"),
-		"categoryColumn": "stage",
-		"valueColumn": "count",
+		"categoryColumn": category_column,
+		"valueColumn": value_column,
 	}
 
 
@@ -979,13 +989,19 @@ def get_leads_by_source(from_date: str | None = None, to_date: str | None = None
 		query = query.where(CRMLead.lead_owner == user)
 
 	result = query.run(as_dict=True)
+	category_column = _("Source")
+	value_column = _("Count")
+	localized_result = [
+		{category_column: _(row.get("source") or ""), value_column: row.get("count") or 0}
+		for row in result
+	]
 
 	return {
-		"data": result or [],
+		"data": localized_result,
 		"title": _("Leads by source"),
 		"subtitle": _("Lead generation channel analysis"),
-		"categoryColumn": "source",
-		"valueColumn": "count",
+		"categoryColumn": category_column,
+		"valueColumn": value_column,
 	}
 
 
@@ -1017,13 +1033,19 @@ def get_deals_by_source(from_date: str | None = None, to_date: str | None = None
 		query = query.where(CRMDeal.deal_owner == user)
 
 	result = query.run(as_dict=True)
+	category_column = _("Source")
+	value_column = _("Count")
+	localized_result = [
+		{category_column: _(row.get("source") or ""), value_column: row.get("count") or 0}
+		for row in result
+	]
 
 	return {
-		"data": result or [],
+		"data": localized_result,
 		"title": _("Deals by source"),
 		"subtitle": _("Deal generation channel analysis"),
-		"categoryColumn": "source",
-		"valueColumn": "count",
+		"categoryColumn": category_column,
+		"valueColumn": value_column,
 	}
 
 

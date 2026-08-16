@@ -178,7 +178,7 @@
   />
   <EmptyState
     v-else-if="tasks.data && !rows.length"
-    name="Tasks"
+    :name="__('Tasks')"
     :icon="Email2Icon"
   />
 </template>

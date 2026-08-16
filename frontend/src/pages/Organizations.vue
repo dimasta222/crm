@@ -49,7 +49,7 @@
   />
   <EmptyState
     v-else-if="organizations.data && !rows.length"
-    name="Organizations"
+    :name="__('Organizations')"
     :icon="OrganizationsIcon"
   />
   <OrganizationModal

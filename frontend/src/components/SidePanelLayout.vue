@@ -110,7 +110,7 @@
                           :options="field.options"
                           :validate="field.validate"
                           :onCreate="field.onCreate"
-                          :label="field.label"
+                          :label="__(field.label)"
                         />
                         <Checkbox
                           v-else-if="field.fieldtype == 'Check'"
@@ -315,7 +315,7 @@
                         />
                         <ButtonControl
                           v-else-if="field.fieldtype === 'Button'"
-                          :label="field.label"
+                          :label="__(field.label)"
                           :icon="field.icon"
                           :theme="getButtonTheme(field.button_color)"
                           :variant="getButtonVariant(field.button_color)"

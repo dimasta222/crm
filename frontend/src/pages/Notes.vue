@@ -88,7 +88,7 @@
     }"
     @loadMore="() => loadMore++"
   />
-  <EmptyState v-else name="Notes" :icon="NoteIcon" />
+  <EmptyState v-else :name="__('Notes')" :icon="NoteIcon" />
 </template>
 
 <script setup>

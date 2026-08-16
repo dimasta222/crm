@@ -41,8 +41,8 @@
     <!-- Empty State -->
     <EmptyState
       v-if="!sources.loading && !sources.data?.length"
-      name="Lead Sources"
-      description="Add and manage your lead sources here."
+      :name="__('Lead Sources')"
+      :description="__('Add and manage your lead sources here.')"
       icon="refresh-cw"
     />
 

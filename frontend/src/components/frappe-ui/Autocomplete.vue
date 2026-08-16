@@ -182,6 +182,10 @@ const props = defineProps({
     type: Number,
     default: 20,
   },
+  translateOptions: {
+    type: Boolean,
+    default: true,
+  },
 })
 const emit = defineEmits(['update:modelValue', 'update:query', 'change'])
 
@@ -222,13 +226,24 @@ const groups = computed(() => {
     .map((group, i) => {
       return {
         key: i,
-        group: group.group,
+        group: props.translateOptions ? __(group.group) : group.group,
         hideLabel: group.hideLabel || false,
-        items: props.filterable ? filterOptions(group.items) : group.items,
+        items: localizeOptions(
+          props.filterable ? filterOptions(group.items) : group.items,
+        ),
       }
     })
     .filter((group) => group.items.length > 0)
 })
+
+function localizeOptions(options) {
+  if (!props.translateOptions) return options
+  return options.map((option) => ({
+    ...option,
+    label: __(option.label ?? option.value ?? ''),
+    description: option.description ? __(option.description) : '',
+  }))
+}
 
 function filterOptions(options) {
   if (!query.value) {

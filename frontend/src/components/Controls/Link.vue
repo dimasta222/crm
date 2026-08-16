@@ -143,7 +143,7 @@ const options = createResource({
       return {
         label: option.label || option.value,
         value: option.value,
-        description: stripHtml(option.description),
+        description: option.description ? __(stripHtml(option.description)) : '',
       }
     })
     if (!props.hideMe && props.doctype == 'User') {

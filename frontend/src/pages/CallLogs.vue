@@ -50,7 +50,7 @@
   />
   <EmptyState
     v-else-if="callLogs.data && !rows.length"
-    name="Call Logs"
+    :name="__('Call Logs')"
     :icon="PhoneIcon"
   />
   <CallLogDetailModal

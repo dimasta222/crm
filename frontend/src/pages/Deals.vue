@@ -231,7 +231,7 @@
   />
   <EmptyState
     v-else-if="deals.data && !rows.length"
-    name="Deals"
+    :name="__('Deals')"
     :icon="DealsIcon"
   />
   <DealModal

@@ -410,7 +410,7 @@ const currentView = computed(() => {
 usePageMeta(() => {
   let label = currentView.value.label
   if (currentView.value.is_standard) {
-    let routeName = route.name
+    let routeName = __(route.name)
     label = `${routeName} - ${label}`
   }
   return {
@@ -778,7 +778,7 @@ const quickFilterOptions = computed(() => {
     .filter((f) => f.label)
     .filter((f) => !existingQuickFilters.includes(f.fieldname))
     .map((field) => ({
-      label: field.label,
+      label: __(field.label),
       value: field.fieldname,
       fieldtype: field.fieldtype,
     }))

@@ -39,6 +39,12 @@ export function processField(rawField, options = {}) {
   // 1. Clone
   let field = { ...rawField }
 
+  // Metadata comes from the server in its canonical language. Translate only
+  // what is displayed; field names and stored option values must stay intact.
+  field.label = translateMetadataText(field.label)
+  field.description = translateMetadataText(field.description)
+  field.placeholder = translateMetadataText(field.placeholder)
+
   // 2. Perm level overrides (security — from server)
   const perm = permOverrides[field.fieldname]
   if (perm) {
@@ -54,13 +60,18 @@ export function processField(rawField, options = {}) {
   // 4. Select options: string → array
   if (field.fieldtype === 'Select' && typeof field.options === 'string') {
     field.options = field.options.split('\n').map((option) => ({
-      label: option,
+      label: __(option),
       value: option,
     }))
 
     if (field.options[0]?.value !== '' && field.reqd !== 1) {
       field.options.unshift({ label: '', value: '' })
     }
+  } else if (field.fieldtype === 'Select' && Array.isArray(field.options)) {
+    field.options = field.options.map((option) => ({
+      ...option,
+      label: __(option.label ?? option.value ?? ''),
+    }))
   }
 
   // 5. Link with options='User' → fieldtype='User'
@@ -69,6 +80,21 @@ export function processField(rawField, options = {}) {
   }
 
   return field
+}
+
+export function translateMetadataText(text) {
+  if (!text || typeof text !== 'string') return text
+
+  const addMatch = text.match(/^Add (.+)\.\.\.$/)
+  if (addMatch) return __('Add {0}...', [__(addMatch[1])])
+
+  const selectMatch = text.match(/^Select (.+)$/)
+  if (selectMatch) return __('Select {0}', [__(selectMatch[1])])
+
+  const enterMatch = text.match(/^Enter (.+)$/)
+  if (enterMatch) return __('Enter {0}', [__(enterMatch[1])])
+
+  return __(text)
 }
 
 /**

@@ -4,7 +4,7 @@
       v-if="column.label && !column.hideLabel"
       class="text-ink-gray-9 max-w-fit text-base"
     >
-      {{ column.label }}
+      {{ __(column.label) }}
     </div>
     <template v-for="field in column.fields" :key="field.fieldname">
       <Field :field="field" :data-name="field.fieldname" />

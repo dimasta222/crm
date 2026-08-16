@@ -40,8 +40,8 @@
     <!-- Empty State -->
     <EmptyState
       v-else-if="!templates.loading && !templates.data?.length"
-      name="Email Templates"
-      description="Add one to get started."
+      :name="__('Email Templates')"
+      :description="__('Add one to get started.')"
       :icon="EmailTemplateIcon"
     />
 

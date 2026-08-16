@@ -9279,3 +9279,263 @@ msgstr "⚠️ Данные для родительского поля не на
 #: frontend/src/data/script.js:191
 msgid "⚠️ No row found for idx: {0} in parent field: {1}"
 msgstr "⚠️ Не найдена строка для idx: {0} в родительском поле: {1}"
+
+#: frontend/src/components/Modals/DoctypeModal.vue
+msgid "Create {0}"
+msgstr "Создать: {0}"
+
+#: frontend/src/components/Modals/DoctypeModal.vue
+msgid "Edit {0}"
+msgstr "Изменить: {0}"
+
+#: frontend/src/utils/fieldTransforms.js
+msgid "Add {0}..."
+msgstr "Добавить: {0}..."
+
+#: frontend/src/components/ConditionsFilter/CFCondition.vue
+msgid "Not Set"
+msgstr "Не задано"
+
+#: frontend/src/components/ConditionsFilter/CFCondition.vue
+msgid "Not Equals"
+msgstr "Не равно"
+
+#: frontend/src/components/Settings/AssignmentRules/AssignmentRuleView.vue
+msgid "Low-Medium"
+msgstr "Ниже среднего"
+
+#: frontend/src/components/Settings/AssignmentRules/AssignmentRuleView.vue
+msgid "Medium-High"
+msgstr "Выше среднего"
+
+#: frontend/src/components/Settings/AssignmentRules/AssigneeRules.vue
+msgid "Auto-rotate"
+msgstr "Автоматически по очереди"
+
+#: frontend/src/components/Settings/AssignmentRules/AssigneeRules.vue
+msgid "Assign by workload"
+msgstr "Назначать по загрузке"
+
+#: frontend/src/components/Settings/AssignmentRules/AssignmentSchedule.vue
+msgid "Days"
+msgstr "Дни"
+
+#: frontend/src/components/Settings/AssignmentRules/AssignmentSchedule.vue
+msgid "Active"
+msgstr "Активно"
+
+#: frappe-ui/src/components/DatePicker/TimePicker.vue
+msgid "Select time"
+msgstr "Выберите время"
+
+#: frappe-ui/src/components/DatePicker/DateTimePicker.vue
+msgid "Now"
+msgstr "Сейчас"
+
+msgid "Select date"
+msgstr "Выберите дату"
+
+msgid "Select date & time"
+msgstr "Выберите дату и время"
+
+#: frappe-ui/frappe/onboarding
+msgid "Getting started"
+msgstr "Начало работы"
+
+#: frappe-ui/frappe/onboarding
+msgid "Continue"
+msgstr "Продолжить"
+
+#: frontend/src/components/Notifications.vue
+msgid "You have no new notifications"
+msgstr "Новых уведомлений нет"
+
+#: standard CRM Industry records
+msgid "Accounting"
+msgstr "Бухгалтерский учёт"
+
+#: standard CRM Industry records
+msgid "Advertising"
+msgstr "Реклама"
+
+#: standard CRM Industry records
+msgid "Aerospace"
+msgstr "Аэрокосмическая отрасль"
+
+#: standard CRM Industry records
+msgid "Agriculture"
+msgstr "Сельское хозяйство"
+
+#: standard CRM Industry records
+msgid "Airline"
+msgstr "Авиаперевозки"
+
+#: standard CRM Industry records
+msgid "Apparel & Accessories"
+msgstr "Одежда и аксессуары"
+
+#: standard CRM Industry records
+msgid "Automotive"
+msgstr "Автомобильная отрасль"
+
+msgid "Access Key for {0}. Required for fetching exchange rates."
+msgstr "Ключ доступа для {0}. Необходим для получения курсов валют."
+
+msgid "Are you sure you want to clear assignment for {0} item(s)?"
+msgstr "Действительно снять назначение с объектов ({0})?"
+
+msgid "Are you sure you want to convert {0} lead(s) to deal(s)?"
+msgstr "Действительно преобразовать лиды ({0}) в сделки?"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "Действительно удалить представление «{0}»?"
+
+msgid "Are you sure you want to delete {0} - {1}?"
+msgstr "Действительно удалить {0} — {1}?"
+
+msgid "Are you sure you want to delete {0} items?"
+msgstr "Действительно удалить объекты ({0})?"
+
+msgid "Are you sure you want to delete {0} linked doc(s)?"
+msgstr "Действительно удалить связанные документы ({0})?"
+
+msgid "Are you sure you want to make this attachment {0}?"
+msgstr "Действительно сделать это вложение {0}?"
+
+msgid "Are you sure you want to unlink {0} linked doc(s)?"
+msgstr "Действительно отсоединить связанные документы ({0})?"
+
+msgid "Beta"
+msgstr "Бета"
+
+msgid "Call Logs"
+msgstr "Журнал звонков"
+
+msgid "Choose how {0} are assigned among the selected assignees."
+msgstr "Выберите способ распределения {0} между выбранными исполнителями."
+
+msgid "Choose which {0} are affected by this assignment rule."
+msgstr "Выберите, к каким {0} применяется это правило назначения."
+
+msgid "Create New Template"
+msgstr "Создать новый шаблон"
+
+msgid "Dismiss"
+msgstr "Закрыть"
+
+msgid "Document"
+msgstr "Документ"
+
+msgid "Edit deal's mandatory fields layout"
+msgstr "Изменить макет обязательных полей сделки"
+
+msgid "Failed to load file-based form controller: {0}"
+msgstr "Не удалось загрузить контроллер формы из файла: {0}"
+
+msgid "File \"{0}\" was skipped because size exceeds {1} MB"
+msgstr "Файл «{0}» пропущен: его размер превышает {1} МБ"
+
+msgid "Lead Form"
+msgstr "Форма лидов"
+
+msgid "Learn more"
+msgstr "Подробнее"
+
+msgid "Manage your lead sources here. Add new sources to start syncing leads automatically."
+msgstr "Здесь можно управлять источниками лидов. Добавьте источник, чтобы начать автоматическую синхронизацию лидов."
+
+msgid "Master"
+msgstr "Основная запись"
+
+msgid "No Assignment Rules Found"
+msgstr "Правила назначения не найдены"
+
+msgid "No SLA Policies Found"
+msgstr "Политики SLA не найдены"
+
+msgid "Open {0}"
+msgstr "Открыть {0}"
+
+msgid "Permissions update"
+msgstr "Обновление разрешений"
+
+msgid "Please enter the {0} Access Key."
+msgstr "Введите ключ доступа для {0}."
+
+msgid "Please provide a reason for marking this {0} as lost"
+msgstr "Укажите причину, по которой {0} отмечается как потерянная запись"
+
+msgid "Random"
+msgstr "Случайно"
+
+msgid "Remove and move columns to {0} section"
+msgstr "Удалить и переместить столбцы в раздел «{0}»"
+
+msgid "Search by keyword"
+msgstr "Поиск по ключевому слову"
+
+msgid "Since you added a new assignee, the {0} has been set to {1}."
+msgstr "После добавления нового исполнителя для {0} установлено значение «{1}»."
+
+msgid "Type an email address to invite"
+msgstr "Введите адрес электронной почты для приглашения"
+
+msgid "Type something..."
+msgstr "Введите текст..."
+
+msgid "User with email {0} already exists"
+msgstr "Пользователь с адресом {0} уже существует"
+
+msgid "User with email {0} already invited"
+msgstr "Пользователь с адресом {0} уже приглашён"
+
+msgid "We are changing how permissions work in Frappe CRM"
+msgstr "Мы меняем принцип работы разрешений в Frappe CRM"
+
+msgid "email already exists"
+msgstr "такой адрес электронной почты уже существует"
+
+msgid "{0} has been granted {1} access"
+msgstr "Для {0} предоставлен доступ уровня «{1}»"
+
+msgid "{0} routing"
+msgstr "Маршрутизация: {0}"
+
+msgid ""
+"<p>Dear {{ lead_name }},</p>\n"
+"\n"
+"<p>This is a reminder for the payment of {{ grand_total }}.</p>\n"
+"\n"
+"<p>Thanks,</p>\n"
+"<p>Frappé</p>"
+msgstr ""
+"<p>Здравствуйте, {{ lead_name }}!</p>\n"
+"\n"
+"<p>Напоминаем об оплате суммы {{ grand_total }}.</p>\n"
+"\n"
+"<p>С уважением,</p>\n"
+"<p>Frappé</p>"
+
+msgid ""
+"Dear {{ lead_name }}, \n"
+"\n"
+"This is a reminder for the payment of {{ grand_total }}. \n"
+"\n"
+"Thanks, \n"
+"Frappé"
+msgstr ""
+"Здравствуйте, {{ lead_name }}! \n"
+"\n"
+"Напоминаем об оплате суммы {{ grand_total }}. \n"
+"\n"
+"С уважением, \n"
+"Frappé"
+
+msgid ""
+"Hi John, \n"
+"\n"
+"Can you please provide more details on this..."
+msgstr ""
+"Здравствуйте, Иван! \n"
+"\n"
+"Пожалуйста, уточните подробности..."

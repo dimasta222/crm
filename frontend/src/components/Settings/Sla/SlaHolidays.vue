@@ -228,13 +228,13 @@ const columns = [
 ]
 
 const workDayOptions = [
-  { label: 'Monday', value: 'Monday' },
-  { label: 'Tuesday', value: 'Tuesday' },
-  { label: 'Wednesday', value: 'Wednesday' },
-  { label: 'Thursday', value: 'Thursday' },
-  { label: 'Friday', value: 'Friday' },
-  { label: 'Saturday', value: 'Saturday' },
-  { label: 'Sunday', value: 'Sunday' },
+  { label: __('Monday'), value: 'Monday' },
+  { label: __('Tuesday'), value: 'Tuesday' },
+  { label: __('Wednesday'), value: 'Wednesday' },
+  { label: __('Thursday'), value: 'Thursday' },
+  { label: __('Friday'), value: 'Friday' },
+  { label: __('Saturday'), value: 'Saturday' },
+  { label: __('Sunday'), value: 'Sunday' },
 ]
 
 const createNewHolidayList = () => {
