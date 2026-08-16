@@ -225,11 +225,11 @@ function getValueControl() {
       type: 'select',
       options: [
         {
-          label: 'Set',
+          label: __('Set'),
           value: 'set',
         },
         {
-          label: 'Not Set',
+          label: __('Not Set'),
           value: 'not set',
         },
       ],
@@ -242,7 +242,7 @@ function getValueControl() {
     return h(FormControl, {
       type: 'select',
       options: _options.map((o) => ({
-        label: o,
+        label: __(o),
         value: o,
       })),
     })
@@ -404,7 +404,10 @@ function getOperators() {
   }
   const op = options.find((o) => o.value == condition[1])
   condition[1] = op?.value || options[0].value
-  return options
+  return options.map((option) => ({
+    ...option,
+    label: __(option.label),
+  }))
 }
 
 function getDefaultValue(field) {

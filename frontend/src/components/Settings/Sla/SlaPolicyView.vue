@@ -73,11 +73,11 @@
               v-model="slaData.apply_on"
               :options="[
                 {
-                  label: 'Lead',
+                  label: __('Lead'),
                   value: 'CRM Lead',
                 },
                 {
-                  label: 'Deal',
+                  label: __('Deal'),
                   value: 'CRM Deal',
                 },
               ]"

@@ -10,7 +10,7 @@
           <Section
             labelClass="px-2 font-semibold"
             headerClass="h-8"
-            :label="section.label"
+            :label="__(section.label)"
             :hideLabel="!section.label"
             :opened="section.opened"
           >
@@ -104,7 +104,7 @@
                           :placeholder="field.placeholder"
                           :options="field.options"
                           :create="field.create"
-                          :label="field.label"
+                          :label="__(field.label)"
                         />
                         <FormControl
                           v-else-if="field.fieldtype == 'Check'"
@@ -419,7 +419,7 @@ import Link from '@/components/Controls/Link.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import SidePanelModal from '@/components/Modals/SidePanelModal.vue'
 import { getMeta } from '@/stores/meta'
-import { parseLinkFilters } from '@/utils/fieldTransforms'
+import { parseLinkFilters, processField } from '@/utils/fieldTransforms'
 import { usersStore } from '@/stores/users'
 import { isMobileView } from '@/composables/settings'
 import {
@@ -482,22 +482,12 @@ const _sections = computed(() => {
 
 function parsedField(field) {
   // Clone to avoid mutating the cached layout data
-  field = { ...field }
+  field = processField(field)
 
   // Merge script property overrides
   const overrides = document.fieldPropertyOverrides?.[field.fieldname]
   if (overrides) {
     Object.assign(field, overrides)
-  }
-
-  if (field.fieldtype == 'Select' && typeof field.options === 'string') {
-    field.options = field.options.split('\n').map((option) => {
-      return { label: option, value: option }
-    })
-
-    if (field.options[0].value !== '' && !field.reqd) {
-      field.options.unshift({ label: '', value: '' })
-    }
   }
 
   if (field.fieldtype === 'Link' && field.options === 'User') {
@@ -525,7 +515,7 @@ function parsedField(field) {
   let _field = {
     ...field,
     filters: parseLinkFilters(field.link_filters),
-    placeholder: field.placeholder || field.label,
+    placeholder: field.placeholder || __(field.label),
     display_via_depends_on: evaluateDependsOnValue(field.depends_on, doc.value),
     mandatory_via_depends_on: evaluateDependsOnValue(
       field.mandatory_depends_on,

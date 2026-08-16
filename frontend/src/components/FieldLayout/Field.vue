@@ -251,7 +251,7 @@
     />
     <ButtonControl
       v-else-if="field.fieldtype === 'Button'"
-      :label="field.label"
+      :label="__(field.label)"
       :icon="field.icon"
       :theme="getButtonTheme(field.button_color)"
       :variant="getButtonVariant(field.button_color)"
@@ -321,7 +321,7 @@ import {
 } from '@/utils'
 import { flt, formatNumber, formatCurrency } from '@/utils/numberFormat.js'
 import { getMeta } from '@/stores/meta'
-import { parseLinkFilters } from '@/utils/fieldTransforms'
+import { parseLinkFilters, processField } from '@/utils/fieldTransforms'
 import { usersStore } from '@/stores/users'
 import { useDocument } from '@/data/document'
 import {
@@ -445,22 +445,12 @@ function getFieldOverrides(fieldname) {
 }
 
 const field = computed(() => {
-  let field = { ...props.field }
+  let field = processField(props.field)
 
   // ── Script property overrides ──
   const overrides = getFieldOverrides(field.fieldname)
   if (overrides) {
     Object.assign(field, overrides)
-  }
-
-  if (field.fieldtype == 'Select' && typeof field.options === 'string') {
-    field.options = field.options.split('\n').map((option) => {
-      return { label: option, value: option }
-    })
-
-    if (field.options[0].value !== '' && !field.reqd) {
-      field.options.unshift({ label: '', value: '' })
-    }
   }
 
   if (field.fieldtype === 'Link' && field.options === 'User') {
@@ -561,10 +551,13 @@ const getPlaceholder = (field) => {
 
 const getOptions = (options) => {
   if (Array.isArray(options)) {
-    return options
+    return options.map((option) => ({
+      ...option,
+      label: __(option.label ?? option.value ?? ''),
+    }))
   } else if (typeof options === 'string') {
     return options.split('\n').map((option) => {
-      return { label: option, value: option }
+      return { label: __(option), value: option }
     })
   } else {
     return []

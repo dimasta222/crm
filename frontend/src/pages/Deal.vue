@@ -325,7 +325,7 @@
     v-model="showDeleteLinkedDocModal"
     :doctype="'CRM Deal'"
     :docname="dealId"
-    name="Deals"
+    :name="__('Deals')"
   />
   <LostReasonModal
     v-if="showLostReasonModal"

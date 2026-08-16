@@ -39,7 +39,7 @@
                 ? 'text-right'
                 : ''
             "
-            :title="field.label"
+            :title="__(field.label)"
           >
             {{ __(field.label) }}
             <span
@@ -324,7 +324,7 @@
                       >
                         <ButtonControl
                           class="button-control"
-                          :label="field.label"
+                          :label="__(field.label)"
                           :icon="field.icon"
                           :theme="getButtonTheme(field.button_color)"
                           :variant="getButtonVariant(field.button_color)"
@@ -494,7 +494,7 @@ import {
 import { flt } from '@/utils/numberFormat.js'
 import { usersStore } from '@/stores/users'
 import { getMeta } from '@/stores/meta'
-import { parseLinkFilters } from '@/utils/fieldTransforms'
+import { parseLinkFilters, processField } from '@/utils/fieldTransforms'
 import { createDocument } from '@/composables/document'
 import {
   FormControl,
@@ -617,6 +617,8 @@ function getFieldObj(field) {
   if (scriptOverrides) {
     Object.assign(field, scriptOverrides)
   }
+
+  field = processField(field)
 
   if (field.fieldtype === 'Link' && field.options !== 'User') {
     if (!field.create) {

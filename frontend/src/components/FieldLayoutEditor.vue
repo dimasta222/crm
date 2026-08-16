@@ -196,7 +196,7 @@
                           <DragVerticalIcon
                             class="field-drag-handle h-3.5 cursor-grab"
                           />
-                          <div class="truncate">{{ field.label }}</div>
+                          <div class="truncate">{{ __(field.label) }}</div>
                         </div>
                         <Button
                           variant="ghost"
@@ -230,7 +230,7 @@
                     </template>
                     <template #item-label="{ option }">
                       <div class="flex flex-col gap-1 text-ink-gray-9">
-                        <div>{{ option.label }}</div>
+                        <div>{{ __(option.label) }}</div>
                         <div class="text-ink-gray-4 text-sm">
                           {{ `${option.fieldname} - ${option.fieldtype}` }}
                         </div>
@@ -343,7 +343,7 @@ const fields = computed(() => {
     })
     .map((field) => {
       return {
-        label: field.label,
+        label: __(field.label),
         value: field.fieldname,
         fieldname: field.fieldname,
         fieldtype: field.fieldtype,

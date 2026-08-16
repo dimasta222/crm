@@ -173,7 +173,7 @@
     v-model="showDeleteLinkedDocModal"
     :doctype="'CRM Organization'"
     :docname="props.organizationId"
-    name="Organizations"
+    :name="__('Organizations')"
   />
 </template>
 

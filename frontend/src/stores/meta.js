@@ -2,6 +2,7 @@ import { createResource } from 'frappe-ui'
 import { noValueFieldTypes, standardFieldsMeta } from '@/utils/model.js'
 import { formatCurrency, formatNumber } from '@/utils/numberFormat.js'
 import { computed, reactive } from 'vue'
+import { processField } from '@/utils/fieldTransforms'
 
 const doctypesMeta = reactive({})
 const userSettings = reactive({})
@@ -99,30 +100,10 @@ export function getMeta(doctype) {
             (!restrictedFieldTypes.length ||
               !restrictedFieldTypes.includes(f.fieldtype)),
         )
-        .map((f) => {
-          if (f.fieldtype === 'Select' && typeof f.options === 'string') {
-            f.options = f.options.split('\n').map((option) => {
-              return {
-                label: option,
-                value: option,
-              }
-            })
-
-            if (f.options[0]?.value !== '' && f.reqd !== 1) {
-              f.options.unshift({
-                label: '',
-                value: '',
-              })
-            }
-          }
-          if (f.fieldtype === 'Link' && f.options == 'User') {
-            f.fieldtype = 'User'
-          }
-          return f
-        }) || []
+        .map((f) => processField(f)) || []
 
     if (withStandardFields) {
-      fieldsMeta = fieldsMeta.concat(standardFieldsMeta)
+      fieldsMeta = fieldsMeta.concat(standardFieldsMeta.map(processField))
     }
 
     return fieldsMeta || []

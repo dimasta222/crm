@@ -49,7 +49,7 @@
     <!-- Empty State -->
     <EmptyState
       v-if="!users.loading && users.data?.crmUsers?.length == 1"
-      name="Users"
+      :name="__('Users')"
       :description="__('Add one to get started.')"
       icon="user"
     />

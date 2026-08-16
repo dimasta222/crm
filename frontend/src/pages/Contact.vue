@@ -151,7 +151,7 @@
           :columns="columns"
           :options="{ selectable: false, showTooltip: false }"
         />
-        <EmptyState v-if="!rows.length" :icon="tab.icon" name="Deals" />
+        <EmptyState v-if="!rows.length" :icon="tab.icon" :name="__('Deals')" />
       </template>
     </Tabs>
   </div>
@@ -165,7 +165,7 @@
     v-model="showDeleteLinkedDocModal"
     :doctype="'Contact'"
     :docname="contact.doc.name"
-    name="Contacts"
+    :name="__('Contacts')"
   />
 </template>
 

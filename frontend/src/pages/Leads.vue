@@ -257,7 +257,7 @@
   />
   <EmptyState
     v-else-if="leads.data && !rows.length"
-    name="Leads"
+    :name="__('Leads')"
     :icon="LeadsIcon"
   />
   <LeadModal

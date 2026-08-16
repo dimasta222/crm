@@ -100,7 +100,7 @@ let slaSection = computed(() => {
         color: color,
       },
       {
-        label: 'Status',
+        label: __('Status'),
         value: data.value.communication_status,
         type: 'Select',
         options: communicationStatuses.data?.map((status) => ({

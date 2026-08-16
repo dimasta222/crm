@@ -13,6 +13,7 @@
       :disabled="attrs.disabled"
       :placement="attrs.placement"
       :filterable="false"
+      :translateOptions="false"
     >
       <template #target="{ open, togglePopover }">
         <slot name="target" v-bind="{ open, togglePopover }" />
@@ -73,6 +74,13 @@ import { watchDebounced } from '@vueuse/core'
 import { createResource } from 'frappe-ui'
 import { useAttrs, computed, ref } from 'vue'
 
+const translatedReferenceDoctypes = new Set([
+  'CRM Industry',
+  'CRM Territory',
+  'Salutation',
+  'Gender',
+])
+
 const props = defineProps({
   doctype: { type: String, required: true },
   filters: { type: [Array, Object, String], default: () => [] },
@@ -90,7 +98,11 @@ const value = computed({
   get: () => {
     let v = valuePropPassed.value ? attrs.value : props.modelValue
 
-    if (isTranslatable(props.doctype)) return __(v)
+    if (
+      isTranslatable(props.doctype) ||
+      translatedReferenceDoctypes.has(props.doctype)
+    )
+      return __(v)
     return v
   },
   set: (val) => {
@@ -141,9 +153,13 @@ const options = createResource({
   transform: (data) => {
     let allData = data.map((option) => {
       return {
-        label: option.label || option.value,
+        label:
+          isTranslatable(props.doctype) ||
+          translatedReferenceDoctypes.has(props.doctype)
+            ? __(option.label || option.value)
+            : option.label || option.value,
         value: option.value,
-        description: option.description,
+        description: option.description ? __(option.description) : '',
       }
     })
     if (!props.hideMe && props.doctype == 'User') {

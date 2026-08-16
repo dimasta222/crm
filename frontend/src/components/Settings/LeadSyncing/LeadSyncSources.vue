@@ -7,7 +7,7 @@
           class="flex gap-2 text-xl font-semibold leading-none h-5 items-center"
         >
           {{ __('Lead Sources') }}
-          <Badge theme="orange" size="sm">Beta</Badge>
+          <Badge theme="orange" size="sm">{{ __('Beta') }}</Badge>
         </h2>
         <p class="text-p-base text-ink-gray-6">
           {{
@@ -43,8 +43,8 @@
     <!-- Empty State -->
     <EmptyState
       v-if="!sources.loading && !sources.data?.length"
-      name="Lead Sources"
-      description="Manage your lead sources here. Add new sources to start syncing leads automatically."
+      :name="__('Lead Sources')"
+      :description="__('Manage your lead sources here. Add new sources to start syncing leads automatically.')"
       icon="refresh-cw"
     />
 
