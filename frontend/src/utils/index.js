@@ -892,8 +892,17 @@ export function clearCache() {
 }
 
 export function isTranslatable(doctype) {
+  const explicitlyTranslatableDoctypes = new Set([
+    'CRM Lead Source',
+    'CRM Lead Status',
+    'CRM Deal Status',
+    'CRM Communication Status',
+  ])
   let translatedDoctypes = window.translated_doctypes || []
-  return translatedDoctypes.includes(doctype)
+  return (
+    explicitlyTranslatableDoctypes.has(doctype) ||
+    translatedDoctypes.includes(doctype)
+  )
 }
 
 export function sanitizeHTML(html = '', options = {}) {

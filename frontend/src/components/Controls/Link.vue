@@ -73,6 +73,17 @@ import { watchDebounced } from '@vueuse/core'
 import { createResource } from 'frappe-ui'
 import { useAttrs, computed, ref } from 'vue'
 
+const translatedReferenceDoctypes = new Set([
+  'CRM Industry',
+  'CRM Territory',
+  'CRM Lead Source',
+  'CRM Lead Status',
+  'CRM Deal Status',
+  'CRM Communication Status',
+  'Salutation',
+  'Gender',
+])
+
 const props = defineProps({
   doctype: { type: String, required: true },
   filters: { type: [Array, Object, String], default: () => [] },

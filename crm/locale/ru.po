@@ -899,7 +899,7 @@ msgstr "Прикрепить файл…"
 #: frontend/src/pages/Deal.vue:600 frontend/src/pages/Lead.vue:452
 #: frontend/src/pages/MobileDeal.vue:474 frontend/src/pages/MobileLead.vue:319
 msgid "Attachments"
-msgstr "Приложения"
+msgstr "Вложения"
 
 #: frontend/src/components/Modals/EventModal.vue:120
 msgid "Attendees"
@@ -2934,7 +2934,7 @@ msgstr "Редактирование строки {0}"
 #: frontend/src/pages/Organization.vue:508
 #: frontend/src/pages/Organization.vue:536
 msgid "Email"
-msgstr "Email"
+msgstr "Электронная почта"
 
 #: frontend/src/components/Settings/Profile/UserEmailSettings.vue:67
 msgid "Email Account"
@@ -4799,7 +4799,7 @@ msgstr "Логотип"
 #: crm/fcrm/doctype/crm_deal_status/crm_deal_status.json
 #: crm/fcrm/doctype/crm_lead_status/crm_lead_status.json
 msgid "Lost"
-msgstr "Поражений"
+msgstr "Проиграно"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:98
 msgid "Lost Deal Reasons"
@@ -9539,3 +9539,125 @@ msgstr ""
 "Здравствуйте, Иван! \n"
 "\n"
 "Пожалуйста, уточните подробности..."
+
+# CRM workflow statuses and sources
+msgid "Contacted"
+msgstr "Связались"
+
+msgid "Nurture"
+msgstr "Прогрев"
+
+msgid "Qualified"
+msgstr "Квалифицирован"
+
+msgid "Unqualified"
+msgstr "Неквалифицирован"
+
+msgid "Junk"
+msgstr "Нецелевой"
+
+msgid "Qualification"
+msgstr "Квалификация"
+
+msgid "Demo/Making"
+msgstr "Демонстрация / подготовка"
+
+msgid "Proposal/Quotation"
+msgstr "Предложение / расчёт"
+
+msgid "Negotiation"
+msgstr "Согласование"
+
+msgid "Ready to Close"
+msgstr "Готово к закрытию"
+
+msgid "Advertisement"
+msgstr "Реклама"
+
+msgid "Campaign"
+msgstr "Рекламная кампания"
+
+msgid "Cold Calling"
+msgstr "Холодный звонок"
+
+msgid "Customer's Vendor"
+msgstr "Поставщик клиента"
+
+msgid "Exhibition"
+msgstr "Выставка"
+
+msgid "Existing Customer"
+msgstr "Постоянный клиент"
+
+msgid "Partner"
+msgstr "Партнёр"
+
+msgid "Public Relations"
+msgstr "Связи с общественностью"
+
+msgid "Referral"
+msgstr "Рекомендация"
+
+msgid "Sales Executive"
+msgstr "Менеджер по продажам"
+
+msgid "Supplier Reference"
+msgstr "Рекомендация поставщика"
+
+msgid "Walk In"
+msgstr "Самостоятельное обращение"
+
+# Activity tabs: empty states
+msgid "No Activities Found"
+msgstr "Активность не найдена"
+
+msgid "No Emails Found"
+msgstr "Писем нет"
+
+msgid "No Comments Found"
+msgstr "Комментариев нет"
+
+msgid "No Data Fields Added Yet"
+msgstr "Поля данных пока не добавлены"
+
+msgid "No Call History"
+msgstr "История звонков пуста"
+
+msgid "No Notes Found"
+msgstr "Заметок нет"
+
+msgid "No Tasks Found"
+msgstr "Задач нет"
+
+msgid "No Attachments Found"
+msgstr "Вложений нет"
+
+msgid "No WhatsApp Messages Found"
+msgstr "Сообщений WhatsApp нет"
+
+msgid "There are no activities to display here. Go ahead and make some changes."
+msgstr "Здесь пока нет активности. Добавьте первое действие."
+
+msgid "No emails found in your inbox. New messages will appear here soon."
+msgstr "Писем пока нет. Новые сообщения появятся здесь."
+
+msgid "Be the first to add one."
+msgstr "Добавьте первый комментарий."
+
+msgid "No data fields have been added yet."
+msgstr "Поля данных пока не добавлены."
+
+msgid "No recent calls to display. Log a call or call someone now!"
+msgstr "Недавних звонков нет. Запишите звонок или позвоните клиенту."
+
+msgid "Nothing here for now. Add a note to keep track of things."
+msgstr "Заметок пока нет. Добавьте заметку, чтобы сохранить важную информацию."
+
+msgid "Nothing to do at the moment. Start organizing by adding one here."
+msgstr "Задач пока нет. Добавьте первую задачу."
+
+msgid "No files have been attached yet. Upload files to see them here."
+msgstr "Вложений пока нет. Загрузите файл, и он появится здесь."
+
+msgid "Start a conversation now!"
+msgstr "Начните переписку."
