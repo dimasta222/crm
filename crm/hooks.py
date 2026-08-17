@@ -310,14 +310,14 @@ after_migrate = [
 standard_dropdown_items = [
 	{
 		"name1": "app_selector",
-		"label": "Apps",
+		"label": "Приложения",
 		"type": "Route",
 		"route": "#",
 		"is_standard": 1,
 	},
 	{
 		"name1": "settings",
-		"label": "Settings",
+		"label": "Настройки",
 		"type": "Route",
 		"icon": "settings",
 		"route": "#",
@@ -325,14 +325,14 @@ standard_dropdown_items = [
 	},
 	{
 		"name1": "login_to_fc",
-		"label": "Login to Frappe Cloud",
+		"label": "Войти во Frappe Cloud",
 		"type": "Route",
 		"route": "#",
 		"is_standard": 1,
 	},
 	{
 		"name1": "about",
-		"label": "About",
+		"label": "О системе",
 		"type": "Route",
 		"icon": "info",
 		"route": "#",
@@ -346,7 +346,7 @@ standard_dropdown_items = [
 	},
 	{
 		"name1": "logout",
-		"label": "Log out",
+		"label": "Выйти",
 		"type": "Route",
 		"icon": "log-out",
 		"route": "#",
