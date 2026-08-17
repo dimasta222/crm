@@ -50,7 +50,7 @@
                   </div>
                 </template>
               </Popover>
-              <div class="text-ink-gray-9">{{ column.column.name }}</div>
+              <div class="text-ink-gray-9">{{ __(column.column.name) }}</div>
             </div>
             <div class="flex">
               <Dropdown :options="actions(column)">
@@ -218,7 +218,7 @@ const deletedColumns = computed(() => {
   return _columns
     ?.filter((col) => col['delete'])
     .map((col) => {
-      return { label: col.name, value: col.name }
+      return { label: __(col.name), value: col.name }
     })
 })
 

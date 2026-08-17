@@ -717,7 +717,7 @@ const emptyText = computed(() => {
   } else if (title.value == 'WhatsApp') {
     text = 'No WhatsApp Messages Found'
   }
-  return text
+  return __(text)
 })
 
 const emptyTextDescription = computed(() => {
@@ -743,7 +743,7 @@ const emptyTextDescription = computed(() => {
   } else if (title.value == 'WhatsApp') {
     description = 'Start a conversation now!'
   }
-  return description
+  return __(description)
 })
 
 const emptyTextIcon = computed(() => {

@@ -77,6 +77,10 @@ import { useAttrs, computed, ref } from 'vue'
 const translatedReferenceDoctypes = new Set([
   'CRM Industry',
   'CRM Territory',
+  'CRM Lead Source',
+  'CRM Lead Status',
+  'CRM Deal Status',
+  'CRM Communication Status',
   'Salutation',
   'Gender',
 ])
