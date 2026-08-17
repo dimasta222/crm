@@ -49,7 +49,7 @@ export function formatDuration(totalSeconds, longForm = false) {
   }
   const s = parseInt(totalSeconds, 10)
   if (isNaN(s)) return ''
-  if (s === 0) return longForm ? '0 seconds' : '0s'
+  if (s === 0) return longForm ? __('0 seconds') : '0s'
 
   const h = Math.floor(s / 3600)
   const m = Math.floor((s % 3600) / 60)
@@ -57,9 +57,9 @@ export function formatDuration(totalSeconds, longForm = false) {
 
   if (longForm) {
     const parts = []
-    if (h) parts.push(h === 1 ? '1 hour' : `${h} hours`)
-    if (m) parts.push(m === 1 ? '1 minute' : `${m} minutes`)
-    if (sec) parts.push(sec === 1 ? '1 second' : `${sec} seconds`)
+    if (h) parts.push(h === 1 ? __('1 hour') : __('{0} hours', [h]))
+    if (m) parts.push(m === 1 ? __('1 minute') : __('{0} minutes', [m]))
+    if (sec) parts.push(sec === 1 ? __('1 second') : __('{0} seconds', [sec]))
     return parts.join(' ')
   }
 

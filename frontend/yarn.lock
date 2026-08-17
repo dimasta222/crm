@@ -3261,7 +3261,7 @@ fraction.js@^5.3.4:
 
 "frappe-ui@github:dimasta222/frappe-ui#future-studio-ru":
   version "0.1.261"
-  resolved "https://codeload.github.com/dimasta222/frappe-ui/tar.gz/3109cf2c05a0686817c6028a8000c4938bf1ae8c"
+  resolved "https://codeload.github.com/dimasta222/frappe-ui/tar.gz/eea38fc407edac5bee422b8d552cbce56bdcc1e0"
   dependencies:
     "@floating-ui/vue" "^1.1.6"
     "@headlessui/vue" "^1.7.14"
