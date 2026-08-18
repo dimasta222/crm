@@ -18,6 +18,13 @@
         <div class="text-base text-ink-gray-8 mb-2">
           {{ __('Fields Order') }}
         </div>
+        <div
+          class="grid grid-cols-[1fr_5rem_2rem] gap-2 px-1 pb-1 text-sm text-ink-gray-5"
+        >
+          <div>{{ __('Field') }}</div>
+          <div class="text-center">{{ __('Column Width') }}</div>
+          <div></div>
+        </div>
         <Draggable
           v-if="oldFields?.length"
           :list="fields"
@@ -38,7 +45,10 @@
                   v-model="field.columns"
                   variant="outline"
                   type="number"
+                  min="1"
+                  max="12"
                   class="w-20"
+                  :title="__('Higher values make the column wider.')"
                 />
                 <Button
                   variant="ghost"
@@ -181,7 +191,7 @@ function update() {
   let updateFields = fields.value.map((field) => {
     return {
       fieldname: field.fieldname,
-      columns: field.columns,
+      columns: Math.min(12, Math.max(1, Number(field.columns) || 2)),
     }
   })
 

@@ -81,7 +81,8 @@ const dialogOptions = computed(() => {
     doctype = doctype.replace(/^(CRM |FCRM )/, '')
   }
 
-  let title = __('New {0}', [doctype])
+  let title =
+    doctype === 'Product' ? __('New Product') : __('New {0}', [__(doctype)])
   let size = 'xl'
   let actions = [
     {
@@ -131,6 +132,25 @@ watch(
 async function create() {
   loading.value = true
   error.value = null
+
+  const requiredFields =
+    tabs.data
+      ?.flatMap((tab) => tab.sections || [])
+      .flatMap((section) => section.columns || [])
+      .flatMap((column) => column.fields || [])
+      .filter((field) => field.reqd) || []
+  const missingFields = requiredFields.filter((field) => {
+    const value = _data.doc[field.fieldname]
+    return value === null || value === undefined || value === ''
+  })
+
+  if (missingFields.length) {
+    error.value = __('Mandatory fields required: {0}', [
+      missingFields.map((field) => __(field.label)).join(', '),
+    ])
+    loading.value = false
+    return
+  }
 
   await triggerOnBeforeCreate?.()
 
