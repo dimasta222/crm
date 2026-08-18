@@ -150,12 +150,13 @@
                   "
                   class="text-xs text-ink-gray-4 bg-surface-gray-3 rounded px-1.5 py-0.5 leading-none"
                 >
-                  {{ section.columns.reduce((n, c) => n + c.fields.length, 0) }}
                   {{
-                    section.columns.reduce((n, c) => n + c.fields.length, 0) ===
-                    1
-                      ? __('field')
-                      : __('fields')
+                    formatFieldCount(
+                      section.columns.reduce(
+                        (n, c) => n + c.fields.length,
+                        0,
+                      ),
+                    )
                   }}
                 </span>
                 <Dropdown :options="getSectionOptions(i, section, tab)">
@@ -350,6 +351,31 @@ const fields = computed(() => {
       }
     })
 })
+
+function formatFieldCount(count) {
+  const language = (
+    document.documentElement.lang ||
+    navigator.language ||
+    ''
+  ).toLowerCase()
+  const isRussian =
+    language.startsWith('ru') ||
+    /[А-Яа-яЁё]/.test(__('Create'))
+
+  if (isRussian) {
+    const mod10 = count % 10
+    const mod100 = count % 100
+    const label =
+      mod10 === 1 && mod100 !== 11
+        ? 'поле'
+        : mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)
+          ? 'поля'
+          : 'полей'
+    return `${count} ${label}`
+  }
+
+  return `${count} ${count === 1 ? __('field') : __('fields')}`
+}
 
 function addTab() {
   if (tabs.value.length == 1 && !tabs.value[0].label) {
