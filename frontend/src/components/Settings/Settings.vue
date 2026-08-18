@@ -65,6 +65,7 @@ import DefaultsSettings from '@/components/Settings/DefaultsSettings.vue'
 import BrandSettings from '@/components/Settings/BrandSettings.vue'
 import HomeActions from '@/components/Settings/HomeActions.vue'
 import GeneralSettings from '@/components/Settings/GeneralSettings.vue'
+import TrackingLinks from '@/components/Settings/TrackingLinks.vue'
 import DashboardSettings from '@/components/Settings/DashboardSettings.vue'
 import EmailTemplatePage from '@/components/Settings/EmailTemplate/EmailTemplatePage.vue'
 import TelephonyPage from '@/components/Settings/Telephony/TelephonyPage.vue'
@@ -199,6 +200,12 @@ const tabs = computed(() => {
     {
       label: __('Integrations', null, 'FCRM'),
       items: [
+        {
+          label: __('Tracking Links'),
+          icon: 'link',
+          component: markRaw(TrackingLinks),
+          condition: () => isManager(),
+        },
         {
           label: __('Telephony'),
           icon: PhoneIcon,

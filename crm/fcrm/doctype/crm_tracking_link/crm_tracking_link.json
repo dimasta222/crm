@@ -1,0 +1,145 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "field:tracking_code",
+ "creation": "2026-08-18 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "tracking_code",
+  "destination_url",
+  "active",
+  "column_break_attribution",
+  "manager",
+  "source",
+  "channel",
+  "campaign_name",
+  "telegram_bot_username",
+  "section_break_stats",
+  "click_count",
+  "last_clicked_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tracking_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Tracking Code",
+   "unique": 1
+  },
+  {
+   "fieldname": "destination_url",
+   "fieldtype": "Data",
+   "label": "Destination URL",
+   "options": "URL",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Active"
+  },
+  {
+   "fieldname": "column_break_attribution",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "manager",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Attracted By",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "source",
+   "fieldtype": "Link",
+   "label": "Source",
+   "options": "CRM Lead Source"
+  },
+  {
+   "fieldname": "channel",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Channel",
+   "options": "Website\nYandex Maps\nTelegram\nAvito\nMAX\nQR Code\nOther",
+   "reqd": 1
+  },
+  {
+   "fieldname": "campaign_name",
+   "fieldtype": "Data",
+   "label": "Campaign"
+  },
+  {
+   "description": "Optional. When set, Telegram links are generated with a start parameter containing the tracking code.",
+   "fieldname": "telegram_bot_username",
+   "fieldtype": "Data",
+   "label": "Telegram Bot Username"
+  },
+  {
+   "fieldname": "section_break_stats",
+   "fieldtype": "Section Break",
+   "label": "Statistics"
+  },
+  {
+   "default": "0",
+   "fieldname": "click_count",
+   "fieldtype": "Int",
+   "label": "Click Count",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_clicked_at",
+   "fieldtype": "Datetime",
+   "label": "Last Clicked At",
+   "read_only": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-08-18 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "FCRM",
+ "name": "CRM Tracking Link",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Sales User"
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "write": 1
+  }
+ ],
+ "search_fields": "title,tracking_code,campaign_name,manager",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "title",
+ "track_changes": 1
+}

@@ -1,0 +1,136 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "hash",
+ "creation": "2026-08-18 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "channel",
+  "account_id",
+  "external_user_id",
+  "external_chat_id",
+  "username",
+  "identity_key",
+  "column_break_links",
+  "lead",
+  "contact",
+  "deal",
+  "is_primary",
+  "last_message_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "channel",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Channel",
+   "options": "Telegram\nAvito\nMAX\nEmail\nPhone\nWebsite",
+   "reqd": 1
+  },
+  {
+   "fieldname": "account_id",
+   "fieldtype": "Data",
+   "label": "Account ID"
+  },
+  {
+   "fieldname": "external_user_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "External User ID",
+   "reqd": 1
+  },
+  {
+   "fieldname": "external_chat_id",
+   "fieldtype": "Data",
+   "label": "External Chat ID"
+  },
+  {
+   "fieldname": "username",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Username"
+  },
+  {
+   "fieldname": "identity_key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Identity Key",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_links",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "lead",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Lead",
+   "options": "CRM Lead"
+  },
+  {
+   "fieldname": "contact",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Contact",
+   "options": "Contact"
+  },
+  {
+   "fieldname": "deal",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Deal",
+   "options": "CRM Deal"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_primary",
+   "fieldtype": "Check",
+   "label": "Primary Identity"
+  },
+  {
+   "fieldname": "last_message_at",
+   "fieldtype": "Datetime",
+   "label": "Last Message At"
+  }
+ ],
+ "links": [],
+ "modified": "2026-08-18 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "FCRM",
+ "name": "CRM External Identity",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Sales User",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "write": 1
+  }
+ ],
+ "search_fields": "external_user_id,external_chat_id,username,lead,contact",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

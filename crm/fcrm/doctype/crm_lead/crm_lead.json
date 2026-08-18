@@ -44,6 +44,22 @@
   "total",
   "column_break_uisv",
   "net_total",
+  "attribution_tab",
+  "attracted_by",
+  "first_touch_source",
+  "first_touch_channel",
+  "campaign_name",
+  "tracking_code",
+  "column_break_attribution",
+  "first_touch_at",
+  "landing_url",
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+  "yclid",
+  "yandex_client_id",
   "sla_tab",
   "sla",
   "sla_creation",
@@ -343,6 +359,90 @@
    "label": "Net Total",
    "options": "currency",
    "read_only": 1
+  },
+  {
+   "fieldname": "attribution_tab",
+   "fieldtype": "Tab Break",
+   "label": "Attribution"
+  },
+  {
+   "fieldname": "attracted_by",
+   "fieldtype": "Link",
+   "label": "Attracted By",
+   "options": "User"
+  },
+  {
+   "fieldname": "first_touch_source",
+   "fieldtype": "Link",
+   "label": "First Touch Source",
+   "options": "CRM Lead Source"
+  },
+  {
+   "fieldname": "first_touch_channel",
+   "fieldtype": "Select",
+   "label": "First Touch Channel",
+   "options": "\nWebsite\nYandex Maps\nTelegram\nAvito\nMAX\nPhone\nEmail\nWalk-in\nOther"
+  },
+  {
+   "fieldname": "campaign_name",
+   "fieldtype": "Data",
+   "label": "Campaign"
+  },
+  {
+   "fieldname": "tracking_code",
+   "fieldtype": "Data",
+   "label": "Tracking Code",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_attribution",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "first_touch_at",
+   "fieldtype": "Datetime",
+   "label": "First Touch At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "landing_url",
+   "fieldtype": "Small Text",
+   "label": "Landing URL"
+  },
+  {
+   "fieldname": "utm_source",
+   "fieldtype": "Data",
+   "label": "UTM Source"
+  },
+  {
+   "fieldname": "utm_medium",
+   "fieldtype": "Data",
+   "label": "UTM Medium"
+  },
+  {
+   "fieldname": "utm_campaign",
+   "fieldtype": "Data",
+   "label": "UTM Campaign"
+  },
+  {
+   "fieldname": "utm_content",
+   "fieldtype": "Data",
+   "label": "UTM Content"
+  },
+  {
+   "fieldname": "utm_term",
+   "fieldtype": "Data",
+   "label": "UTM Term"
+  },
+  {
+   "fieldname": "yclid",
+   "fieldtype": "Data",
+   "label": "Yandex Click ID"
+  },
+  {
+   "fieldname": "yandex_client_id",
+   "fieldtype": "Data",
+   "label": "Yandex Client ID"
   },
   {
    "fieldname": "syncing_tab",

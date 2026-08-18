@@ -1,0 +1,112 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-08-18 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "item_reference",
+  "service_type",
+  "combined_methods",
+  "placement",
+  "section_break_dimensions",
+  "width_cm",
+  "height_cm",
+  "quantity",
+  "column_break_artwork",
+  "artwork",
+  "artwork_status",
+  "production_notes"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "fieldname": "item_reference",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Item Reference",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.service_type == \"Combined\"",
+   "description": "Example: DTF Printing + Embroidery",
+   "fieldname": "combined_methods",
+   "fieldtype": "Small Text",
+   "label": "Combined Production Methods",
+   "mandatory_depends_on": "eval:doc.service_type == \"Combined\""
+  },
+  {
+   "columns": 2,
+   "fieldname": "service_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Production Method",
+   "options": "DTF Printing\nScreen Printing\nEmbroidery\nSublimation\nHeat Transfer Printing\nCombined",
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "placement",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Application Placement",
+   "options": "Chest\nBack Placement\nLeft Sleeve\nRight Sleeve\nInside Label\nLeg\nCustom",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_dimensions",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "width_cm",
+   "fieldtype": "Float",
+   "label": "Width (cm)"
+  },
+  {
+   "fieldname": "height_cm",
+   "fieldtype": "Float",
+   "label": "Height (cm)"
+  },
+  {
+   "default": "1",
+   "fieldname": "quantity",
+   "fieldtype": "Float",
+   "label": "Quantity"
+  },
+  {
+   "fieldname": "column_break_artwork",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "artwork",
+   "fieldtype": "Attach",
+   "label": "Artwork File"
+  },
+  {
+   "default": "Not Received",
+   "fieldname": "artwork_status",
+   "fieldtype": "Select",
+   "label": "Artwork Status",
+   "options": "Not Received\nReceived\nIn Preparation\nPending Approval\nApproved\nRevision Required"
+  },
+  {
+   "fieldname": "production_notes",
+   "fieldtype": "Small Text",
+   "label": "Production Notes"
+  }
+ ],
+ "grid_page_length": 50,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-08-18 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "FCRM",
+ "name": "CRM Deal Application",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -55,6 +55,38 @@
   "total",
   "column_break_udbq",
   "net_total",
+  "production_tab",
+  "production_deadline",
+  "production_manager",
+  "column_break_production",
+  "production_notes",
+  "applications",
+  "payment_tab",
+  "order_total",
+  "paid_amount",
+  "balance_amount",
+  "column_break_payment",
+  "payment_status",
+  "payment_terms",
+  "payment_method",
+  "payment_due_date",
+  "last_payment_date",
+  "attribution_tab",
+  "attracted_by",
+  "first_touch_source",
+  "first_touch_channel",
+  "campaign_name",
+  "tracking_code",
+  "column_break_attribution",
+  "first_touch_at",
+  "landing_url",
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+  "yclid",
+  "yandex_client_id",
   "sla_tab",
   "sla",
   "sla_creation",
@@ -385,6 +417,192 @@
    "fieldtype": "Currency",
    "label": "Net Total",
    "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "production_tab",
+   "fieldtype": "Tab Break",
+   "label": "Production"
+  },
+  {
+   "fieldname": "production_deadline",
+   "fieldtype": "Datetime",
+   "label": "Production Deadline"
+  },
+  {
+   "fieldname": "production_manager",
+   "fieldtype": "Link",
+   "label": "Production Manager",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_production",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "production_notes",
+   "fieldtype": "Small Text",
+   "label": "Production Notes"
+  },
+  {
+   "fieldname": "applications",
+   "fieldtype": "Table",
+   "label": "Applications",
+   "options": "CRM Deal Application"
+  },
+  {
+   "fieldname": "payment_tab",
+   "fieldtype": "Tab Break",
+   "label": "Payment"
+  },
+  {
+   "fieldname": "order_total",
+   "fieldtype": "Currency",
+   "label": "Order Total",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "paid_amount",
+   "fieldtype": "Currency",
+   "label": "Paid Amount",
+   "options": "currency"
+  },
+  {
+   "fieldname": "balance_amount",
+   "fieldtype": "Currency",
+   "label": "Balance Due",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_payment",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "payment_status",
+   "fieldtype": "Select",
+   "label": "Payment Status",
+   "options": "Unpaid\nPartially Paid\nPaid\nPostpayment",
+   "read_only": 1
+  },
+  {
+   "default": "Prepayment",
+   "fieldname": "payment_terms",
+   "fieldtype": "Select",
+   "label": "Payment Terms",
+   "options": "Prepayment\nPostpayment"
+  },
+  {
+   "fieldname": "payment_method",
+   "fieldtype": "Select",
+   "label": "Payment Method",
+   "options": "\nCash\nBank Card\nBank Transfer\nOnline Payment\nOther"
+  },
+  {
+   "fieldname": "payment_due_date",
+   "fieldtype": "Date",
+   "label": "Payment Due Date"
+  },
+  {
+   "fieldname": "last_payment_date",
+   "fieldtype": "Date",
+   "label": "Last Payment Date"
+  },
+  {
+   "fieldname": "attribution_tab",
+   "fieldtype": "Tab Break",
+   "label": "Attribution"
+  },
+  {
+   "fieldname": "attracted_by",
+   "fieldtype": "Link",
+   "label": "Attracted By",
+   "options": "User"
+  },
+  {
+   "fieldname": "first_touch_source",
+   "fieldtype": "Link",
+   "label": "First Touch Source",
+   "options": "CRM Lead Source",
+   "read_only": 1
+  },
+  {
+   "fieldname": "first_touch_channel",
+   "fieldtype": "Select",
+   "label": "First Touch Channel",
+   "options": "\nWebsite\nYandex Maps\nTelegram\nAvito\nMAX\nPhone\nEmail\nWalk-in\nOther",
+   "read_only": 1
+  },
+  {
+   "fieldname": "campaign_name",
+   "fieldtype": "Data",
+   "label": "Campaign",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tracking_code",
+   "fieldtype": "Data",
+   "label": "Tracking Code",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_attribution",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "first_touch_at",
+   "fieldtype": "Datetime",
+   "label": "First Touch At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "landing_url",
+   "fieldtype": "Small Text",
+   "label": "Landing URL",
+   "read_only": 1
+  },
+  {
+   "fieldname": "utm_source",
+   "fieldtype": "Data",
+   "label": "UTM Source",
+   "read_only": 1
+  },
+  {
+   "fieldname": "utm_medium",
+   "fieldtype": "Data",
+   "label": "UTM Medium",
+   "read_only": 1
+  },
+  {
+   "fieldname": "utm_campaign",
+   "fieldtype": "Data",
+   "label": "UTM Campaign",
+   "read_only": 1
+  },
+  {
+   "fieldname": "utm_content",
+   "fieldtype": "Data",
+   "label": "UTM Content",
+   "read_only": 1
+  },
+  {
+   "fieldname": "utm_term",
+   "fieldtype": "Data",
+   "label": "UTM Term",
+   "read_only": 1
+  },
+  {
+   "fieldname": "yclid",
+   "fieldtype": "Data",
+   "label": "Yandex Click ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "yandex_client_id",
+   "fieldtype": "Data",
+   "label": "Yandex Client ID",
    "read_only": 1
   },
   {

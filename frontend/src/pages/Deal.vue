@@ -596,6 +596,11 @@ const tabs = computed(() => {
       icon: AttachmentIcon,
     },
     {
+      name: 'Channels',
+      label: __('Channels'),
+      icon: CommentIcon,
+    },
+    {
       name: 'WhatsApp',
       label: __('WhatsApp'),
       icon: WhatsAppIcon,
