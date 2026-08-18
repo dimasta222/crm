@@ -252,6 +252,13 @@ def _tab(name, label, sections):
 
 
 def _section(name, label, fields, opened=True):
+	if len(fields) == 1:
+		return {
+			"name": name,
+			"label": label,
+			"opened": opened,
+			"columns": [{"name": f"{name}_full", "fields": fields}],
+		}
 	midpoint = (len(fields) + 1) // 2
 	return {
 		"name": name,

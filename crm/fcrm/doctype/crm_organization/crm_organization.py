@@ -29,6 +29,8 @@ class CRMOrganization(Document):
 	# end: auto-generated types
 
 	def validate(self):
+		if not self.currency:
+			self.currency = frappe.db.get_single_value("FCRM Settings", "currency") or "RUB"
 		self.update_exchange_rate()
 
 	def update_exchange_rate(self):

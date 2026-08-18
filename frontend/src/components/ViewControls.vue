@@ -460,7 +460,12 @@ function getParams() {
   let _view = getView(route.query.view, route.params.viewType, props.doctype)
   const view_name = _view?.name || ''
   const view_type = _view?.type || route.params.viewType || 'list'
-  const filters = (_view?.filters && JSON.parse(_view.filters)) || {}
+  const filters =
+    route.query.view && _view?.filters
+      ? typeof _view.filters === 'string'
+        ? JSON.parse(_view.filters)
+        : _view.filters
+      : {}
   const order_by = _view?.order_by || 'modified desc'
   const group_by_field = _view?.group_by_field || 'owner'
   const columns = _view?.columns || ''
@@ -858,9 +863,6 @@ function updateFilter(filters) {
   view.value.filters = filters
   list.value.reload()
 
-  if (!route.query.view) {
-    createOrUpdateStandardView()
-  }
 }
 
 function updateSort(order_by) {

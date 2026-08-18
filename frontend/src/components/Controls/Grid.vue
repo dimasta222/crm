@@ -6,11 +6,12 @@
 
     <div
       v-if="fields?.length"
-      class="rounded border border-outline-gray-modals"
+      class="rounded border border-outline-gray-modals overflow-x-auto"
     >
       <!-- Header -->
       <div
         class="grid-header flex items-center rounded-t-[7px] bg-surface-gray-2 text-ink-gray-5 truncate"
+        :style="{ minWidth: tableMinWidth }"
       >
         <div
           class="inline-flex items-center justify-center border-r border-outline-gray-2 h-8 p-2 w-12"
@@ -75,6 +76,7 @@
           <template #item="{ element: row, index }">
             <div
               class="grid-row flex cursor-pointer items-center border-b border-outline-gray-modals bg-surface-modals last:rounded-b last:border-b-0"
+              :style="{ minWidth: tableMinWidth }"
               @click.stop="
                 () => {
                   if (!gridSettings.editable_grid) {
@@ -620,6 +622,21 @@ function getFieldObj(field) {
 
   field = processField(field)
 
+  if (
+    props.parentFieldname === 'applications' &&
+    field.fieldname === 'item_reference'
+  ) {
+    const products = ensureProductReferences()
+    field.fieldtype = 'Autocomplete'
+    field.options = products.map((product) => ({
+      label: [product.item_reference, product.product_name || product.product]
+        .filter(Boolean)
+        .join(' — '),
+      value: product.item_reference,
+    }))
+    field.placeholder = __('Select an order item')
+  }
+
   if (field.fieldtype === 'Link' && field.options !== 'User') {
     if (!field.create) {
       field.create = (value, field, row, close) => {
@@ -643,7 +660,7 @@ function getFieldObj(field) {
   const fieldObjWithFilters = {
     ...field,
     filters: parseLinkFilters(field.link_filters),
-    placeholder: field.placeholder || field.label,
+    placeholder: field.placeholder || __(field.label),
   }
 
   return {
@@ -660,10 +677,14 @@ const gridTemplateColumns = computed(() => {
       const gs = gridViewSettings.length
         ? gridViewSettings.find((g) => g.fieldname === f.fieldname)
         : f
-      return `minmax(0, ${gs?.columns || 2}fr)`
+      return `minmax(120px, ${Math.max(Number(gs?.columns) || 2, 1)}fr)`
     })
     .join(' ')
 })
+
+const tableMinWidth = computed(
+  () => `${144 + Math.max(fields.value?.length || 1, 1) * 120}px`,
+)
 
 const allRowsSelected = computed(() => {
   if (!rows.value?.length) return false
@@ -708,8 +729,43 @@ const addRow = () => {
   newRow['doctype'] = props.doctype
   newRow['parentfield'] = props.parentFieldname
   newRow['parenttype'] = props.parentDoctype
+
+  if (props.parentFieldname === 'products') {
+    newRow.item_reference = nextItemReference()
+  } else if (props.parentFieldname === 'applications') {
+    const products = ensureProductReferences()
+    if (products.length === 1) {
+      newRow.item_reference = products[0].item_reference
+    }
+  }
+
   rows.value.push(newRow)
   triggerOnRowAdd(newRow)
+}
+
+function nextItemReference() {
+  const used = new Set(
+    (parentDoc.value?.products || [])
+      .map((product) => product.item_reference)
+      .filter(Boolean),
+  )
+  let number = 1
+  let reference = ''
+  do {
+    reference = `ITEM-${String(number).padStart(3, '0')}`
+    number += 1
+  } while (used.has(reference))
+  return reference
+}
+
+function ensureProductReferences() {
+  const products = parentDoc.value?.products || []
+  products.forEach((product) => {
+    if (!product.item_reference) {
+      product.item_reference = nextItemReference()
+    }
+  })
+  return products
 }
 
 const deleteRows = () => {
@@ -777,10 +833,14 @@ function getDefaultValue(defaultValue, fieldtype) {
 
 const getOptions = (options) => {
   if (Array.isArray(options)) {
-    return options
+    return options.map((option) =>
+      typeof option === 'string'
+        ? { label: __(option), value: option }
+        : { ...option, label: __(option.label) },
+    )
   } else if (typeof options === 'string') {
     return options.split('\n').map((option) => {
-      return { label: option, value: option }
+      return { label: __(option), value: option }
     })
   } else {
     return []

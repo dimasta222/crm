@@ -85,6 +85,8 @@ class CRMDeal(Document):
 	# end: auto-generated types
 
 	def before_validate(self):
+		if not self.currency:
+			self.currency = frappe.db.get_single_value("FCRM Settings", "currency") or "RUB"
 		if self.source and not self.first_touch_source:
 			self.first_touch_source = self.source
 		ensure_first_touch_timestamp(self)
@@ -134,6 +136,11 @@ class CRMDeal(Document):
 				frappe.throw(_("Order item {0} must have a quantity greater than zero.").format(index))
 			if flt(item.rate) < 0:
 				frappe.throw(_("Order item {0} cannot have a negative rate.").format(index))
+		if len(self.products or []) == 1:
+			item_reference = self.products[0].item_reference
+			for application in self.applications or []:
+				if not application.item_reference:
+					application.item_reference = item_reference
 
 	def validate_application_references(self):
 		item_reference_list = [item.item_reference for item in self.products or []]
@@ -141,6 +148,10 @@ class CRMDeal(Document):
 			frappe.throw(_("Every order item must have a unique item reference."))
 		item_references = set(item_reference_list)
 		for application in self.applications or []:
+			if not application.item_reference:
+				frappe.throw(
+					_("Select an order item for application row {0}.").format(application.idx)
+				)
 			if application.item_reference not in item_references:
 				frappe.throw(
 					_("Application row {0} refers to an unknown item: {1}").format(

@@ -26,6 +26,16 @@ function translate(message, replace, context = null) {
     translatedMessage = translatedMessages[message] || message
   }
 
+  const language = (
+    document.documentElement.lang || navigator.language || ''
+  ).toLowerCase()
+  const isRussian =
+    language.startsWith('ru') ||
+    /[А-Яа-яЁё]/.test(translatedMessages['Create'] || '')
+  if (isRussian && message === 'In Progress') {
+    translatedMessage = 'В работе'
+  }
+
   const hasPlaceholders = /{\d+}/.test(message)
   if (!hasPlaceholders) {
     return translatedMessage
