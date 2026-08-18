@@ -9,6 +9,13 @@ from frappe.desk.form.assign_to import _add as assign
 from frappe.model.document import Document
 from frappe.utils import validate_email_address
 
+from crm.api.omnichannel import link_conversations_after_conversion
+from crm.api.tracking import (
+	ATTRIBUTION_FIELDS,
+	apply_first_touch,
+	copy_attribution_to_contact,
+	ensure_first_touch_timestamp,
+)
 from crm.fcrm.doctype.crm_service_level_agreement.utils import get_sla
 from crm.fcrm.doctype.crm_status_change_log.crm_status_change_log import (
 	add_status_change_log,
@@ -82,6 +89,10 @@ class CRMLead(Document):
 		enrich_form_submission(self)
 
 	def before_validate(self):
+		apply_first_touch(self, self.tracking_code)
+		if self.source and not self.first_touch_source:
+			self.first_touch_source = self.source
+		ensure_first_touch_timestamp(self)
 		self.set_sla()
 
 	def validate(self):
@@ -91,6 +102,7 @@ class CRMLead(Document):
 		self.set_title()
 		self.validate_email()
 		self.validate_lost_reason()
+		self.validate_first_touch()
 		if not self.is_new() and self.has_value_changed("lead_owner") and self.lead_owner:
 			self.share_with_agent(self.lead_owner)
 			self.assign_agent(self.lead_owner)
@@ -112,6 +124,16 @@ class CRMLead(Document):
 				self.status = "New"
 			else:
 				self.status = frappe.get_all("CRM Lead Status", {"type": "Open"}, pluck="name")[0]
+
+	def validate_first_touch(self):
+		if self.is_new() or "System Manager" in frappe.get_roles():
+			return
+		old_doc = self.get_doc_before_save()
+		if not old_doc or not old_doc.first_touch_at:
+			return
+		for fieldname in ATTRIBUTION_FIELDS:
+			if self.has_value_changed(fieldname):
+				frappe.throw(_("First-touch attribution can only be changed by a System Manager."))
 
 	def set_full_name(self):
 		if self.first_name:
@@ -214,6 +236,7 @@ class CRMLead(Document):
 		existing_contact = existing_contact or self.contact_exists(throw)
 		if existing_contact:
 			self.update_lead_contact(existing_contact)
+			copy_attribution_to_contact(self, existing_contact)
 			return existing_contact
 
 		contact = frappe.new_doc("Contact")
@@ -240,6 +263,7 @@ class CRMLead(Document):
 
 		contact.insert(ignore_permissions=True)
 		contact.reload()  # load changes by hooks on contact
+		copy_attribution_to_contact(self, contact.name)
 
 		return contact.name
 
@@ -505,7 +529,9 @@ def convert_to_deal(
 		frappe.throw(_("Not allowed to convert Lead to Deal"), frappe.PermissionError)
 
 	lead = frappe.get_cached_doc("CRM Lead", lead)
-	if frappe.db.exists("CRM Lead Status", "Qualified"):
+	if frappe.db.exists("CRM Lead Status", "Ready"):
+		lead.db_set("status", "Ready")
+	elif frappe.db.exists("CRM Lead Status", "Qualified"):
 		lead.db_set("status", "Qualified")
 	lead.db_set("converted", 1)
 	if lead.sla and frappe.db.exists("CRM Communication Status", "Replied"):
@@ -513,6 +539,7 @@ def convert_to_deal(
 	contact = lead.create_contact(existing_contact, False)
 	organization = lead.create_organization(existing_organization)
 	_deal = lead.create_deal(contact, organization, deal)
+	link_conversations_after_conversion(lead.name, _deal, contact)
 	return _deal
 
 

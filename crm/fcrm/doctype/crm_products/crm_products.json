@@ -9,6 +9,11 @@
   "product_code",
   "column_break_gvbc",
   "product_name",
+  "item_reference",
+  "supplied_by_customer",
+  "color",
+  "size_breakdown",
+  "item_notes",
   "section_break_fnvf",
   "qty",
   "column_break_ajac",
@@ -33,6 +38,37 @@
    "fieldtype": "Data",
    "label": "Product Name",
    "reqd": 1
+  },
+  {
+   "fieldname": "item_reference",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Item Reference",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "supplied_by_customer",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Customer-supplied Item"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Color"
+  },
+  {
+   "description": "Example: S - 2, M - 5, L - 3",
+   "fieldname": "size_breakdown",
+   "fieldtype": "Small Text",
+   "label": "Size Breakdown"
+  },
+  {
+   "fieldname": "item_notes",
+   "fieldtype": "Small Text",
+   "label": "Item Notes"
   },
   {
    "fieldname": "section_break_fnvf",

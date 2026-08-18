@@ -12,7 +12,10 @@
   />
   <FadedScrollableDiv class="flex flex-col h-full overflow-y-auto">
     <div
-      v-if="all_activities?.loading"
+      v-if="
+        all_activities?.loading ||
+        (title == 'Channels' && channelMessages.loading)
+      "
       class="flex flex-1 flex-col items-center justify-center gap-3 text-2xl-medium text-ink-gray-4"
     >
       <LoadingIndicator class="h-6 w-6" />
@@ -21,7 +24,8 @@
     <div
       v-else-if="
         activities?.length ||
-        (whatsappMessages.data?.length && title == 'WhatsApp')
+        (whatsappMessages.data?.length && title == 'WhatsApp') ||
+        title == 'Channels'
       "
       class="activities"
     >
@@ -33,6 +37,12 @@
           :messages="whatsappMessages.data"
         />
       </div>
+      <ChannelMessagesArea
+        v-else-if="title == 'Channels'"
+        :messages="activities"
+        :reference-doctype="doctype"
+        :reference-name="docname"
+      />
       <div
         v-else-if="title == 'Notes'"
         class="grid grid-cols-1 gap-4 px-3 pb-3 sm:px-10 sm:pb-5 lg:grid-cols-2 xl:grid-cols-3"
@@ -442,6 +452,7 @@ import CallArea from '@/components/Activities/CallArea.vue'
 import NoteArea from '@/components/Activities/NoteArea.vue'
 import TaskArea from '@/components/Activities/TaskArea.vue'
 import AttachmentArea from '@/components/Activities/AttachmentArea.vue'
+import ChannelMessagesArea from '@/components/Activities/ChannelMessagesArea.vue'
 import DataFields from '@/components/Activities/DataFields.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import ActivityIcon from '@/components/Icons/ActivityIcon.vue'
@@ -538,6 +549,17 @@ const all_activities = createResource({
   onSuccess: () => nextTick(() => scroll()),
 })
 
+const channelMessages = createResource({
+  url: 'crm.api.omnichannel.get_channel_messages',
+  params: {
+    reference_doctype: props.doctype,
+    reference_name: props.docname,
+  },
+  cache: ['channel_messages', props.doctype, props.docname],
+  auto: true,
+  onSuccess: () => nextTick(() => scroll()),
+})
+
 const showWhatsappTemplates = ref(false)
 
 const whatsappMessages = createResource({
@@ -564,6 +586,7 @@ onBeforeUnmount(() => {
   $socket.off('whatsapp_message')
   $socket.off('docinfo_update', handleDocinfoUpdate)
   $socket.emit('doc_unsubscribe', props.doctype, props.docname)
+  $socket.off('crm_channel_message')
 })
 
 onMounted(() => {
@@ -575,6 +598,16 @@ onMounted(() => {
       data.reference_name === props.docname
     ) {
       whatsappMessages.reload()
+    }
+  })
+
+  $socket.on('crm_channel_message', (data) => {
+    if (
+      data.lead === props.docname ||
+      data.deal === props.docname ||
+      data.contact === props.docname
+    ) {
+      channelMessages.reload()
     }
   })
 
@@ -650,6 +683,8 @@ const activities = computed(() => {
   } else if (title.value == 'Attachments') {
     if (!all_activities.data?.attachments) return []
     return sortByModified(all_activities.data.attachments)
+  } else if (title.value == 'Channels') {
+    return channelMessages.data || []
   }
 
   _activities.forEach((activity) => {
@@ -734,6 +769,8 @@ const emptyText = computed(() => {
     text = 'No Attachments Found'
   } else if (title.value == 'WhatsApp') {
     text = 'No WhatsApp Messages Found'
+  } else if (title.value == 'Channels') {
+    text = 'No Channel Messages Found'
   }
   return __(text)
 })
@@ -760,6 +797,8 @@ const emptyTextDescription = computed(() => {
       'No files have been attached yet. Upload files to see them here.'
   } else if (title.value == 'WhatsApp') {
     description = 'Start a conversation now!'
+  } else if (title.value == 'Channels') {
+    description = 'Messages from connected channels will appear here.'
   }
   return __(description)
 })
@@ -782,6 +821,8 @@ const emptyTextIcon = computed(() => {
     icon = AttachmentIcon
   } else if (title.value == 'WhatsApp') {
     icon = WhatsAppIcon
+  } else if (title.value == 'Channels') {
+    icon = CommentIcon
   }
   return h(icon, { class: 'text-ink-gray-4' })
 })

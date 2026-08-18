@@ -106,13 +106,14 @@
     >
       <template #tab-item="{ tab, selected }">
         <button
-          v-if="tab.name == 'Deals'"
+          v-if="['Deals', 'Channels'].includes(tab.name)"
           class="group flex items-center gap-2 border-b border-transparent py-2.5 text-base text-ink-gray-5 duration-300 ease-in-out hover:text-ink-gray-9 !px-4"
           :class="{ 'text-ink-gray-9': selected }"
         >
           <component :is="tab.icon" v-if="tab.icon" class="h-5" />
           {{ __(tab.label) }}
           <Badge
+            v-if="tab.count !== undefined"
             class="group-hover:bg-surface-gray-10"
             :class="[selected ? 'bg-surface-gray-10' : 'bg-gray-600']"
             variant="solid"
@@ -138,14 +139,36 @@
           </div>
         </div>
         <DealsListView
-          v-else-if="tab.label === 'Deals' && rows.length"
+          v-else-if="tab.name === 'Deals' && rows.length"
           class="mt-4"
           :rows="rows"
           :columns="columns"
           :options="{ selectable: false, showTooltip: false }"
         />
         <div
-          v-if="tab.label === 'Deals' && !rows.length"
+          v-else-if="tab.name === 'Channels'"
+          class="flex flex-1 flex-col overflow-y-auto pt-4"
+        >
+          <ChannelMessagesArea
+            v-if="channelMessages.data?.length"
+            :messages="channelMessages.data"
+          />
+          <div
+            v-else
+            class="grid flex-1 place-items-center px-4 text-center text-ink-gray-5"
+          >
+            <div>
+              <div class="text-lg font-medium text-ink-gray-8">
+                {{ __('No Channel Messages Found') }}
+              </div>
+              <div class="mt-1">
+                {{ __('Messages from connected channels will appear here.') }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          v-else-if="tab.name === 'Deals' && !rows.length"
           class="grid flex-1 place-items-center text-2xl-medium text-ink-gray-4"
         >
           <div class="flex flex-col items-center justify-center space-y-3">
@@ -167,6 +190,8 @@ import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 import CameraIcon from '@/components/Icons/CameraIcon.vue'
 import DealsIcon from '@/components/Icons/DealsIcon.vue'
 import DealsListView from '@/components/ListViews/DealsListView.vue'
+import ChannelMessagesArea from '@/components/Activities/ChannelMessagesArea.vue'
+import CommentIcon from '@/components/Icons/CommentIcon.vue'
 import { validateIsImageFile } from '@/utils'
 import { useContactFields } from '@/composables/useContactFields'
 import { timestampCell } from '@/composables/useTimelinePreferences'
@@ -310,12 +335,24 @@ const tabs = [
     icon: h(DealsIcon, { class: 'h-4 w-4' }),
     count: computed(() => deals.data?.length),
   },
+  {
+    name: 'Channels',
+    label: __('Channels'),
+    icon: h(CommentIcon, { class: 'h-4 w-4' }),
+  },
 ]
 
 const deals = createResource({
   url: 'crm.api.contact.get_linked_deals',
   cache: ['deals', props.contactId],
   params: { contact: props.contactId },
+  auto: true,
+})
+
+const channelMessages = createResource({
+  url: 'crm.api.omnichannel.get_channel_messages',
+  cache: ['channelMessages', 'Contact', props.contactId],
+  params: { reference_doctype: 'Contact', reference_name: props.contactId },
   auto: true,
 })
 

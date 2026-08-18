@@ -5,8 +5,15 @@ import frappe
 from frappe import _
 from frappe.desk.form.assign_to import _add as assign
 from frappe.model.document import Document
+from frappe.utils import flt
 
 from crm.api.exchange_rate import get_exchange_rate
+from crm.api.tracking import (
+	ATTRIBUTION_FIELDS,
+	copy_attribution,
+	copy_attribution_to_contact,
+	ensure_first_touch_timestamp,
+)
 from crm.fcrm.doctype.crm_service_level_agreement.utils import get_sla
 from crm.fcrm.doctype.crm_status_change_log.crm_status_change_log import add_status_change_log
 from crm.fcrm.doctype.utils import add_or_remove_lost_reason_section_in_sidepanel
@@ -84,10 +91,18 @@ class CRMDeal(Document):
 		enrich_form_submission(self)
 
 	def before_validate(self):
+		if self.source and not self.first_touch_source:
+			self.first_touch_source = self.source
+		ensure_first_touch_timestamp(self)
 		self.set_sla()
 
 	def validate(self):
 		self.validate_status()
+		self.set_item_references()
+		self.validate_application_references()
+		self.calculate_order_totals()
+		self.update_payment_summary()
+		self.validate_first_touch()
 		self.set_primary_contact()
 		self.set_primary_email_mobile_no()
 		if not self.is_new() and self.has_value_changed("deal_owner") and self.deal_owner:
@@ -112,10 +127,77 @@ class CRMDeal(Document):
 
 	def validate_status(self):
 		if self.is_new() and not self.status:
-			if frappe.db.exists("CRM Deal Status", "Qualification"):
-				self.status = "Qualification"
+			if frappe.db.exists("CRM Deal Status", "New Order"):
+				self.status = "New Order"
 			else:
 				self.status = frappe.get_all("CRM Deal Status", {"type": "Open"}, pluck="name")[0]
+
+	def set_item_references(self):
+		for index, item in enumerate(self.products or [], 1):
+			if not item.item_reference:
+				item.item_reference = f"ITEM-{index:03d}"
+			if flt(item.qty) <= 0:
+				frappe.throw(_("Order item {0} must have a quantity greater than zero.").format(index))
+			if flt(item.rate) < 0:
+				frappe.throw(_("Order item {0} cannot have a negative rate.").format(index))
+
+	def validate_application_references(self):
+		item_reference_list = [item.item_reference for item in self.products or []]
+		if len(item_reference_list) != len(set(item_reference_list)):
+			frappe.throw(_("Every order item must have a unique item reference."))
+		item_references = set(item_reference_list)
+		for application in self.applications or []:
+			if application.item_reference not in item_references:
+				frappe.throw(
+					_("Application row {0} refers to an unknown item: {1}").format(
+						application.idx, application.item_reference
+					)
+				)
+			if flt(application.quantity) <= 0:
+				frappe.throw(
+					_("Application row {0} must have a quantity greater than zero.").format(
+						application.idx
+					)
+				)
+
+	def calculate_order_totals(self):
+		total = 0
+		net_total = 0
+		for item in self.products or []:
+			item.amount = flt(item.qty) * flt(item.rate)
+			item.discount_amount = item.amount * flt(item.discount_percentage) / 100
+			item.net_amount = item.amount - item.discount_amount
+			total += item.amount
+			net_total += item.net_amount
+		self.total = total
+		self.net_total = net_total
+		self.order_total = flt(self.net_total) if self.products else flt(self.deal_value or self.total)
+		if self.products:
+			self.deal_value = self.order_total
+
+	def update_payment_summary(self):
+		self.paid_amount = max(flt(self.paid_amount), 0)
+		if flt(self.order_total) > 0 and self.paid_amount > flt(self.order_total):
+			frappe.throw(_("Paid amount cannot exceed the order total."))
+		self.balance_amount = max(flt(self.order_total) - self.paid_amount, 0)
+		if flt(self.order_total) > 0 and self.paid_amount >= flt(self.order_total):
+			self.payment_status = "Paid"
+		elif self.paid_amount > 0:
+			self.payment_status = "Partially Paid"
+		elif self.payment_terms == "Postpayment" and flt(self.order_total) > 0:
+			self.payment_status = "Postpayment"
+		else:
+			self.payment_status = "Unpaid"
+
+	def validate_first_touch(self):
+		if self.is_new() or "System Manager" in frappe.get_roles():
+			return
+		old_doc = self.get_doc_before_save()
+		if not old_doc or not old_doc.first_touch_at:
+			return
+		for fieldname in ATTRIBUTION_FIELDS:
+			if self.has_value_changed(fieldname):
+				frappe.throw(_("First-touch attribution can only be changed by a System Manager."))
 
 	def set_primary_contact(self, contact=None):
 		if not self.contacts:
@@ -227,7 +309,11 @@ class CRMDeal(Document):
 		"""
 		Update the closed date based on the "Won" status.
 		"""
-		if self.status == "Won" and not self.closed_date:
+		if (
+			self.status
+			and frappe.get_cached_value("CRM Deal Status", self.status, "type") == "Won"
+			and not self.closed_date
+		):
 			self.closed_date = frappe.utils.nowdate()
 
 	def update_default_probability(self):
@@ -428,6 +514,7 @@ def contact_exists(doc):
 def create_contact(doc):
 	existing_contact = contact_exists(doc)
 	if existing_contact:
+		copy_attribution_to_contact(doc, existing_contact)
 		return existing_contact
 
 	contact = frappe.new_doc("Contact")
@@ -449,6 +536,7 @@ def create_contact(doc):
 
 	contact.insert(ignore_permissions=True)
 	contact.reload()  # load changes by hooks on contact
+	copy_attribution_to_contact(doc, contact.name)
 
 	return contact.name
 
@@ -473,6 +561,8 @@ def create_deal(doc: dict):
 	doc.pop("organization", None)
 
 	deal.update(doc)
+	if deal.lead:
+		copy_attribution(frappe.get_cached_doc("CRM Lead", deal.lead), deal)
 
 	deal.insert(ignore_permissions=True)
 	return deal.name

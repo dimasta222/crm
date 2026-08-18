@@ -1,0 +1,129 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2026-08-18 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "conversation",
+  "external_message_id",
+  "message_key",
+  "direction",
+  "sender_name",
+  "sent_at",
+  "delivery_status",
+  "content",
+  "attachment_url",
+  "attachment_type",
+  "raw_payload"
+ ],
+ "fields": [
+  {
+   "fieldname": "conversation",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Conversation",
+   "options": "CRM Channel Conversation",
+   "reqd": 1
+  },
+  {
+   "fieldname": "external_message_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "External Message ID",
+   "reqd": 1
+  },
+  {
+   "fieldname": "message_key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Message Key",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "direction",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Direction",
+   "options": "Incoming\nOutgoing",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sender_name",
+   "fieldtype": "Data",
+   "label": "Sender"
+  },
+  {
+   "fieldname": "sent_at",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Sent At"
+  },
+  {
+   "default": "Sent",
+   "fieldname": "delivery_status",
+   "fieldtype": "Select",
+   "label": "Delivery Status",
+   "options": "Queued\nSent\nDelivered\nRead\nFailed"
+  },
+  {
+   "fieldname": "content",
+   "fieldtype": "Long Text",
+   "label": "Message"
+  },
+  {
+   "fieldname": "attachment_url",
+   "fieldtype": "Data",
+   "label": "Attachment URL"
+  },
+  {
+   "fieldname": "attachment_type",
+   "fieldtype": "Data",
+   "label": "Attachment Type"
+  },
+  {
+   "fieldname": "raw_payload",
+   "fieldtype": "Code",
+   "hidden": 1,
+   "label": "Raw Payload",
+   "options": "JSON"
+  }
+ ],
+ "links": [],
+ "modified": "2026-08-18 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "FCRM",
+ "name": "CRM Channel Message",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Sales User",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "write": 1
+  }
+ ],
+ "search_fields": "external_message_id,sender_name,content",
+ "sort_field": "sent_at",
+ "sort_order": "DESC",
+ "states": []
+}
