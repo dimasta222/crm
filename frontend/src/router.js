@@ -2,6 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { usersStore } from '@/stores/users'
 import { sessionStore } from '@/stores/session'
 import { viewsStore } from '@/stores/views'
+import {
+  getRememberedViewType,
+  rememberViewType,
+} from '@/utils/viewPreferences'
 
 const routes = [
   {
@@ -204,10 +208,16 @@ router.beforeEach(async (to, from, next) => {
       }
 
       const doctype = doctypeMap[to.name]
-      let defaultViewType = 'list'
+      const rememberedViewType = getRememberedViewType(to.name)
+      let defaultViewType = rememberedViewType || 'list'
+      const hasRememberedView = Boolean(rememberedViewType)
 
       let globalDefault = getDefaultView()
-      if (globalDefault && globalDefault.route_name === to.name) {
+      if (
+        !hasRememberedView &&
+        globalDefault &&
+        globalDefault.route_name === to.name
+      ) {
         defaultViewType = globalDefault.type || 'list'
         if (globalDefault.name && !globalDefault.is_standard) {
           next({
@@ -219,11 +229,13 @@ router.beforeEach(async (to, from, next) => {
         }
       }
 
-      for (const viewType of standardViewTypes) {
-        const standardView = standardViews.value?.[doctype + ' ' + viewType]
-        if (standardView?.is_default) {
-          defaultViewType = viewType
-          break
+      if (!hasRememberedView) {
+        for (const viewType of standardViewTypes) {
+          const standardView = standardViews.value?.[doctype + ' ' + viewType]
+          if (standardView?.is_default) {
+            defaultViewType = viewType
+            break
+          }
         }
       }
 
@@ -253,6 +265,7 @@ router.beforeEach(async (to, from, next) => {
         })
       }
     } else {
+      rememberViewType(to.name, viewType)
       next()
     }
   } else {

@@ -68,7 +68,7 @@
       <DateTimePicker
         v-model="task.due_date"
         class="datepicker w-36"
-        :placeholder="__('01/04/2024 11:30 PM')"
+        :placeholder="__('01/04/2024 23:30')"
         :formatter="(date) => getFormat(date, '', true, true)"
         input-class="border-none"
       />

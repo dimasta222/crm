@@ -161,6 +161,8 @@ const isDirty = computed(() => {
 })
 
 function updateSettings() {
+  settings.doc.language ||= 'ru'
+  settings.doc.time_format = 'HH:mm'
   settings.save.submit(null, {
     onSuccess: () => {
       toast.success(__('Settings updated successfully'))
@@ -175,6 +177,7 @@ function updateSettings() {
 const fieldsMeta = computed(() => getFields() || [])
 
 function getOptions(fieldname) {
+  if (fieldname === 'time_format') return ['HH:mm']
   const field = fieldsMeta.value.find((f) => f.fieldname === fieldname)
   return field?.options || []
 }

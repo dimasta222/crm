@@ -166,6 +166,7 @@ class CRMDeal(Document):
 				)
 
 	def calculate_order_totals(self):
+		previous_order_total = flt(self.order_total)
 		total = 0
 		net_total = 0
 		for item in self.products or []:
@@ -176,9 +177,15 @@ class CRMDeal(Document):
 			net_total += item.net_amount
 		self.total = total
 		self.net_total = net_total
-		self.order_total = flt(self.net_total) if self.products else flt(self.deal_value or self.total)
-		if self.products:
-			self.deal_value = self.order_total
+		if self.has_value_changed("order_total"):
+			self.order_total = previous_order_total
+		elif self.products:
+			self.order_total = flt(self.net_total)
+		elif self.has_value_changed("deal_value"):
+			self.order_total = flt(self.deal_value)
+		else:
+			self.order_total = previous_order_total or flt(self.deal_value or self.total)
+		self.deal_value = self.order_total
 
 	def update_payment_summary(self):
 		self.paid_amount = max(flt(self.paid_amount), 0)
@@ -190,7 +197,7 @@ class CRMDeal(Document):
 		elif self.paid_amount > 0:
 			self.payment_status = "Partially Paid"
 		elif self.payment_terms == "Postpayment" and flt(self.order_total) > 0:
-			self.payment_status = "Postpayment"
+			self.payment_status = "Postpaid"
 		else:
 			self.payment_status = "Unpaid"
 

@@ -459,8 +459,7 @@
    "fieldname": "order_total",
    "fieldtype": "Currency",
    "label": "Order Total",
-   "options": "currency",
-   "read_only": 1
+   "options": "currency"
   },
   {
    "default": "0",
@@ -484,7 +483,7 @@
    "fieldname": "payment_status",
    "fieldtype": "Select",
    "label": "Payment Status",
-   "options": "Unpaid\nPartially Paid\nPaid\nPostpayment",
+   "options": "Unpaid\nPartially Paid\nPaid\nPostpaid\nRefunded\nCancelled",
    "read_only": 1
   },
   {
