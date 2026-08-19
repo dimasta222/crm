@@ -88,6 +88,175 @@ def get_chart(
 		return {"error": _("Invalid chart name")}
 
 
+def _period_condition(field, from_date: str, to_date: str):
+	return (field >= from_date) & (field < frappe.utils.add_days(to_date, 1))
+
+
+def _with_deal_owner(condition, Deal, user: str | None):
+	if user:
+		return condition & (Deal.deal_owner == user)
+	return condition
+
+
+def _number_card(title: str, tooltip: str, value, *, currency: bool = False):
+	card = {
+		"title": _(title),
+		"tooltip": _(tooltip),
+		"value": value or 0,
+	}
+	if currency:
+		card["prefix"] = get_base_currency_symbol()
+	return card
+
+
+def get_total_order_amount(from_date: str | None = None, to_date: str | None = None, user: str | None = None):
+	"""Return order_total for non-cancelled orders created in the selected period."""
+	Deal = DocType("CRM Deal")
+	Status = DocType("CRM Deal Status")
+	condition = (
+		_period_condition(Deal.creation, from_date, to_date)
+		& (Status.type != "Lost")
+		& (Deal.currency == get_base_currency())
+	)
+	condition = _with_deal_owner(condition, Deal, user)
+
+	result = (
+		frappe.qb.from_(Deal)
+		.join(Status)
+		.on(Deal.status == Status.name)
+		.select(Sum(Deal.order_total).as_("value"))
+		.where(condition)
+	).run(as_dict=True)[0]
+
+	return _number_card(
+		"Total order amount",
+		"Sum of order totals for orders created in the selected period",
+		result.value,
+		currency=True,
+	)
+
+
+def get_paid_for_period_orders(
+	from_date: str | None = None, to_date: str | None = None, user: str | None = None
+):
+	"""Return current paid_amount for orders created in the selected period."""
+	Deal = DocType("CRM Deal")
+	condition = _period_condition(Deal.creation, from_date, to_date) & (Deal.currency == get_base_currency())
+	condition = _with_deal_owner(condition, Deal, user)
+
+	result = (frappe.qb.from_(Deal).select(Sum(Deal.paid_amount).as_("value")).where(condition)).run(
+		as_dict=True
+	)[0]
+
+	return _number_card(
+		"Paid for period orders",
+		"Current paid amount for orders created in the selected period",
+		result.value,
+		currency=True,
+	)
+
+
+def get_awaiting_payment(from_date: str | None = None, to_date: str | None = None, user: str | None = None):
+	"""Return positive balances for non-cancelled, non-refunded period orders."""
+	Deal = DocType("CRM Deal")
+	Status = DocType("CRM Deal Status")
+	condition = (
+		_period_condition(Deal.creation, from_date, to_date)
+		& (Deal.balance_amount > 0)
+		& (Status.type != "Lost")
+		& (Coalesce(Deal.payment_status, "").notin(["Cancelled", "Refunded"]))
+		& (Deal.currency == get_base_currency())
+	)
+	condition = _with_deal_owner(condition, Deal, user)
+
+	result = (
+		frappe.qb.from_(Deal)
+		.join(Status)
+		.on(Deal.status == Status.name)
+		.select(Sum(Deal.balance_amount).as_("value"))
+		.where(condition)
+	).run(as_dict=True)[0]
+
+	return _number_card(
+		"Awaiting Payment",
+		"Outstanding balance for orders created in the selected period",
+		result.value,
+		currency=True,
+	)
+
+
+def get_current_orders(from_date: str | None = None, to_date: str | None = None, user: str | None = None):
+	"""Return a current snapshot of unfinished, non-cancelled orders."""
+	Deal = DocType("CRM Deal")
+	Status = DocType("CRM Deal Status")
+	condition = _with_deal_owner(Status.type.notin(["Won", "Lost"]), Deal, user)
+
+	result = (
+		frappe.qb.from_(Deal)
+		.join(Status)
+		.on(Deal.status == Status.name)
+		.select(Count(Deal.name).as_("value"))
+		.where(condition)
+	).run(as_dict=True)[0]
+
+	return _number_card(
+		"Current orders (now)",
+		"Current number of unfinished and non-cancelled orders",
+		result.value,
+	)
+
+
+def get_completed_orders(from_date: str | None = None, to_date: str | None = None, user: str | None = None):
+	"""Return won orders whose closed_date is in the selected period."""
+	Deal = DocType("CRM Deal")
+	Status = DocType("CRM Deal Status")
+	condition = _period_condition(Deal.closed_date, from_date, to_date) & (Status.type == "Won")
+	condition = _with_deal_owner(condition, Deal, user)
+
+	result = (
+		frappe.qb.from_(Deal)
+		.join(Status)
+		.on(Deal.status == Status.name)
+		.select(Count(Deal.name).as_("value"))
+		.where(condition)
+	).run(as_dict=True)[0]
+
+	return _number_card(
+		"Completed orders",
+		"Number of completed orders by closure date in the selected period",
+		result.value,
+	)
+
+
+def get_average_order_value(
+	from_date: str | None = None, to_date: str | None = None, user: str | None = None
+):
+	"""Return average order_total for non-cancelled orders created in the selected period."""
+	Deal = DocType("CRM Deal")
+	Status = DocType("CRM Deal Status")
+	condition = (
+		_period_condition(Deal.creation, from_date, to_date)
+		& (Status.type != "Lost")
+		& (Deal.currency == get_base_currency())
+	)
+	condition = _with_deal_owner(condition, Deal, user)
+
+	result = (
+		frappe.qb.from_(Deal)
+		.join(Status)
+		.on(Deal.status == Status.name)
+		.select(Avg(Deal.order_total).as_("value"))
+		.where(condition)
+	).run(as_dict=True)[0]
+
+	return _number_card(
+		"Average order value",
+		"Average order total for orders created in the selected period",
+		result.value,
+		currency=True,
+	)
+
+
 def get_total_leads(from_date: str | None = None, to_date: str | None = None, user: str | None = None):
 	"""
 	Get lead count for the dashboard.
@@ -1170,12 +1339,16 @@ def get_deals_by_salesperson(
 	}
 
 
+def get_base_currency():
+	"""Get the dashboard base currency from CRM settings."""
+	return frappe.db.get_single_value("FCRM Settings", "currency") or "RUB"
+
+
 def get_base_currency_symbol():
 	"""
 	Get the base currency symbol from the system settings.
 	"""
-	base_currency = frappe.db.get_single_value("FCRM Settings", "currency") or "USD"
-	return frappe.db.get_value("Currency", base_currency, "symbol") or ""
+	return frappe.db.get_value("Currency", get_base_currency(), "symbol") or ""
 
 
 def get_deal_status_change_counts(

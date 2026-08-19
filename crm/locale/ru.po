@@ -9092,3 +9092,40 @@ msgstr "Внешний идентификатор должен быть связ
 #: crm/fcrm/doctype/crm_channel_conversation/crm_channel_conversation.py:13
 msgid "A conversation must be linked to a lead, contact, or deal"
 msgstr "Переписка должна быть связана с лидом, контактом или заказом."
+
+# Print studio dashboard cards
+msgid "Total order amount"
+msgstr "Сумма заказов"
+
+msgid "Paid for period orders"
+msgstr "Оплачено по заказам периода"
+
+msgid "Awaiting Payment"
+msgstr "Ожидает оплаты"
+
+msgid "Current orders (now)"
+msgstr "Текущие заказы (сейчас)"
+
+msgid "Completed orders"
+msgstr "Выполненные заказы"
+
+msgid "Average order value"
+msgstr "Средний чек"
+
+msgid "Sum of order totals for orders created in the selected period"
+msgstr "Сумма заказов, созданных за выбранный период"
+
+msgid "Current paid amount for orders created in the selected period"
+msgstr "Текущая оплаченная сумма по заказам, созданным за выбранный период"
+
+msgid "Outstanding balance for orders created in the selected period"
+msgstr "Остаток к оплате по заказам, созданным за выбранный период"
+
+msgid "Current number of unfinished and non-cancelled orders"
+msgstr "Текущее количество незавершённых и неотменённых заказов"
+
+msgid "Number of completed orders by closure date in the selected period"
+msgstr "Количество выполненных заказов по дате закрытия за выбранный период"
+
+msgid "Average order total for orders created in the selected period"
+msgstr "Средний чек по заказам, созданным за выбранный период"

@@ -2,6 +2,7 @@ import {
   formatRange,
   getDashboardDateRange,
   getLastXDays,
+  PRINT_STUDIO_NUMBER_CHARTS,
 } from '@/utils/dashboard'
 
 const controlDate = new Date(2026, 7, 19, 12)
@@ -64,5 +65,18 @@ describe('dashboard date ranges', () => {
         process.env.TZ = originalTimezone
       }
     }
+  })
+})
+
+describe('print studio dashboard cards', () => {
+  it('exposes all primary number cards to the chart picker', () => {
+    expect(PRINT_STUDIO_NUMBER_CHARTS).toEqual([
+      { label: 'Total order amount', value: 'total_order_amount' },
+      { label: 'Paid for period orders', value: 'paid_for_period_orders' },
+      { label: 'Awaiting Payment', value: 'awaiting_payment' },
+      { label: 'Current orders (now)', value: 'current_orders' },
+      { label: 'Completed orders', value: 'completed_orders' },
+      { label: 'Average order value', value: 'average_order_value' },
+    ])
   })
 })
