@@ -16,6 +16,30 @@ export const PRINT_STUDIO_NUMBER_CHARTS = [
   { label: 'Unpaid orders (now)', value: 'unpaid_orders' },
 ] as const
 
+export const PRINT_STUDIO_AXIS_CHARTS = [
+  {
+    label: 'Completed order amount by day',
+    value: 'completed_order_amount_by_day',
+  },
+  {
+    label: 'Orders by production type',
+    value: 'orders_by_production_type',
+  },
+  {
+    label: 'Orders by acquisition manager',
+    value: 'orders_by_acquisition_manager',
+  },
+  {
+    label: 'Outstanding balance by payment status (now)',
+    value: 'outstanding_balance_by_payment_status',
+  },
+] as const
+
+export const PRINT_STUDIO_DONUT_CHARTS = [
+  { label: 'Current statuses of period orders', value: 'orders_by_status' },
+  { label: 'Orders by source', value: 'orders_by_source' },
+] as const
+
 export type DashboardPeriod =
   | 'Today'
   | 'Yesterday'

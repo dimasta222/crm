@@ -79,10 +79,43 @@ PRINT_STUDIO_DASHBOARD_CARDS = [
 	*PRINT_STUDIO_OPERATIONAL_DASHBOARD_CARDS,
 ]
 
+PRINT_STUDIO_DASHBOARD_GRAPHS = [
+	{
+		"name": "completed_order_amount_by_day",
+		"type": "axis_chart",
+		"layout": {"x": 0, "y": 4, "w": 10, "h": 9, "i": "completed_order_amount_by_day"},
+	},
+	{
+		"name": "orders_by_status",
+		"type": "donut_chart",
+		"layout": {"x": 10, "y": 4, "w": 10, "h": 9, "i": "orders_by_status"},
+	},
+	{
+		"name": "orders_by_production_type",
+		"type": "axis_chart",
+		"layout": {"x": 0, "y": 11, "w": 10, "h": 9, "i": "orders_by_production_type"},
+	},
+	{
+		"name": "orders_by_source",
+		"type": "donut_chart",
+		"layout": {"x": 10, "y": 11, "w": 10, "h": 9, "i": "orders_by_source"},
+	},
+	{
+		"name": "orders_by_acquisition_manager",
+		"type": "axis_chart",
+		"layout": {"x": 0, "y": 18, "w": 10, "h": 9, "i": "orders_by_acquisition_manager"},
+	},
+	{
+		"name": "outstanding_balance_by_payment_status",
+		"type": "axis_chart",
+		"layout": {"x": 10, "y": 18, "w": 10, "h": 9, "i": "outstanding_balance_by_payment_status"},
+	},
+]
 
-def _manager_dashboard_layout(cards):
+
+def _manager_dashboard_layout(cards, graphs=None):
 	legacy_layout = json.loads(LEGACY_DEFAULT_MANAGER_DASHBOARD_LAYOUT)
-	return json.dumps(cards + legacy_layout[8:], separators=(",", ":"))
+	return json.dumps(cards + (legacy_layout[8:] if graphs is None else graphs), separators=(",", ":"))
 
 
 def stage_2b2_manager_dashboard_layout():
@@ -90,11 +123,16 @@ def stage_2b2_manager_dashboard_layout():
 	return _manager_dashboard_layout(PRINT_STUDIO_DASHBOARD_CARDS_2B2)
 
 
+def stage_2b3_manager_dashboard_layout():
+	"""Return the exact default layout introduced by dashboard stage 2B-3."""
+	return _manager_dashboard_layout(PRINT_STUDIO_DASHBOARD_CARDS)
+
+
 def default_manager_dashboard_layout():
 	"""
 	Returns the default layout for the CRM Manager Dashboard.
 	"""
-	return _manager_dashboard_layout(PRINT_STUDIO_DASHBOARD_CARDS)
+	return _manager_dashboard_layout(PRINT_STUDIO_DASHBOARD_CARDS, PRINT_STUDIO_DASHBOARD_GRAPHS)
 
 
 def create_default_manager_dashboard(force=False):

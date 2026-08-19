@@ -2,6 +2,8 @@ import {
   formatRange,
   getDashboardDateRange,
   getLastXDays,
+  PRINT_STUDIO_AXIS_CHARTS,
+  PRINT_STUDIO_DONUT_CHARTS,
   PRINT_STUDIO_NUMBER_CHARTS,
 } from '@/utils/dashboard'
 
@@ -87,6 +89,34 @@ describe('print studio dashboard cards', () => {
       },
       { label: 'Overdue orders (now)', value: 'overdue_orders' },
       { label: 'Unpaid orders (now)', value: 'unpaid_orders' },
+    ])
+  })
+
+  it('exposes only the current print studio graphs to the chart picker', () => {
+    expect(PRINT_STUDIO_AXIS_CHARTS).toEqual([
+      {
+        label: 'Completed order amount by day',
+        value: 'completed_order_amount_by_day',
+      },
+      {
+        label: 'Orders by production type',
+        value: 'orders_by_production_type',
+      },
+      {
+        label: 'Orders by acquisition manager',
+        value: 'orders_by_acquisition_manager',
+      },
+      {
+        label: 'Outstanding balance by payment status (now)',
+        value: 'outstanding_balance_by_payment_status',
+      },
+    ])
+    expect(PRINT_STUDIO_DONUT_CHARTS).toEqual([
+      {
+        label: 'Current statuses of period orders',
+        value: 'orders_by_status',
+      },
+      { label: 'Orders by source', value: 'orders_by_source' },
     ])
   })
 })

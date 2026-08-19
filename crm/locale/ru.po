@@ -9153,3 +9153,94 @@ msgstr "Текущее количество незавершённых зака�
 
 msgid "Current number of unfinished orders with a positive total and no payment"
 msgstr "Текущее количество незавершённых заказов со стоимостью больше нуля и без оплаты"
+
+# Print studio dashboard graphs
+msgid "Completed order amount by day"
+msgstr "Сумма выполненных заказов по дням"
+
+msgid "Current statuses of period orders"
+msgstr "Текущие статусы заказов периода"
+
+msgid "Orders by production type"
+msgstr "Заказы по видам производства"
+
+msgid "Orders by source"
+msgstr "Заказы по источникам"
+
+msgid "Orders by acquisition manager"
+msgstr "Заказы по менеджерам привлечения"
+
+msgid "Outstanding balance by payment status (now)"
+msgstr "Долги по статусам оплаты (сейчас)"
+
+msgid "Order total for completed orders by closure date"
+msgstr "Сумма выполненных заказов по дате закрытия"
+
+msgid "Current status distribution for orders created in the selected period"
+msgstr "Текущие статусы заказов, созданных за выбранный период"
+
+msgid "Production methods for orders created in the selected period"
+msgstr "Виды производства в заказах, созданных за выбранный период"
+
+msgid "First-touch sources for orders created in the selected period"
+msgstr "Источники первого касания заказов, созданных за выбранный период"
+
+msgid "Acquisition managers for orders created in the selected period"
+msgstr "Менеджеры привлечения заказов, созданных за выбранный период"
+
+msgid "Current outstanding balance grouped by payment status"
+msgstr "Текущая задолженность по статусам оплаты"
+
+msgid "Order amount"
+msgstr "Сумма заказов"
+
+msgid "Production Type"
+msgstr "Вид производства"
+
+msgid "Acquisition Manager"
+msgstr "Менеджер привлечения"
+
+msgid "Payment Status"
+msgstr "Статус оплаты"
+
+msgid "Outstanding Balance"
+msgstr "Задолженность"
+
+msgid "Not specified"
+msgstr "Не указан"
+
+msgid "DTF Printing"
+msgstr "DTF-печать"
+
+msgid "Screen Printing"
+msgstr "Шелкография"
+
+msgid "Embroidery"
+msgstr "Вышивка"
+
+msgid "Sublimation"
+msgstr "Сублимация"
+
+msgid "Heat Transfer Printing"
+msgstr "Термопечать"
+
+msgid "Combined"
+msgstr "Комбинированное нанесение"
+
+msgid "Unpaid"
+msgstr "Не оплачено"
+
+msgid "Partially Paid"
+msgstr "Частично оплачено"
+
+msgid "Paid"
+msgstr "Оплачено"
+
+msgid "Postpaid"
+msgstr "Постоплата"
+
+msgid "Refunded"
+msgstr "Возврат"
+
+msgid "Cancelled"
+msgstr "Отменено"

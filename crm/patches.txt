@@ -30,3 +30,4 @@ crm.patches.v1_0.improve_print_studio_workflow_ui
 crm.patches.v1_0.fix_print_studio_stage_1
 crm.patches.v1_0.update_print_studio_dashboard_cards
 crm.patches.v1_0.add_print_studio_operational_dashboard_cards
+crm.patches.v1_0.update_print_studio_dashboard_graphs
