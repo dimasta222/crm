@@ -65,18 +65,7 @@
         variant="outline"
         :placeholder="__('Period')"
         :formatter="formatRange"
-        @change="
-          (v) =>
-            updateFilter('period', v, () => {
-              showDatePicker = false
-              if (!v) {
-                filters.period = getLastXDays()
-                preset = 'Last 30 Days'
-              } else {
-                preset = formatter(v)
-              }
-            })
-        "
+        @change="applyCustomRange"
       >
         <template #prefix>
           <LucideCalendar class="size-4 text-ink-gray-5 mr-2" />
@@ -146,10 +135,11 @@ import Link from '@/components/Controls/Link.vue'
 import { usersStore } from '@/stores/users'
 import { copy } from '@/utils'
 import {
-  getLastXDays,
+  getDashboardDateRange,
   formatter,
   formatRange,
   parseDateRange,
+  type DashboardPeriod,
 } from '@/utils/dashboard'
 import {
   usePageMeta,
@@ -170,7 +160,7 @@ const preset = ref('Last 30 Days')
 const showAddChartModal = ref(false)
 
 const filters = reactive({
-  period: getLastXDays(),
+  period: getDashboardDateRange('Last 30 Days'),
   user: null,
 })
 
@@ -194,36 +184,28 @@ const options = computed(() => [
     hideLabel: true,
     items: [
       {
+        label: __('Today'),
+        onClick: () => applyPreset('Today'),
+      },
+      {
+        label: __('Yesterday'),
+        onClick: () => applyPreset('Yesterday'),
+      },
+      {
         label: __('Last 7 Days'),
-        onClick: () => {
-          preset.value = 'Last 7 Days'
-          filters.period = getLastXDays(7)
-          dashboardItems.reload()
-        },
+        onClick: () => applyPreset('Last 7 Days'),
       },
       {
         label: __('Last 30 Days'),
-        onClick: () => {
-          preset.value = 'Last 30 Days'
-          filters.period = getLastXDays(30)
-          dashboardItems.reload()
-        },
+        onClick: () => applyPreset('Last 30 Days'),
       },
       {
         label: __('Last 60 Days'),
-        onClick: () => {
-          preset.value = 'Last 60 Days'
-          filters.period = getLastXDays(60)
-          dashboardItems.reload()
-        },
+        onClick: () => applyPreset('Last 60 Days'),
       },
       {
         label: __('Last 90 Days'),
-        onClick: () => {
-          preset.value = 'Last 90 Days'
-          filters.period = getLastXDays(90)
-          dashboardItems.reload()
-        },
+        onClick: () => applyPreset('Last 90 Days'),
       },
     ],
   },
@@ -237,6 +219,28 @@ const options = computed(() => [
     },
   },
 ])
+
+function applyPreset(value: DashboardPeriod) {
+  preset.value = value
+  filters.period = getDashboardDateRange(value)
+  dashboardItems.reload()
+}
+
+function applyCustomRange(value: string | null) {
+  updateFilter(
+    'period',
+    getDashboardDateRange('Custom Range', value),
+    () => {
+      showDatePicker.value = false
+      if (!value) {
+        filters.period = getDashboardDateRange('Last 30 Days')
+        preset.value = 'Last 30 Days'
+      } else {
+        preset.value = formatter(value)
+      }
+    },
+  )
+}
 
 const dashboardItems = createResource({
   url: 'crm.api.dashboard.get_dashboard',
