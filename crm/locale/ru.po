@@ -2255,6 +2255,24 @@ msgstr "Текущий пароль"
 msgid "Current number of unfinished and non-cancelled orders"
 msgstr "Текущее количество незавершённых и неотменённых заказов"
 
+msgid "Current number of unfinished orders in production"
+msgstr "Текущее количество незавершённых заказов в производстве"
+
+msgid "Current number of unfinished orders ready for pickup"
+msgstr "Текущее количество незавершённых заказов, готовых к выдаче"
+
+msgid ""
+"Current number of unfinished orders with a positive total and no payment"
+msgstr ""
+"Текущее количество незавершённых заказов со стоимостью больше нуля и без "
+"оплаты"
+
+msgid ""
+"Current number of unfinished orders with a production deadline before today"
+msgstr ""
+"Текущее количество незавершённых заказов со сроком производства раньше "
+"сегодняшнего дня"
+
 msgid "Current orders (now)"
 msgstr "Текущие заказы (сейчас)"
 
@@ -6105,6 +6123,9 @@ msgid ""
 "Order of activities, emails, comments and calls in the timeline for all users"
 msgstr ""
 
+msgid "Orders in production (now)"
+msgstr "Заказы в производстве (сейчас)"
+
 #. Label of the organization (Link) field in DocType 'CRM Deal'
 #. Label of the organization_tab (Tab Break) field in DocType 'CRM Deal'
 #. Label of the organization (Data) field in DocType 'CRM Lead'
@@ -6189,6 +6210,9 @@ msgstr "Исходящие"
 
 msgid "Outstanding balance for orders created in the selected period"
 msgstr "Остаток к оплате по заказам, созданным за выбранный период"
+
+msgid "Overdue orders (now)"
+msgstr "Просроченные заказы (сейчас)"
 
 #. Label of the log_owner (Link) field in DocType 'CRM Status Change Log'
 #: crm/fcrm/doctype/crm_status_change_log/crm_status_change_log.json
@@ -6645,6 +6669,9 @@ msgstr "Цена"
 #: crm/fcrm/doctype/crm_notification/crm_notification.json
 msgid "Read"
 msgstr "Читать"
+
+msgid "Ready for pickup (now)"
+msgstr "Готовы к выдаче (сейчас)"
 
 msgid "Ready to Close"
 msgstr "Готово к закрытию"
@@ -8602,6 +8629,9 @@ msgstr "Отвязать связанную запись"
 #: frontend/src/components/DeleteLinkedDocModal.vue:82
 msgid "Unlink {0} Item(s)"
 msgstr "Отвязать элементы: {0}"
+
+msgid "Unpaid orders (now)"
+msgstr "Заказы без оплаты (сейчас)"
 
 #: frontend/src/components/ViewControls.vue:1096
 msgid "Unpin View"
