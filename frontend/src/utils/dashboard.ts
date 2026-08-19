@@ -1,6 +1,16 @@
 import { dayjs } from 'frappe-ui'
 
 export type DashboardDateRange = string | [string, string] | [] | null
+
+export const PRINT_STUDIO_NUMBER_CHARTS = [
+  { label: 'Total order amount', value: 'total_order_amount' },
+  { label: 'Paid for period orders', value: 'paid_for_period_orders' },
+  { label: 'Awaiting Payment', value: 'awaiting_payment' },
+  { label: 'Current orders (now)', value: 'current_orders' },
+  { label: 'Completed orders', value: 'completed_orders' },
+  { label: 'Average order value', value: 'average_order_value' },
+] as const
+
 export type DashboardPeriod =
   | 'Today'
   | 'Yesterday'

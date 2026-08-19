@@ -42,6 +42,7 @@
 
 <script setup lang="ts">
 import { getRandom } from '@/utils'
+import { PRINT_STUDIO_NUMBER_CHARTS } from '@/utils/dashboard'
 import { createResource, Dialog, FormControl } from 'frappe-ui'
 import { ref, reactive, inject } from 'vue'
 
@@ -69,6 +70,10 @@ const chartTypes = [
 
 const numberChart = ref('')
 const numberCharts = [
+  ...PRINT_STUDIO_NUMBER_CHARTS.map((chart) => ({
+    label: __(chart.label),
+    value: chart.value,
+  })),
   { label: __('Total Leads'), value: 'total_leads' },
   { label: __('Ongoing Deals'), value: 'ongoing_deals' },
   { label: __('Avg Ongoing Deal Value'), value: 'average_ongoing_deal_value' },

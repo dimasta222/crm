@@ -1103,6 +1103,12 @@ msgstr "Средний чек текущих и выполненных зака�
 msgid "Average deal value of won deals"
 msgstr "Средняя стоимость выигранных сделок"
 
+msgid "Average order total for orders created in the selected period"
+msgstr "Средний чек по заказам, созданным за выбранный период"
+
+msgid "Average order value"
+msgstr "Средний чек"
+
 #: crm/api/dashboard.py:546
 msgid "Average time taken from deal creation to deal closure"
 msgstr "Среднее время от создания до закрытия сделки"
@@ -1154,6 +1160,9 @@ msgstr "Среднее время закрытия лида"
 #: crm/api/dashboard.py:364
 msgid "Avg. won deal value"
 msgstr "Средняя стоимость выигранных сделок"
+
+msgid "Awaiting Payment"
+msgstr "Ожидает оплаты"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:26
 #: frontend/src/components/Dashboard/AddChartModal.vue:70
@@ -1842,6 +1851,9 @@ msgstr "Полная регистрация"
 msgid "Completed"
 msgstr "Завершено"
 
+msgid "Completed orders"
+msgstr "Выполненные заказы"
+
 #. Option for the 'Device' (Select) field in DocType 'CRM Telephony Agent'
 #: crm/fcrm/doctype/crm_telephony_agent/crm_telephony_agent.json
 msgid "Computer"
@@ -2239,6 +2251,15 @@ msgstr "Валюта успешно установлена как {0}"
 #: frontend/src/components/Modals/ChangePasswordModal.vue:8
 msgid "Current Password"
 msgstr "Текущий пароль"
+
+msgid "Current number of unfinished and non-cancelled orders"
+msgstr "Текущее количество незавершённых и неотменённых заказов"
+
+msgid "Current orders (now)"
+msgstr "Текущие заказы (сейчас)"
+
+msgid "Current paid amount for orders created in the selected period"
+msgstr "Текущая оплаченная сумма по заказам, созданным за выбранный период"
 
 #: crm/api/dashboard.py:896
 msgid "Current pipeline distribution"
@@ -5915,6 +5936,9 @@ msgstr "Числовой показатель"
 msgid "Number Format"
 msgstr "Формат номера"
 
+msgid "Number of completed orders by closure date in the selected period"
+msgstr "Количество выполненных заказов по дате закрытия за выбранный период"
+
 #: crm/api/dashboard.py:1075 crm/api/dashboard.py:1138
 msgid "Number of deals"
 msgstr "Количество сделок"
@@ -6163,6 +6187,9 @@ msgstr "Исходящие звонки"
 msgid "Outgoing"
 msgstr "Исходящие"
 
+msgid "Outstanding balance for orders created in the selected period"
+msgstr "Остаток к оплате по заказам, созданным за выбранный период"
+
 #. Label of the log_owner (Link) field in DocType 'CRM Status Change Log'
 #: crm/fcrm/doctype/crm_status_change_log/crm_status_change_log.json
 msgid "Owner"
@@ -6181,6 +6208,9 @@ msgstr "Страница"
 #: crm/lead_syncing/doctype/facebook_page/facebook_page.json
 msgid "Page Name"
 msgstr "Название страницы"
+
+msgid "Paid for period orders"
+msgstr "Оплачено по заказам периода"
 
 #. Label of the parent_crm_territory (Link) field in DocType 'CRM Territory'
 #: crm/fcrm/doctype/crm_territory/crm_territory.json
@@ -7908,6 +7938,9 @@ msgstr "Необходимо ввести тему"
 msgid "Subject: {0}"
 msgstr "Тема: {0}"
 
+msgid "Sum of order totals for orders created in the selected period"
+msgstr "Сумма заказов, созданных за выбранный период"
+
 #. Option for the 'Weekly Off' (Select) field in DocType 'CRM Holiday List'
 #. Option for the 'Workday' (Select) field in DocType 'CRM Service Day'
 #: crm/fcrm/doctype/crm_holiday_list/crm_holiday_list.json
@@ -8396,6 +8429,10 @@ msgstr "Общее количество выполненных заказов"
 #: crm/api/dashboard.py:307
 msgid "Total number of won deals based on its closure date"
 msgstr "Общее количество выигранных сделок на основе даты закрытия"
+
+# Print studio dashboard cards
+msgid "Total order amount"
+msgstr "Сумма заказов"
 
 #. Label of the traceback (Code) field in DocType 'Failed Lead Sync Log'
 #: crm/lead_syncing/doctype/failed_lead_sync_log/failed_lead_sync_log.json

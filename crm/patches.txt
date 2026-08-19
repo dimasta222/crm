@@ -32,3 +32,4 @@ crm.patches.v1_0.reorder_address_quick_entry_layout
 crm.patches.v1_0.setup_print_studio_workflow
 crm.patches.v1_0.improve_print_studio_workflow_ui
 crm.patches.v1_0.fix_print_studio_stage_1
+crm.patches.v1_0.update_print_studio_dashboard_cards
