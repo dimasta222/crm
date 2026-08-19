@@ -248,14 +248,14 @@ msgstr "Автоматически создавать клиента"
 #. Settings'
 #: crm/fcrm/doctype/fcrm_settings/fcrm_settings.json
 msgid "Auto update Expected Deal Value"
-msgstr "Автоматически обновлять ожидаемую сумму сделки"
+msgstr "Автоматически обновлять ожидаемую стоимость заказа"
 
 #: frontend/src/components/Settings/AssignmentRules/AssignmentRules.vue:11
 msgid ""
 "Auto-assign leads/deals to the right sales user based on predefined "
 "conditions"
 msgstr ""
-"Автоматически назначайте лиды и сделки подходящему менеджеру по заданным "
+"Автоматически назначать лиды и заказы подходящему менеджеру по заданным "
 "условиям"
 
 #. Description of the 'Reopen lead/deal on new communication' (Check) field in
@@ -267,7 +267,7 @@ msgid ""
 "a new communication is created. Applies only when SLA is enabled"
 msgstr ""
 "При создании нового сообщения автоматически устанавливает для лида или "
-"сделки статус коммуникации «Открыто». Действует только при включённом SLA"
+"заказа статус коммуникации «Открыто». Действует только при включённом SLA"
 
 #. Description of the 'Mark lead/deal as replied on response' (Check) field in
 #. DocType 'FCRM Settings'
@@ -277,20 +277,20 @@ msgid ""
 "Automatically sets Communication Status to “Replied” for the lead or deal "
 "when a response is received. Applies only when SLA is enabled"
 msgstr ""
-"При получении ответа автоматически устанавливает для лида или сделки статус "
+"При получении ответа автоматически устанавливает для лида или заказа статус "
 "коммуникации «Отвечено». Действует только при включённом SLA"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:81
 msgid "Avg Deal Value"
-msgstr "Средняя сумма сделки"
+msgstr "Средний чек"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:78
 msgid "Avg Ongoing Deal Value"
-msgstr "Средняя сумма текущей сделки"
+msgstr "Средний чек текущих заказов"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:87
 msgid "Avg Time to Close a Deal"
-msgstr "Среднее время закрытия сделки"
+msgstr "Среднее время закрытия заказа"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:83
 msgid "Avg Time to Close a Lead"
@@ -298,7 +298,7 @@ msgstr "Среднее время закрытия лида"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:80
 msgid "Avg Won Deal Value"
-msgstr "Средняя сумма выигранной сделки"
+msgstr "Средний чек выполненных заказов"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:26
 #: frontend/src/components/Dashboard/AddChartModal.vue:70
@@ -348,7 +348,7 @@ msgstr "Выберите почтового провайдера для наст
 
 #: frontend/src/components/Settings/Sla/SlaPolicyView.vue:107
 msgid "Choose which leads/deals are affected by this policy."
-msgstr "Выберите лиды и сделки, к которым применяется эта политика."
+msgstr "Выберите лиды и заказы, к которым применяется эта политика."
 
 #: frontend/src/components/Filter.vue:21 frontend/src/components/Filter.vue:149
 msgid "Clear All Filters"
@@ -400,7 +400,7 @@ msgid ""
 "including forecasting, deal values, and currency settings"
 msgstr ""
 "Настройте расчёт, форматирование и отображение ключевых показателей панели, "
-"включая прогнозы, суммы сделок и валюту"
+"включая прогнозы, стоимость заказов и валюту"
 
 #: frontend/src/components/Settings/DashboardSettings.vue:102
 msgid "Configure the Exchange Rate Provider for your CRM"
@@ -495,15 +495,15 @@ msgstr "Создать событие"
 
 #: frontend/src/components/Settings/ERPNextSettings.vue:189
 msgid "Create customer in ERPNext when the deal status is changed"
-msgstr "Создавать клиента в ERPNext при изменении статуса сделки"
+msgstr "Создавать клиента в ERPNext при изменении статуса заказа"
 
 #: frontend/src/components/Settings/ERPNextSettings.vue:398
 msgid ""
 "Create quotation button on deal page and auto customer creation on deal "
 "status change will be disabled. Are you sure?"
 msgstr ""
-"Кнопка создания предложения на странице сделки и автоматическое создание "
-"клиента при изменении статуса сделки будут отключены. Продолжить?"
+"Кнопка создания предложения на странице заказа и автоматическое создание "
+"клиента при изменении статуса заказа будут отключены. Продолжить?"
 
 #: frontend/src/components/Modals/ChangePasswordModal.vue:8
 msgid "Current Password"
@@ -551,27 +551,27 @@ msgstr "Настройки панели успешно обновлены"
 
 #: frontend/src/components/Settings/ERPNextSettings.vue:481
 msgid "Deal status is required"
-msgstr "Необходимо указать статус сделки"
+msgstr "Необходимо указать статус заказа"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:97
 msgid "Deals by Ongoing & Won Stage"
-msgstr "Сделки по текущим и выигранным этапам"
+msgstr "Текущие и выполненные заказы по этапам"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:100
 msgid "Deals by Salesperson"
-msgstr "Сделки по менеджерам"
+msgstr "Заказы по менеджерам"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:107
 msgid "Deals by Source"
-msgstr "Сделки по источникам"
+msgstr "Заказы по источникам"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:105
 msgid "Deals by Stage"
-msgstr "Сделки по этапам"
+msgstr "Заказы по этапам"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:99
 msgid "Deals by Territory"
-msgstr "Сделки по территориям"
+msgstr "Заказы по территориям"
 
 #: frontend/src/utils/callLog.js:66
 msgid "Declined"
@@ -898,7 +898,7 @@ msgstr "Необходимо указать ожидаемую дату закр
 
 #: crm/fcrm/doctype/crm_deal/crm_deal.py:251
 msgid "Expected deal value is required."
-msgstr "Необходимо указать ожидаемую сумму сделки."
+msgstr "Необходимо указать ожидаемую стоимость заказа."
 
 #: frontend/src/components/ViewControls.vue:295
 msgid "Export all {0} record(s)"
@@ -1170,7 +1170,7 @@ msgstr "Войти с другой учётной записью"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:98
 msgid "Lost Deal Reasons"
-msgstr "Причины проигрыша сделок"
+msgstr "Причины потери заказов"
 
 #. Label of the lost_details_tab (Tab Break) field in DocType 'CRM Deal'
 #. Label of the lost_details_tab (Tab Break) field in DocType 'CRM Lead'
@@ -1213,7 +1213,7 @@ msgstr "Управляйте политиками соглашения об ур
 #: crm/fcrm/doctype/fcrm_settings/fcrm_settings.json
 #: frontend/src/components/Settings/GeneralSettings.vue:38
 msgid "Mark lead/deal as replied on response"
-msgstr "Отмечать лид или сделку как отвеченные при получении ответа"
+msgstr "Отмечать лид или заказ как отвеченный при получении ответа"
 
 #: frontend/src/utils/callLog.js:71
 msgid "Missed Call"
@@ -1398,7 +1398,7 @@ msgstr "Количество знаков после запятой для вс�
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:77
 msgid "Ongoing Deals"
-msgstr "Текущие сделки"
+msgstr "Текущие заказы"
 
 #: crm/api/user.py:62 crm/api/user.py:95
 msgid "Only System Managers can assign the Sales Manager role"
@@ -1616,7 +1616,7 @@ msgstr "Удалить вкладку"
 #: crm/fcrm/doctype/fcrm_settings/fcrm_settings.json
 #: frontend/src/components/Settings/GeneralSettings.vue:60
 msgid "Reopen lead/deal on new communication"
-msgstr "Повторно открывать лид или сделку при новом сообщении"
+msgstr "Повторно открывать лид или заказ при новом сообщении"
 
 #. Label of the section_break_ufaf (Section Break) field in DocType 'CRM
 #. Service Level Agreement'
@@ -1724,7 +1724,7 @@ msgstr "Выберите вариант"
 #: frontend/src/components/Settings/ERPNextSettings.vue:217
 msgid "Select the deal status to trigger the auto customer creation in ERPNext"
 msgstr ""
-"Выберите статус сделки, при котором клиент будет автоматически создан в "
+"Выберите статус заказа, при котором клиент будет автоматически создан в "
 "ERPNext"
 
 #: frontend/src/components/Settings/CalendarSettings.vue:38
@@ -2079,7 +2079,7 @@ msgid ""
 "Update the modified timestamp on new email communication & comment for leads "
 "& deals"
 msgstr ""
-"Обновлять время изменения лидов и сделок при появлении нового письма или "
+"Обновлять время изменения лидов и заказов при появлении нового письма или "
 "комментария"
 
 #: frontend/src/components/Settings/GeneralSettings.vue:20
@@ -2087,7 +2087,7 @@ msgid ""
 "Update the modified timestamp on new email communication & comments for "
 "leads & deals"
 msgstr ""
-"Обновлять время изменения лидов и сделок при появлении новых писем или "
+"Обновлять время изменения лидов и заказов при появлении новых писем или "
 "комментариев"
 
 #: frontend/src/components/Settings/Profile/ProfileSettings.vue:158
@@ -2132,7 +2132,7 @@ msgstr "Сообщение WhatsApp"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:79
 msgid "Won Deals"
-msgstr "Выигранные сделки"
+msgstr "Выполненные заказы"
 
 #: frontend/src/components/Settings/Sla/SlaHolidays.vue:5
 msgid "Work Schedule & Holidays"
@@ -2180,11 +2180,11 @@ msgstr "заранее в"
 
 #: crm/api/activities.py:54
 msgid "converted the lead to this deal"
-msgstr "преобразовал(а) лид в эту сделку"
+msgstr "преобразовал(а) лид в этот заказ"
 
 #: crm/api/activities.py:50
 msgid "created this deal"
-msgstr "создал(а) эту сделку"
+msgstr "создал(а) этот заказ"
 
 #: crm/api/activities.py:202
 msgid "created this lead"
@@ -2552,7 +2552,7 @@ msgstr "Добавить фильтр"
 
 #: frontend/src/components/Calendar/CalendarEventPanel.vue:430
 msgid "Add Lead or Deal"
-msgstr "Добавить лид или сделку"
+msgstr "Добавить лид или заказ"
 
 #: frontend/src/components/Controls/Grid.vue:452
 #: frontend/src/components/Settings/Sla/SlaHolidays.vue:163
@@ -2812,7 +2812,7 @@ msgstr "Вы уверены, что хотите войти в панель уп
 msgid ""
 "Are you sure you want to reset 'Create Quotation from CRM Deal' Form Script?"
 msgstr ""
-"Вы уверены, что хотите сбросить скрипт формы «Создать предложение из сделки "
+"Вы уверены, что хотите сбросить скрипт формы «Создать предложение из заказа "
 "CRM»?"
 
 #: frontend/src/components/Settings/DashboardSettings.vue:236
@@ -2910,7 +2910,7 @@ msgstr "Токен аутентификации"
 
 #: frontend/src/components/Settings/DashboardSettings.vue:49
 msgid "Auto Update Expected Deal Value"
-msgstr "Автоматическое обновление ожидаемой стоимости сделки"
+msgstr "Автоматическое обновление ожидаемой стоимости заказа"
 
 #. Description of the 'Condition' (Code) field in DocType 'CRM Service Level
 #. Agreement'
@@ -2935,8 +2935,8 @@ msgid ""
 "Automatically update \"Expected Deal Value\" based on the total value of "
 "associated products in a deal"
 msgstr ""
-"Автоматически обновляйте \"Ожидаемую стоимость сделки\" на основе общей "
-"стоимости связанных товаров в сделке"
+"Автоматически обновлять \"Ожидаемую стоимость заказа\" на основе общей "
+"стоимости связанных товаров в заказе"
 
 #: frontend/src/components/Settings/Settings.vue:180
 msgid "Automation & Rules"
@@ -2944,35 +2944,43 @@ msgstr "Автоматизация и правила"
 
 #: crm/api/dashboard.py:252
 msgid "Average deal value of non won/lost deals"
-msgstr "Средняя стоимость сделки для незавершённых сделок"
+msgstr "Средний чек незавершённых заказов"
 
 #: crm/api/dashboard.py:419
 msgid "Average deal value of ongoing & won deals"
-msgstr "Средняя стоимость текущих и выигранных сделок"
+msgstr "Средний чек текущих и выполненных заказов"
+
+#: crm/fcrm/doctype/crm_dashboard/crm_dashboard.py:16
+msgid "Average deal value of ongoing and won deals"
+msgstr "Средний чек текущих и выполненных заказов"
 
 #: crm/api/dashboard.py:365
 msgid "Average deal value of won deals"
-msgstr "Средняя стоимость выигранных сделок"
+msgstr "Средний чек выполненных заказов"
+
+#: crm/fcrm/doctype/crm_dashboard/crm_dashboard.py:16
+msgid "Average value of won deals"
+msgstr "Средний чек выполненных заказов"
 
 #: crm/api/dashboard.py:546
 msgid "Average time taken from deal creation to deal closure"
-msgstr "Среднее время от создания до закрытия сделки"
+msgstr "Среднее время от создания до закрытия заказа"
 
 #: crm/api/dashboard.py:483
 msgid "Average time taken from lead creation to deal closure"
-msgstr "Среднее время от создания лида до закрытия сделки"
+msgstr "Среднее время от создания лида до закрытия заказа"
 
 #: crm/api/dashboard.py:418
 msgid "Avg. deal value"
-msgstr "Средняя стоимость сделки"
+msgstr "Средний чек"
 
 #: crm/api/dashboard.py:251
 msgid "Avg. ongoing deal value"
-msgstr "Средняя стоимость текущих сделок"
+msgstr "Средний чек текущих заказов"
 
 #: crm/api/dashboard.py:545
 msgid "Avg. time to close a deal"
-msgstr "Среднее время закрытия сделки"
+msgstr "Среднее время закрытия заказа"
 
 #: crm/api/dashboard.py:482
 msgid "Avg. time to close a lead"
@@ -2980,7 +2988,7 @@ msgstr "Среднее время закрытия лида"
 
 #: crm/api/dashboard.py:364
 msgid "Avg. won deal value"
-msgstr "Средняя стоимость выигранных сделок"
+msgstr "Средний чек выполненных заказов"
 
 #: frontend/src/components/Activities/EmailArea.vue:62
 #: frontend/src/components/EmailEditor.vue:62
@@ -3070,12 +3078,12 @@ msgstr "Панель управления CRM"
 #. Name of a DocType
 #: crm/fcrm/doctype/crm_deal/crm_deal.json
 msgid "CRM Deal"
-msgstr "CRM Сделка"
+msgstr "CRM Заказ"
 
 #. Name of a DocType
 #: crm/fcrm/doctype/crm_deal_status/crm_deal_status.json
 msgid "CRM Deal Status"
-msgstr "CRM Статус сделки"
+msgstr "CRM Статус заказа"
 
 #. Name of a DocType
 #: crm/fcrm/doctype/crm_dropdown_item/crm_dropdown_item.json
@@ -3350,7 +3358,7 @@ msgstr "Изменить статус"
 #: frontend/src/components/Layouts/AppSidebar.vue:504
 #: frontend/src/components/Layouts/AppSidebar.vue:513
 msgid "Change deal status"
-msgstr "Изменить статус сделки"
+msgstr "Изменить статус заказа"
 
 #: frontend/src/components/Settings/PreferencesSettings.vue:60
 msgid "Change language of the application."
@@ -3493,7 +3501,7 @@ msgstr "Комментарии"
 
 #: crm/api/dashboard.py:938
 msgid "Common reasons for losing deals"
-msgstr "Основные причины потери сделок"
+msgstr "Основные причины потери заказов"
 
 #. Label of the communication_status (Link) field in DocType 'CRM Deal'
 #. Label of the communication_status (Link) field in DocType 'CRM Lead'
@@ -3634,14 +3642,14 @@ msgstr "Преобразовать"
 #: frontend/src/components/Layouts/AppSidebar.vue:390
 #: frontend/src/components/Layouts/AppSidebar.vue:398
 msgid "Convert lead to deal"
-msgstr "Конвертировать лид в сделку"
+msgstr "Конвертировать лид в заказ"
 
 #: frontend/src/components/ListBulkActions.vue:78
 #: frontend/src/components/ListBulkActions.vue:195
 #: frontend/src/components/Modals/ConvertToDealModal.vue:7
 #: frontend/src/pages/Lead.vue:38
 msgid "Convert to Deal"
-msgstr "Преобразовать в сделку"
+msgstr "Преобразовать в заказ"
 
 #. Label of the converted (Check) field in DocType 'CRM Lead'
 #: crm/fcrm/doctype/crm_lead/crm_lead.json
@@ -3677,7 +3685,7 @@ msgstr "Создать"
 
 #: frontend/src/components/Modals/DealModal.vue:8
 msgid "Create Deal"
-msgstr "Создать сделку"
+msgstr "Создать заказ"
 
 #: frontend/src/components/Modals/CallLogDetailModal.vue:155
 #: frontend/src/components/Modals/LeadModal.vue:8
@@ -3770,7 +3778,7 @@ msgstr "Ежедневно"
 
 #: crm/api/dashboard.py:639
 msgid "Daily performance of leads, deals, and wins"
-msgstr "Ежедневная производительность лидов, сделок и побед"
+msgstr "Ежедневная динамика лидов, заказов и выполненных заказов"
 
 #: frontend/src/components/Settings/ThemeSwitcher.vue:89
 msgid "Dark"
@@ -3826,7 +3834,7 @@ msgstr "День"
 #: frontend/src/components/Telephony/ExotelCallUI.vue:200
 #: frontend/src/pages/Tasks.vue:132
 msgid "Deal"
-msgstr "Сделка"
+msgstr "Заказ"
 
 #. Label of the deal_owner (Link) field in DocType 'CRM Deal'
 #: crm/fcrm/doctype/crm_deal/crm_deal.json frontend/src/pages/Contact.vue:546
@@ -3834,31 +3842,31 @@ msgstr "Сделка"
 #: frontend/src/pages/MobileOrganization.vue:488
 #: frontend/src/pages/Organization.vue:518
 msgid "Deal Owner"
-msgstr "Владелец сделки"
+msgstr "Ответственный за заказ"
 
 #. Label of the deal_status (Link) field in DocType 'ERPNext CRM Settings'
 #: crm/fcrm/doctype/erpnext_crm_settings/erpnext_crm_settings.json
 #: frontend/src/components/Settings/ERPNextSettings.vue:213
 msgid "Deal Status"
-msgstr "Статус сделки"
+msgstr "Статус заказа"
 
 #. Label of a shortcut in the Frappe CRM Workspace
 #: crm/fcrm/workspace/frappe_crm/frappe_crm.json
 msgid "Deal Statuses"
-msgstr "Статусы сделок"
+msgstr "Статусы заказов"
 
 #. Label of the deal_value (Currency) field in DocType 'CRM Deal'
 #: crm/fcrm/doctype/crm_deal/crm_deal.json
 msgid "Deal Value"
-msgstr "Стоимость сделки"
+msgstr "Стоимость заказа"
 
 #: crm/api/dashboard.py:1023
 msgid "Deal generation channel analysis"
-msgstr "Анализ каналов генерации сделок"
+msgstr "Анализ каналов поступления заказов"
 
 #: crm/api/dashboard.py:1078 crm/api/dashboard.py:1141
 msgid "Deal value"
-msgstr "Стоимость сделки"
+msgstr "Стоимость заказа"
 
 #. Label of a shortcut in the Frappe CRM Workspace
 #: crm/fcrm/workspace/frappe_crm/frappe_crm.json
@@ -3866,27 +3874,27 @@ msgstr "Стоимость сделки"
 #: frontend/src/pages/MobileDeal.vue:392
 #: frontend/src/pages/MobileOrganization.vue:342
 msgid "Deals"
-msgstr "Сделки"
+msgstr "Заказы"
 
 #: crm/api/dashboard.py:846
 msgid "Deals by ongoing & won stage"
-msgstr "Сделки по текущим и выигранным стадиям"
+msgstr "Текущие и выполненные заказы по этапам"
 
 #: crm/api/dashboard.py:1130
 msgid "Deals by salesperson"
-msgstr "Сделки по менеджеру продаж"
+msgstr "Заказы по менеджеру продаж"
 
 #: crm/api/dashboard.py:1022
 msgid "Deals by source"
-msgstr "Сделки по источникам"
+msgstr "Заказы по источникам"
 
 #: crm/api/dashboard.py:895
 msgid "Deals by stage"
-msgstr "Сделки по стадиям"
+msgstr "Заказы по этапам"
 
 #: crm/api/dashboard.py:1067
 msgid "Deals by territory"
-msgstr "Сделки по территориям"
+msgstr "Заказы по территориям"
 
 #: frontend/src/components/Settings/EmailTemplate/EditEmailTemplate.vue:111
 #: frontend/src/components/Settings/EmailTemplate/NewEmailTemplate.vue:111
@@ -4445,7 +4453,7 @@ msgstr "Произошла ошибка"
 
 #: frontend/src/components/Modals/ConvertToDealModal.vue:173
 msgid "Error converting to deal: {0}"
-msgstr "Ошибка конвертации в сделку: {0}"
+msgstr "Ошибка конвертации в заказ: {0}"
 
 #: frontend/src/components/Settings/LeadSyncing/LeadSyncSourceForm.vue:290
 msgid "Error creating Lead Sync Source"
@@ -4563,7 +4571,7 @@ msgstr "Ожидаемая дата закрытия"
 #. Label of the expected_deal_value (Currency) field in DocType 'CRM Deal'
 #: crm/fcrm/doctype/crm_deal/crm_deal.json
 msgid "Expected Deal Value"
-msgstr "Ожидаемая стоимость сделки"
+msgstr "Ожидаемая стоимость заказа"
 
 #. Option for the 'Status' (Select) field in DocType 'CRM Invitation'
 #: crm/fcrm/doctype/crm_invitation/crm_invitation.json
@@ -4906,7 +4914,7 @@ msgstr "Основные настройки"
 
 #: crm/api/dashboard.py:1068
 msgid "Geographic distribution of deals and revenue"
-msgstr "Географическое распределение сделок и доходов"
+msgstr "Географическое распределение заказов и доходов"
 
 #: frontend/src/components/Modals/AboutModal.vue:55
 msgid "GitHub Repository"
@@ -5272,7 +5280,7 @@ msgid ""
 "mandatory to get accurate forecasting insights"
 msgstr ""
 "Это сделает обязательными поля «Ожидаемая дата закрытия» и «Ожидаемая "
-"стоимость сделки» для получения точных прогнозов"
+"стоимость заказа» для получения точных прогнозов"
 
 #. Label of the json (JSON) field in DocType 'CRM Global Settings'
 #: crm/fcrm/doctype/crm_global_settings/crm_global_settings.json
@@ -5504,7 +5512,7 @@ msgstr "Начата синхронизация лидов."
 
 #: crm/api/dashboard.py:788
 msgid "Lead to deal conversion pipeline"
-msgstr "Воронка конверсии лида в сделку"
+msgstr "Воронка конверсии лида в заказ"
 
 #. Label of a shortcut in the Frappe CRM Workspace
 #: crm/fcrm/workspace/frappe_crm/frappe_crm.json
@@ -5647,7 +5655,7 @@ msgstr "Забыли Причина"
 
 #: crm/api/dashboard.py:937
 msgid "Lost deal reasons"
-msgstr "Причины потерянных сделок"
+msgstr "Причины потери заказов"
 
 #. Option for the 'Priority' (Select) field in DocType 'CRM Task'
 #: crm/fcrm/doctype/crm_task/crm_task.json
@@ -5694,8 +5702,8 @@ msgid ""
 "Makes \"Expected Closure Date\" and \"Expected Deal Value\" mandatory for "
 "deal value forecasting"
 msgstr ""
-"Делает «Ожидаемую дату закрытия» и «Ожидаемую стоимость сделки» "
-"обязательными для прогнозирования стоимости сделки"
+"Делает «Ожидаемую дату закрытия» и «Ожидаемую стоимость заказа» "
+"обязательными для прогнозирования стоимости заказа"
 
 #: frontend/src/components/Settings/Users.vue:11
 msgid ""
@@ -5849,7 +5857,7 @@ msgstr "Другие параметры"
 
 #: frontend/src/components/Modals/ViewModal.vue:30
 msgid "My Open Deals"
-msgstr "Мои открытые сделки"
+msgstr "Мои открытые заказы"
 
 #. Label of the title (Data) field in DocType 'CRM Dashboard'
 #. Label of the name1 (Data) field in DocType 'CRM Dropdown Item'
@@ -6106,19 +6114,19 @@ msgstr "Не синхронизирован"
 
 #: crm/fcrm/doctype/crm_deal/crm_deal.py:355
 msgid "Not allowed to add contact to Deal"
-msgstr "Не разрешено добавлять контакт в сделку"
+msgstr "Не разрешено добавлять контакт в заказ"
 
 #: crm/fcrm/doctype/crm_lead/crm_lead.py:506
 msgid "Not allowed to convert Lead to Deal"
-msgstr "Не разрешено конвертировать Лид в сделку"
+msgstr "Не разрешено конвертировать Лид в заказ"
 
 #: crm/fcrm/doctype/crm_deal/crm_deal.py:366
 msgid "Not allowed to remove contact from Deal"
-msgstr "Не разрешено удалять контакт из сделки"
+msgstr "Не разрешено удалять контакт из заказа"
 
 #: crm/fcrm/doctype/crm_deal/crm_deal.py:377
 msgid "Not allowed to set primary contact for Deal"
-msgstr "Не разрешено назначать основное контактное лицо для сделки"
+msgstr "Не разрешено назначать основное контактное лицо для заказа"
 
 #: crm/lead_syncing/doctype/failed_lead_sync_log/failed_lead_sync_log.py:32
 msgid "Not implemented yet!"
@@ -6194,11 +6202,11 @@ msgstr "Формат номера"
 
 #: crm/api/dashboard.py:1075 crm/api/dashboard.py:1138
 msgid "Number of deals"
-msgstr "Количество сделок"
+msgstr "Количество заказов"
 
 #: crm/api/dashboard.py:1131
 msgid "Number of deals and total value per salesperson"
-msgstr "Количество сделок и общая стоимость на менеджера продаж"
+msgstr "Количество заказов и общая стоимость по менеджерам продаж"
 
 #: frontend/src/components/Settings/AssignmentRules/AssignmentRuleView.vue:167
 #: frontend/src/components/Settings/AssignmentRules/AssignmentRuleView.vue:251
@@ -6230,7 +6238,7 @@ msgstr "В процессе"
 
 #: crm/api/dashboard.py:189
 msgid "Ongoing deals"
-msgstr "Текущие сделки"
+msgstr "Текущие заказы"
 
 #: frontend/src/utils/index.js:484
 msgid "Only image files are allowed"
@@ -6251,7 +6259,7 @@ msgstr "Открыт"
 #: frontend/src/components/Modals/NoteModal.vue:15
 #: frontend/src/components/Modals/TaskModal.vue:15
 msgid "Open Deal"
-msgstr "Открыть сделку"
+msgstr "Открыть заказ"
 
 #: frontend/src/components/Modals/NoteModal.vue:16
 #: frontend/src/components/Modals/TaskModal.vue:16
@@ -6505,11 +6513,11 @@ msgstr "Пожалуйста, настройте интеграцию с Exotel"
 
 #: crm/fcrm/doctype/crm_deal/crm_deal.py:261
 msgid "Please specify a reason for losing the deal."
-msgstr "Укажите причину потери сделки."
+msgstr "Укажите причину потери заказа."
 
 #: crm/fcrm/doctype/crm_deal/crm_deal.py:263
 msgid "Please specify the reason for losing the deal."
-msgstr "Укажите причину потери сделки."
+msgstr "Укажите причину потери заказа."
 
 #: frontend/src/components/Settings/Sla/SlaPolicyList.vue:62
 msgid "Policy Name"
@@ -6597,7 +6605,7 @@ msgstr "Профиль"
 
 #: crm/api/dashboard.py:719
 msgid "Projected vs actual revenue based on deal probability"
-msgstr "Прогнозируемая против фактической выручки на основе вероятности сделки"
+msgstr "Прогнозируемая и фактическая выручка на основе вероятности заказа"
 
 #. Label of the public (Check) field in DocType 'CRM View Settings'
 #: crm/fcrm/doctype/crm_view_settings/crm_view_settings.json
@@ -7592,7 +7600,7 @@ msgid ""
 "(set in CRM Settings). It is set once when the currency is first added and "
 "doesn't change automatically."
 msgstr ""
-"Курс, используемый для конвертации валюты сделки в базовую валюту вашей CRM "
+"Курс, используемый для конвертации валюты заказа в базовую валюту вашей CRM "
 "(задаётся в настройках CRM). Он устанавливается один раз при первом "
 "добавлении валюты и не меняется автоматически."
 
@@ -7775,11 +7783,19 @@ msgstr "Общее количество лидов"
 
 #: crm/api/dashboard.py:190
 msgid "Total number of non won/lost deals"
-msgstr "Общее количество незавершенных сделок"
+msgstr "Общее количество незавершённых заказов"
+
+#: crm/fcrm/doctype/crm_dashboard/crm_dashboard.py:16
+msgid "Total number of ongoing deals"
+msgstr "Общее количество текущих заказов"
+
+#: crm/fcrm/doctype/crm_dashboard/crm_dashboard.py:16
+msgid "Total number of won deals"
+msgstr "Общее количество выполненных заказов"
 
 #: crm/api/dashboard.py:307
 msgid "Total number of won deals based on its closure date"
-msgstr "Общее количество выигранных сделок на основе даты закрытия"
+msgstr "Общее количество выполненных заказов по дате закрытия"
 
 #. Label of the traceback (Code) field in DocType 'Failed Lead Sync Log'
 #: crm/lead_syncing/doctype/failed_lead_sync_log/failed_lead_sync_log.json
@@ -8109,7 +8125,7 @@ msgstr "Выиграно"
 
 #: crm/api/dashboard.py:306
 msgid "Won deals"
-msgstr "Выигранные сделки"
+msgstr "Выполненные заказы"
 
 #. Label of the workday (Select) field in DocType 'CRM Service Day'
 #: crm/fcrm/doctype/crm_service_day/crm_service_day.json
@@ -8292,7 +8308,7 @@ msgstr "дни"
 #: frontend/src/components/Settings/AssignmentRules/AssigneeRules.vue:131
 #: frontend/src/components/Settings/AssignmentRules/AssignmentRuleView.vue:380
 msgid "deals"
-msgstr "сделки"
+msgstr "заказы"
 
 #: frontend/src/components/Settings/AssignmentRules/AssignmentRuleView.vue:190
 #: frontend/src/components/Settings/AssignmentRules/AssignmentRuleView.vue:274
@@ -8446,10 +8462,14 @@ msgstr "лиды"
 msgid "list"
 msgstr "список"
 
-#: crm/api/comment.py:39 frontend/src/components/Notifications.vue:64
-#: frontend/src/pages/MobileNotification.vue:50
+#: crm/api/comment.py:39
 msgid "mentioned you in {0}"
 msgstr "Вас упомянули в {0}"
+
+#: frontend/src/components/Notifications.vue:64
+#: frontend/src/pages/MobileNotification.vue:51
+msgid "mentioned you in document {0}"
+msgstr "Вас упомянули в документе «{0}»"
 
 #: frontend/src/components/Calendar/EventNotifications.vue:238
 #: frontend/src/components/Settings/CalendarSettings.vue:112
@@ -8788,7 +8808,7 @@ msgid "Are you sure you want to clear assignment for {0} item(s)?"
 msgstr "Действительно снять назначение с объектов ({0})?"
 
 msgid "Are you sure you want to convert {0} lead(s) to deal(s)?"
-msgstr "Действительно преобразовать лиды ({0}) в сделки?"
+msgstr "Действительно преобразовать лиды ({0}) в заказы?"
 
 msgid "Are you sure you want to delete \"{0}\" view?"
 msgstr "Действительно удалить представление «{0}»?"
@@ -8830,7 +8850,7 @@ msgid "Document"
 msgstr "Документ"
 
 msgid "Edit deal's mandatory fields layout"
-msgstr "Изменить макет обязательных полей сделки"
+msgstr "Изменить макет обязательных полей заказа"
 
 msgid "Failed to load file-based form controller: {0}"
 msgstr "Не удалось загрузить контроллер формы из файла: {0}"
@@ -9064,3 +9084,11 @@ msgstr "Вложений пока нет. Загрузите файл, и он �
 
 msgid "Start a conversation now!"
 msgstr "Начните переписку."
+
+#: crm/fcrm/doctype/crm_external_identity/crm_external_identity.py:13
+msgid "An external identity must be linked to a lead, contact, or deal"
+msgstr "Внешний идентификатор должен быть связан с лидом, контактом или заказом."
+
+#: crm/fcrm/doctype/crm_channel_conversation/crm_channel_conversation.py:13
+msgid "A conversation must be linked to a lead, contact, or deal"
+msgstr "Переписка должна быть связана с лидом, контактом или заказом."

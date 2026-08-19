@@ -47,7 +47,11 @@
               {{ n.from_user.full_name }}
             </span>
             <span>
-              {{ __('mentioned you in {0}', [n.reference_doctype]) }}
+              {{
+                __('mentioned you in document {0}', [
+                  __(n.reference_doctype),
+                ])
+              }}
             </span>
             <span class="font-medium text-ink-gray-9">
               {{ n.reference_name }}

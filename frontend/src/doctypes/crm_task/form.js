@@ -1,7 +1,7 @@
 export class CRMTask {
   onRender() {
     if (this.doc.reference_doctype && this.doc.reference_docname) {
-      let label = this.doc.reference_doctype.replace('CRM ', '')
+      let label = __(this.doc.reference_doctype.replace('CRM ', ''))
 
       this.actions = [
         {
