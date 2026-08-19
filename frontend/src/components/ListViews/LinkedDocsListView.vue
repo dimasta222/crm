@@ -46,7 +46,7 @@
               v-if="column.key === 'reference_doctype'"
               class="truncate text-base flex gap-2"
             >
-              {{ getDoctypeName(row.reference_doctype) }}
+              {{ __(getDoctypeName(row.reference_doctype)) }}
             </span>
           </template>
         </ListRowItem>

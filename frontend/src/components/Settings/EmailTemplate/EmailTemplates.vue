@@ -99,7 +99,7 @@
               </div>
             </div>
             <div class="text-base text-ink-gray-6 w-1/6">
-              {{ template.reference_doctype.replace('CRM ', '') }}
+              {{ __(template.reference_doctype.replace('CRM ', '')) }}
             </div>
             <div class="flex items-center justify-between w-1/6">
               <Switch
