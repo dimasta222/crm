@@ -9129,3 +9129,27 @@ msgstr "Количество выполненных заказов по дате
 
 msgid "Average order total for orders created in the selected period"
 msgstr "Средний чек по заказам, созданным за выбранный период"
+
+msgid "Orders in production (now)"
+msgstr "Заказы в производстве (сейчас)"
+
+msgid "Ready for pickup (now)"
+msgstr "Готовы к выдаче (сейчас)"
+
+msgid "Overdue orders (now)"
+msgstr "Просроченные заказы (сейчас)"
+
+msgid "Unpaid orders (now)"
+msgstr "Заказы без оплаты (сейчас)"
+
+msgid "Current number of unfinished orders in production"
+msgstr "Текущее количество незавершённых заказов в производстве"
+
+msgid "Current number of unfinished orders ready for pickup"
+msgstr "Текущее количество незавершённых заказов, готовых к выдаче"
+
+msgid "Current number of unfinished orders with a production deadline before today"
+msgstr "Текущее количество незавершённых заказов со сроком производства раньше сегодняшнего дня"
+
+msgid "Current number of unfinished orders with a positive total and no payment"
+msgstr "Текущее количество незавершённых заказов со стоимостью больше нуля и без оплаты"

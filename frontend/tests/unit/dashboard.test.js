@@ -77,6 +77,16 @@ describe('print studio dashboard cards', () => {
       { label: 'Current orders (now)', value: 'current_orders' },
       { label: 'Completed orders', value: 'completed_orders' },
       { label: 'Average order value', value: 'average_order_value' },
+      {
+        label: 'Orders in production (now)',
+        value: 'orders_in_production',
+      },
+      {
+        label: 'Ready for pickup (now)',
+        value: 'orders_ready_for_pickup',
+      },
+      { label: 'Overdue orders (now)', value: 'overdue_orders' },
+      { label: 'Unpaid orders (now)', value: 'unpaid_orders' },
     ])
   })
 })

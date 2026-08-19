@@ -257,6 +257,84 @@ def get_average_order_value(
 	)
 
 
+def _snapshot_order_count(title: str, tooltip: str, condition, Deal, Status, user: str | None):
+	condition = _with_deal_owner(condition, Deal, user)
+	result = (
+		frappe.qb.from_(Deal)
+		.join(Status)
+		.on(Deal.status == Status.name)
+		.select(Count(Deal.name).as_("value"))
+		.where(condition)
+	).run(as_dict=True)[0]
+	return _number_card(title, tooltip, result.value)
+
+
+def get_orders_in_production(
+	from_date: str | None = None, to_date: str | None = None, user: str | None = None
+):
+	"""Return the current number of unfinished orders in production."""
+	Deal = DocType("CRM Deal")
+	Status = DocType("CRM Deal Status")
+	condition = (Status.name == "In Production") & Status.type.notin(["Won", "Lost"])
+	return _snapshot_order_count(
+		"Orders in production (now)",
+		"Current number of unfinished orders in production",
+		condition,
+		Deal,
+		Status,
+		user,
+	)
+
+
+def get_orders_ready_for_pickup(
+	from_date: str | None = None, to_date: str | None = None, user: str | None = None
+):
+	"""Return the current number of unfinished orders ready for pickup."""
+	Deal = DocType("CRM Deal")
+	Status = DocType("CRM Deal Status")
+	condition = (Status.name == "Ready for Pickup") & Status.type.notin(["Won", "Lost"])
+	return _snapshot_order_count(
+		"Ready for pickup (now)",
+		"Current number of unfinished orders ready for pickup",
+		condition,
+		Deal,
+		Status,
+		user,
+	)
+
+
+def get_overdue_orders(from_date: str | None = None, to_date: str | None = None, user: str | None = None):
+	"""Return the current number of unfinished orders overdue before today."""
+	Deal = DocType("CRM Deal")
+	Status = DocType("CRM Deal Status")
+	condition = (Deal.production_deadline < frappe.utils.nowdate()) & Status.type.notin(["Won", "Lost"])
+	return _snapshot_order_count(
+		"Overdue orders (now)",
+		"Current number of unfinished orders with a production deadline before today",
+		condition,
+		Deal,
+		Status,
+		user,
+	)
+
+
+def get_unpaid_orders(from_date: str | None = None, to_date: str | None = None, user: str | None = None):
+	"""Return the current number of unfinished orders with no payment."""
+	Deal = DocType("CRM Deal")
+	Status = DocType("CRM Deal Status")
+	condition = (
+		(Deal.order_total > 0) & (Coalesce(Deal.paid_amount, 0) == 0) & Status.type.notin(["Won", "Lost"])
+	)
+	return _snapshot_order_count(
+		"Unpaid orders (now)",
+		"Current number of unfinished orders with a positive total and no payment",
+		condition,
+		Deal,
+		Status,
+		user,
+	)
+
+
 def get_total_leads(from_date: str | None = None, to_date: str | None = None, user: str | None = None):
 	"""
 	Get lead count for the dashboard.
