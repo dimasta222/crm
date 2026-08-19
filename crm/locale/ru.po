@@ -322,6 +322,12 @@ msgstr "Бухгалтерский учёт"
 msgid "Accounts"
 msgstr "Счета"
 
+msgid "Acquisition Manager"
+msgstr "Менеджер привлечения"
+
+msgid "Acquisition managers for orders created in the selected period"
+msgstr "Менеджеры привлечения заказов, созданных за выбранный период"
+
 #: frontend/src/components/CustomActions.vue:66
 #: frontend/src/components/ViewControls.vue:692
 #: frontend/src/components/ViewControls.vue:1067
@@ -1545,6 +1551,9 @@ msgstr "Отмена"
 msgid "Canceled"
 msgstr "Отменен"
 
+msgid "Cancelled"
+msgstr "Отменено"
+
 #: crm/api/user.py:82
 msgid "Cannot assign this role"
 msgstr "Нельзя назначить эту роль"
@@ -1794,6 +1803,9 @@ msgstr "Поле столбца"
 msgid "Columns"
 msgstr "Колонки"
 
+msgid "Combined"
+msgstr "Комбинированное нанесение"
+
 #. Label of the comment (Link) field in DocType 'CRM Notification'
 #: crm/fcrm/doctype/crm_notification/crm_notification.json
 #: frontend/src/components/Activities/ActivityHeader.vue:125
@@ -1850,6 +1862,10 @@ msgstr "Полная регистрация"
 #: frontend/src/utils/callLog.js:64
 msgid "Completed"
 msgstr "Завершено"
+
+# Print studio dashboard graphs
+msgid "Completed order amount by day"
+msgstr "Сумма выполненных заказов по дням"
 
 msgid "Completed orders"
 msgstr "Выполненные заказы"
@@ -2276,12 +2292,21 @@ msgstr ""
 msgid "Current orders (now)"
 msgstr "Текущие заказы (сейчас)"
 
+msgid "Current outstanding balance grouped by payment status"
+msgstr "Текущая задолженность по статусам оплаты"
+
 msgid "Current paid amount for orders created in the selected period"
 msgstr "Текущая оплаченная сумма по заказам, созданным за выбранный период"
 
 #: crm/api/dashboard.py:896
 msgid "Current pipeline distribution"
 msgstr "Текущее распределение по воронке продаж"
+
+msgid "Current status distribution for orders created in the selected period"
+msgstr "Текущие статусы заказов, созданных за выбранный период"
+
+msgid "Current statuses of period orders"
+msgstr "Текущие статусы заказов периода"
 
 #: frontend/src/components/Layouts/AppSidebar.vue:615
 msgid "Custom Actions"
@@ -2322,6 +2347,9 @@ msgstr "Настройка"
 #: frontend/src/components/ViewControls.vue:223
 msgid "Customize Quick Filters"
 msgstr "Настройка быстрых фильтров"
+
+msgid "DTF Printing"
+msgstr "DTF-печать"
 
 #. Option for the 'Default Calendar View' (Select) field in DocType 'FCRM
 #. Settings'
@@ -3224,6 +3252,9 @@ msgstr "Письма"
 msgid "Emails & Signature"
 msgstr "Электронная почта и подпись"
 
+msgid "Embroidery"
+msgstr "Вышивка"
+
 #: frontend/src/components/ListViews/ListRows.vue:12
 msgid "Empty"
 msgstr "Пустой"
@@ -3915,6 +3946,9 @@ msgstr "Время первого отклика"
 msgid "First name"
 msgstr "Имя"
 
+msgid "First-touch sources for orders created in the selected period"
+msgstr "Источники первого касания заказов, созданных за выбранный период"
+
 #: frontend/src/components/Settings/DefaultsSettings.vue:92
 msgid "Float Precision"
 msgstr "Поплавковая точность"
@@ -4116,6 +4150,9 @@ msgstr "Группа по: "
 #: frontend/src/components/Telephony/TwilioCallUI.vue:63
 msgid "Hang Up"
 msgstr "Завершить звонок"
+
+msgid "Heat Transfer Printing"
+msgstr "Термопечать"
 
 #: crm/templates/emails/helpdesk_invitation.html:2
 msgid "Hello"
@@ -5874,6 +5911,9 @@ msgstr "Нет доступа к связанному сообщению WhatsAp
 msgid "Not permitted to modify fields layout"
 msgstr "Нет прав на изменение расположения полей"
 
+msgid "Not specified"
+msgstr "Не указан"
+
 #. Label of the note (Link) field in DocType 'CRM Call Log'
 #: crm/fcrm/doctype/crm_call_log/crm_call_log.json
 #: frontend/src/components/Activities/ActivityHeader.vue:146
@@ -6112,6 +6152,9 @@ msgstr "Или создавайте лиды вручную"
 msgid "Order By"
 msgstr "Сортировать по"
 
+msgid "Order amount"
+msgstr "Сумма заказов"
+
 #: frontend/src/components/Settings/GeneralSettings.vue:111
 msgid "Order of activities, emails, comments and calls in the timeline"
 msgstr ""
@@ -6122,6 +6165,18 @@ msgstr ""
 msgid ""
 "Order of activities, emails, comments and calls in the timeline for all users"
 msgstr ""
+
+msgid "Order total for completed orders by closure date"
+msgstr "Сумма выполненных заказов по дате закрытия"
+
+msgid "Orders by acquisition manager"
+msgstr "Заказы по менеджерам привлечения"
+
+msgid "Orders by production type"
+msgstr "Заказы по видам производства"
+
+msgid "Orders by source"
+msgstr "Заказы по источникам"
 
 msgid "Orders in production (now)"
 msgstr "Заказы в производстве (сейчас)"
@@ -6208,6 +6263,12 @@ msgstr "Исходящие звонки"
 msgid "Outgoing"
 msgstr "Исходящие"
 
+msgid "Outstanding Balance"
+msgstr "Задолженность"
+
+msgid "Outstanding balance by payment status (now)"
+msgstr "Долги по статусам оплаты (сейчас)"
+
 msgid "Outstanding balance for orders created in the selected period"
 msgstr "Остаток к оплате по заказам, созданным за выбранный период"
 
@@ -6233,6 +6294,9 @@ msgstr "Страница"
 msgid "Page Name"
 msgstr "Название страницы"
 
+msgid "Paid"
+msgstr "Оплачено"
+
 msgid "Paid for period orders"
 msgstr "Оплачено по заказам периода"
 
@@ -6240,6 +6304,9 @@ msgstr "Оплачено по заказам периода"
 #: crm/fcrm/doctype/crm_territory/crm_territory.json
 msgid "Parent CRM Territory"
 msgstr "Родительская территория CRM"
+
+msgid "Partially Paid"
+msgstr "Частично оплачено"
 
 msgid "Partner"
 msgstr "Партнёр"
@@ -6295,6 +6362,9 @@ msgstr "Напоминание об оплате"
 #: frontend/src/components/Settings/EmailTemplate/NewEmailTemplate.vue:69
 msgid "Payment Reminder from Frappé - (#{{ name }})"
 msgstr "Напоминание о платеже от Frappé - (#{{ name }})"
+
+msgid "Payment Status"
+msgstr "Статус оплаты"
 
 #: frontend/src/components/Settings/EmailTemplate/EditEmailTemplate.vue:69
 msgid "Payment reminder from Frappé - (#{{ name }})"
@@ -6466,6 +6536,9 @@ msgstr "Название политики"
 msgid "Position"
 msgstr "Позиция"
 
+msgid "Postpaid"
+msgstr "Постоплата"
+
 #: frontend/src/components/Settings/PreferencesSettings.vue:4
 #: frontend/src/components/Settings/Settings.vue:108
 msgid "Preferences"
@@ -6572,6 +6645,12 @@ msgstr ""
 #: frontend/src/components/Settings/ERPNextSettings.vue:330
 msgid "Product sync started. Items will appear shortly."
 msgstr ""
+
+msgid "Production Type"
+msgstr "Вид производства"
+
+msgid "Production methods for orders created in the selected period"
+msgstr "Виды производства в заказах, созданных за выбранный период"
 
 #. Label of the products_tab (Tab Break) field in DocType 'CRM Deal'
 #. Label of the products (Table) field in DocType 'CRM Deal'
@@ -6760,6 +6839,9 @@ msgstr "Обновить приложения"
 #: frontend/src/components/Settings/ERPNextSettings.vue:157
 msgid "Refresh Companies"
 msgstr "Обновить список компаний"
+
+msgid "Refunded"
+msgstr "Возврат"
 
 #: frontend/src/components/Telephony/TwilioCallUI.vue:97
 msgid "Reject"
@@ -7306,6 +7388,9 @@ msgstr "Запланируйте задачу..."
 #: frontend/src/components/Activities/ActivityHeader.vue:130
 msgid "Schedule an Event"
 msgstr "Запланировать мероприятие"
+
+msgid "Screen Printing"
+msgstr "Шелкография"
 
 #. Label of the script (Code) field in DocType 'CRM Form Script'
 #: crm/fcrm/doctype/crm_form_script/crm_form_script.json
@@ -7964,6 +8049,9 @@ msgstr "Необходимо ввести тему"
 #: frontend/src/components/Modals/EmailTemplateSelectorModal.vue:35
 msgid "Subject: {0}"
 msgstr "Тема: {0}"
+
+msgid "Sublimation"
+msgstr "Сублимация"
 
 msgid "Sum of order totals for orders created in the selected period"
 msgstr "Сумма заказов, созданных за выбранный период"
@@ -8629,6 +8717,9 @@ msgstr "Отвязать связанную запись"
 #: frontend/src/components/DeleteLinkedDocModal.vue:82
 msgid "Unlink {0} Item(s)"
 msgstr "Отвязать элементы: {0}"
+
+msgid "Unpaid"
+msgstr "Не оплачено"
 
 msgid "Unpaid orders (now)"
 msgstr "Заказы без оплаты (сейчас)"

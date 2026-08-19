@@ -42,7 +42,11 @@
 
 <script setup lang="ts">
 import { getRandom } from '@/utils'
-import { PRINT_STUDIO_NUMBER_CHARTS } from '@/utils/dashboard'
+import {
+  PRINT_STUDIO_AXIS_CHARTS,
+  PRINT_STUDIO_DONUT_CHARTS,
+  PRINT_STUDIO_NUMBER_CHARTS,
+} from '@/utils/dashboard'
 import { createResource, Dialog, FormControl } from 'frappe-ui'
 import { ref, reactive, inject } from 'vue'
 
@@ -74,39 +78,19 @@ const numberCharts = [
     label: __(chart.label),
     value: chart.value,
   })),
-  { label: __('Total Leads'), value: 'total_leads' },
-  { label: __('Ongoing Deals'), value: 'ongoing_deals' },
-  { label: __('Avg Ongoing Deal Value'), value: 'average_ongoing_deal_value' },
-  { label: __('Won Deals'), value: 'won_deals' },
-  { label: __('Avg Won Deal Value'), value: 'average_won_deal_value' },
-  { label: __('Avg Deal Value'), value: 'average_deal_value' },
-  {
-    label: __('Avg Time to Close a Lead'),
-    value: 'average_time_to_close_a_lead',
-  },
-  {
-    label: __('Avg Time to Close a Deal'),
-    value: 'average_time_to_close_a_deal',
-  },
 ]
 
-const axisChart = ref('sales_trend')
-const axisCharts = [
-  { label: __('Sales Trend'), value: 'sales_trend' },
-  { label: __('Forecasted Revenue'), value: 'forecasted_revenue' },
-  { label: __('Funnel Conversion'), value: 'funnel_conversion' },
-  { label: __('Deals by Ongoing & Won Stage'), value: 'deals_by_stage_axis' },
-  { label: __('Lost Deal Reasons'), value: 'lost_deal_reasons' },
-  { label: __('Deals by Territory'), value: 'deals_by_territory' },
-  { label: __('Deals by Salesperson'), value: 'deals_by_salesperson' },
-]
+const axisChart = ref(PRINT_STUDIO_AXIS_CHARTS[0].value)
+const axisCharts = PRINT_STUDIO_AXIS_CHARTS.map((chart) => ({
+  label: __(chart.label),
+  value: chart.value,
+}))
 
-const donutChart = ref('deals_by_stage_donut')
-const donutCharts = [
-  { label: __('Deals by Stage'), value: 'deals_by_stage_donut' },
-  { label: __('Leads by Source'), value: 'leads_by_source' },
-  { label: __('Deals by Source'), value: 'deals_by_source' },
-]
+const donutChart = ref(PRINT_STUDIO_DONUT_CHARTS[0].value)
+const donutCharts = PRINT_STUDIO_DONUT_CHARTS.map((chart) => ({
+  label: __(chart.label),
+  value: chart.value,
+}))
 
 async function addChart() {
   show.value = false

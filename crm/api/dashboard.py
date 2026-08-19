@@ -1,4 +1,5 @@
 import json
+from decimal import Decimal
 
 import frappe
 from frappe import _
@@ -333,6 +334,240 @@ def get_unpaid_orders(from_date: str | None = None, to_date: str | None = None, 
 		Status,
 		user,
 	)
+
+
+def _category_value(field):
+	"""Return a category expression that normalizes NULL and empty values."""
+	return Case().when(field.isnotnull() & (field != ""), field).else_("Not specified")
+
+
+def _decimal_or_zero(value):
+	return value if value is not None else Decimal("0.00")
+
+
+def _count_axis_chart(title, subtitle, category_title, category_key, data, *, swap_xy=False):
+	chart = {
+		"data": data or [],
+		"title": _(title),
+		"subtitle": _(subtitle),
+		"xAxis": {"title": _(category_title), "key": category_key, "type": "category"},
+		"yAxis": {"title": _("Count")},
+		"series": [{"name": "count", "type": "bar", "echartOptions": {"name": _("Count")}}],
+	}
+	if swap_xy:
+		chart["swapXY"] = True
+	return chart
+
+
+def _donut_chart(title, subtitle, category_title, rows, category_key):
+	category_column = _(category_title)
+	value_column = _("Count")
+	return {
+		"data": [
+			{category_column: _(row.get(category_key) or "Not specified"), value_column: row.get("count") or 0}
+			for row in rows
+		],
+		"title": _(title),
+		"subtitle": _(subtitle),
+		"categoryColumn": category_column,
+		"valueColumn": value_column,
+	}
+
+
+def get_completed_order_amount_by_day(
+	from_date: str | None = None, to_date: str | None = None, user: str | None = None
+):
+	"""Return base-currency totals for won orders grouped by their closure date."""
+	Deal = DocType("CRM Deal")
+	Status = DocType("CRM Deal Status")
+	condition = (
+		_period_condition(Deal.closed_date, from_date, to_date)
+		& (Status.type == "Won")
+		& (Deal.currency == get_base_currency())
+	)
+	condition = _with_deal_owner(condition, Deal, user)
+	rows = (
+		frappe.qb.from_(Deal)
+		.join(Status)
+		.on(Deal.status == Status.name)
+		.select(Deal.closed_date.as_("date"), Sum(Deal.order_total).as_("amount"))
+		.where(condition)
+		.groupby(Deal.closed_date)
+		.orderby(Deal.closed_date)
+	).run(as_dict=True)
+	for row in rows:
+		row["date"] = frappe.utils.getdate(row.date).isoformat()
+		row["amount"] = _decimal_or_zero(row.amount)
+
+	return {
+		"data": rows,
+		"title": _("Completed order amount by day"),
+		"subtitle": _("Order total for completed orders by closure date"),
+		"xAxis": {"title": _("Date"), "key": "date", "type": "time", "timeGrain": "day"},
+		"yAxis": {"title": _("Amount") + f" ({get_base_currency_symbol()})"},
+		"series": [
+			{
+				"name": "amount",
+				"type": "line",
+				"showDataPoints": True,
+				"echartOptions": {"name": _("Order amount")},
+			}
+		],
+	}
+
+
+def get_orders_by_status(from_date: str | None = None, to_date: str | None = None, user: str | None = None):
+	"""Return current statuses for orders created in the selected period."""
+	Deal = DocType("CRM Deal")
+	status = _category_value(Deal.status)
+	condition = _with_deal_owner(_period_condition(Deal.creation, from_date, to_date), Deal, user)
+	rows = (
+		frappe.qb.from_(Deal)
+		.select(status.as_("status"), Count(Deal.name).as_("count"))
+		.where(condition)
+		.groupby(status)
+		.orderby(Count(Deal.name), order=frappe.qb.desc)
+	).run(as_dict=True)
+	return _donut_chart(
+		"Current statuses of period orders",
+		"Current status distribution for orders created in the selected period",
+		"Status",
+		rows,
+		"status",
+	)
+
+
+def get_orders_by_production_type(
+	from_date: str | None = None, to_date: str | None = None, user: str | None = None
+):
+	"""Return distinct order counts for each application service type."""
+	Deal = DocType("CRM Deal")
+	Application = DocType("CRM Deal Application")
+	service_type = _category_value(Application.service_type)
+	count = Count(Deal.name).distinct()
+	condition = _with_deal_owner(_period_condition(Deal.creation, from_date, to_date), Deal, user)
+	rows = (
+		frappe.qb.from_(Deal)
+		.left_join(Application)
+		.on(
+			(Application.parent == Deal.name)
+			& (Application.parenttype == "CRM Deal")
+			& (Application.parentfield == "applications")
+		)
+		.select(service_type.as_("service_type"), count.as_("count"))
+		.where(condition)
+		.groupby(service_type)
+		.orderby(count, order=frappe.qb.desc)
+	).run(as_dict=True)
+	for row in rows:
+		row["service_type"] = _(row.get("service_type") or "Not specified")
+	return _count_axis_chart(
+		"Orders by production type",
+		"Production methods for orders created in the selected period",
+		"Production Type",
+		"service_type",
+		rows,
+		swap_xy=True,
+	)
+
+
+def get_orders_by_source(from_date: str | None = None, to_date: str | None = None, user: str | None = None):
+	"""Return first-touch source with source as a fallback for period orders."""
+	Deal = DocType("CRM Deal")
+	source = (
+		Case()
+		.when(Deal.first_touch_source.isnotnull() & (Deal.first_touch_source != ""), Deal.first_touch_source)
+		.when(Deal.source.isnotnull() & (Deal.source != ""), Deal.source)
+		.else_("Not specified")
+	)
+	condition = _with_deal_owner(_period_condition(Deal.creation, from_date, to_date), Deal, user)
+	rows = (
+		frappe.qb.from_(Deal)
+		.select(source.as_("source"), Count(Deal.name).as_("count"))
+		.where(condition)
+		.groupby(source)
+		.orderby(Count(Deal.name), order=frappe.qb.desc)
+	).run(as_dict=True)
+	return _donut_chart(
+		"Orders by source",
+		"First-touch sources for orders created in the selected period",
+		"Source",
+		rows,
+		"source",
+	)
+
+
+def get_orders_by_acquisition_manager(
+	from_date: str | None = None, to_date: str | None = None, user: str | None = None
+):
+	"""Return period order counts grouped by the acquisition manager."""
+	Deal = DocType("CRM Deal")
+	User = DocType("User")
+	manager = (
+		Case()
+		.when(User.full_name.isnotnull() & (User.full_name != ""), User.full_name)
+		.when(Deal.attracted_by.isnotnull() & (Deal.attracted_by != ""), Deal.attracted_by)
+		.else_("Not specified")
+	)
+	condition = _with_deal_owner(_period_condition(Deal.creation, from_date, to_date), Deal, user)
+	rows = (
+		frappe.qb.from_(Deal)
+		.left_join(User)
+		.on(User.name == Deal.attracted_by)
+		.select(manager.as_("manager"), Count(Deal.name).as_("count"))
+		.where(condition)
+		.groupby(Deal.attracted_by, User.full_name)
+		.orderby(Count(Deal.name), order=frappe.qb.desc)
+	).run(as_dict=True)
+	for row in rows:
+		row["manager"] = _(row.get("manager") or "Not specified")
+	return _count_axis_chart(
+		"Orders by acquisition manager",
+		"Acquisition managers for orders created in the selected period",
+		"Acquisition Manager",
+		"manager",
+		rows,
+		swap_xy=True,
+	)
+
+
+def get_outstanding_balance_by_payment_status(
+	from_date: str | None = None, to_date: str | None = None, user: str | None = None
+):
+	"""Return a current base-currency debt snapshot grouped by payment status."""
+	Deal = DocType("CRM Deal")
+	Status = DocType("CRM Deal Status")
+	payment_status = _category_value(Deal.payment_status)
+	condition = (
+		(Deal.balance_amount > 0)
+		& (Deal.currency == get_base_currency())
+		& (Coalesce(Status.type, "") != "Lost")
+		& Coalesce(Deal.payment_status, "").notin(["Cancelled", "Refunded"])
+	)
+	condition = _with_deal_owner(condition, Deal, user)
+	rows = (
+		frappe.qb.from_(Deal)
+		.left_join(Status)
+		.on(Deal.status == Status.name)
+		.select(payment_status.as_("payment_status"), Sum(Deal.balance_amount).as_("balance"))
+		.where(condition)
+		.groupby(payment_status)
+		.orderby(Sum(Deal.balance_amount), order=frappe.qb.desc)
+	).run(as_dict=True)
+	for row in rows:
+		row["payment_status"] = _(row.get("payment_status") or "Not specified")
+		row["balance"] = _decimal_or_zero(row.balance)
+
+	return {
+		"data": rows,
+		"title": _("Outstanding balance by payment status (now)"),
+		"subtitle": _("Current outstanding balance grouped by payment status"),
+		"xAxis": {"title": _("Payment Status"), "key": "payment_status", "type": "category"},
+		"yAxis": {"title": _("Outstanding Balance") + f" ({get_base_currency_symbol()})"},
+		"series": [
+			{"name": "balance", "type": "bar", "echartOptions": {"name": _("Outstanding Balance")}}
+		],
+	}
 
 
 def get_total_leads(from_date: str | None = None, to_date: str | None = None, user: str | None = None):
