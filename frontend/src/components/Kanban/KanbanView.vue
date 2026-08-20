@@ -50,7 +50,9 @@
                   </div>
                 </template>
               </Popover>
-              <div class="text-ink-gray-9">{{ __(column.column.name) }}</div>
+              <div class="text-ink-gray-9">
+                {{ getColumnLabel(column.column.name) }}
+              </div>
             </div>
             <div class="flex">
               <Dropdown :options="actions(column)">
@@ -176,6 +178,7 @@ import RefreshIcon from '@/components/Icons/RefreshIcon.vue'
 import Autocomplete from '@/components/frappe-ui/Autocomplete.vue'
 import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
 import { isTouchScreenDevice, colors, parseColor } from '@/utils'
+import { translateSelectValue } from '@/utils/fieldTransforms'
 import Draggable from 'vuedraggable'
 import { Dropdown, Popover } from 'frappe-ui'
 import { computed } from 'vue'
@@ -218,9 +221,16 @@ const deletedColumns = computed(() => {
   return _columns
     ?.filter((col) => col['delete'])
     .map((col) => {
-      return { label: __(col.name), value: col.name }
+      return { label: getColumnLabel(col.name), value: col.name }
     })
 })
+
+function getColumnLabel(name) {
+  if (kanban.value?.params?.column_field === 'payment_status') {
+    return translateSelectValue(name, 'payment_status', 'Not specified')
+  }
+  return name
+}
 
 function actions(column) {
   return [

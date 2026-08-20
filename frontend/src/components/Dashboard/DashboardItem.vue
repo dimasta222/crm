@@ -2,7 +2,7 @@
   <div class="h-full w-full">
     <div
       v-if="item.type == 'number_chart'"
-      class="flex h-full w-full rounded shadow overflow-hidden cursor-pointer"
+      class="flex h-full w-full cursor-pointer overflow-hidden rounded shadow"
     >
       <Tooltip :text="__(item.data.tooltip)">
         <NumberChart
@@ -10,7 +10,18 @@
           :key="index"
           class="!items-start"
           :config="item.data"
-        />
+        >
+          <template v-if="isDashboardCurrencyCard(item.name)" #subtitle>
+            <div
+              class="max-h-[72px] w-full max-w-full overflow-auto break-all font-semibold leading-tight text-ink-gray-9"
+              :class="getDashboardCurrencyValueClass(currencyValue(item.data))"
+              :title="currencyValue(item.data)"
+              data-testid="dashboard-currency-value"
+            >
+              {{ currencyValue(item.data) }}
+            </div>
+          </template>
+        </NumberChart>
       </Tooltip>
     </div>
     <div
@@ -36,10 +47,19 @@
 </template>
 <script setup>
 import { AxisChart, DonutChart, NumberChart, Tooltip } from 'frappe-ui'
+import {
+  formatDashboardCurrency,
+  getDashboardCurrencyValueClass,
+  isDashboardCurrencyCard,
+} from '@/utils/dashboard'
 
 defineProps({
   index: { type: Number, required: true },
   item: { type: Object, required: true },
   editing: { type: Boolean, default: false },
 })
+
+function currencyValue(config) {
+  return formatDashboardCurrency(config.value, config.prefix)
+}
 </script>

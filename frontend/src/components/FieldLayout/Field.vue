@@ -37,7 +37,7 @@
           'Text Editor',
         ].includes(field.fieldtype)
       "
-      v-model="data[field.fieldname]"
+      :modelValue="getReadOnlyFieldValue(field)"
       type="text"
       :placeholder="getPlaceholder(field)"
       :disabled="true"
@@ -321,7 +321,11 @@ import {
 } from '@/utils'
 import { flt, formatNumber, formatCurrency } from '@/utils/numberFormat.js'
 import { getMeta } from '@/stores/meta'
-import { parseLinkFilters, processField } from '@/utils/fieldTransforms'
+import {
+  parseLinkFilters,
+  processField,
+  translateSelectValue,
+} from '@/utils/fieldTransforms'
 import { usersStore } from '@/stores/users'
 import { useDocument } from '@/data/document'
 import {
@@ -442,6 +446,16 @@ function getFieldOverrides(fieldname) {
     return { ...(colOv || {}), ...(rowOv || {}) }
   }
   return formDocument.value?.fieldPropertyOverrides?.[fieldname]
+}
+
+function getReadOnlyFieldValue(field) {
+  const value = data.value?.[field.fieldname]
+  if (field.fieldtype !== 'Select') return value
+  return translateSelectValue(
+    value,
+    field.fieldname,
+    field.fieldname === 'payment_status' ? 'Not specified' : '',
+  )
 }
 
 const field = computed(() => {

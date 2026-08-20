@@ -26,9 +26,7 @@ function translate(message, replace, context = null) {
     translatedMessage = translatedMessages[message] || message
   }
 
-  const language = (
-    document.documentElement.lang || navigator.language || ''
-  ).toLowerCase()
+  const language = (getCurrentLocale() || '').toLowerCase()
   const isRussian =
     language.startsWith('ru') ||
     /[А-Яа-яЁё]/.test(translatedMessages['Create'] || '')
@@ -42,4 +40,12 @@ function translate(message, replace, context = null) {
   }
 
   return format(translatedMessage, replace)
+}
+
+export function getCurrentLocale() {
+  return (
+    (typeof document !== 'undefined' && document.documentElement.lang) ||
+    (typeof navigator !== 'undefined' && navigator.language) ||
+    undefined
+  )
 }

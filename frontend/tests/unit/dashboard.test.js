@@ -1,11 +1,94 @@
 import {
   formatRange,
+  formatDashboardCurrency,
+  getDashboardCurrencyValueClass,
   getDashboardDateRange,
   getLastXDays,
+  isDashboardCurrencyCard,
   PRINT_STUDIO_AXIS_CHARTS,
   PRINT_STUDIO_DONUT_CHARTS,
   PRINT_STUDIO_NUMBER_CHARTS,
 } from '@/utils/dashboard'
+
+vi.mock('frappe-ui', () => ({
+  dayjs: (value) => ({
+    format: () => {
+      const year = value.getFullYear()
+      const month = String(value.getMonth() + 1).padStart(2, '0')
+      const day = String(value.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
+    },
+  }),
+}))
+
+describe('dashboard number card formatting', () => {
+  const originalLanguage = document.documentElement.lang
+
+  afterEach(() => {
+    document.documentElement.lang = originalLanguage
+  })
+
+  it('uses the current Russian application locale without compact notation', () => {
+    document.documentElement.lang = 'ru-RU'
+    expect(formatDashboardCurrency(0, '₽')).toBe('0 ₽')
+    expect(formatDashboardCurrency('0', '₽')).toBe('0 ₽')
+    expect(formatDashboardCurrency(1000, '₽')).toBe('1 000 ₽')
+    expect(formatDashboardCurrency(1500.5, '₽')).toBe('1 500,50 ₽')
+    expect(formatDashboardCurrency(-1500.5, '₽')).toBe('-1 500,50 ₽')
+    expect(formatDashboardCurrency('1500.50', '₽')).toBe('1 500,50 ₽')
+  })
+
+  it('uses the current English application locale', () => {
+    document.documentElement.lang = 'en-US'
+    expect(formatDashboardCurrency(1000, '$')).toBe('1,000 $')
+    expect(formatDashboardCurrency('1500.50', '$')).toBe('1,500.50 $')
+  })
+
+  it.each([null, undefined, '', '   ', 'invalid', NaN, Infinity, -Infinity])(
+    'renders missing or invalid value %s as a neutral state',
+    (value) => {
+      expect(formatDashboardCurrency(value, '₽')).toBe('—')
+    },
+  )
+
+  it('preserves every digit of a decimal string beyond Number.MAX_SAFE_INTEGER', () => {
+    document.documentElement.lang = 'ru-RU'
+    expect(formatDashboardCurrency('900719925474099312345.25', '₽')).toBe(
+      '900 719 925 474 099 312 345,25 ₽',
+    )
+
+    document.documentElement.lang = 'en-US'
+    expect(formatDashboardCurrency('900719925474099312345.25', '$')).toBe(
+      '900,719,925,474,099,312,345.25 $',
+    )
+  })
+
+  it('never adds compact notation or duplicates the dynamic symbol', () => {
+    document.documentElement.lang = 'ru-RU'
+    const result = formatDashboardCurrency('1500.50', '€')
+    expect(result).not.toMatch(/[KMКМ]|тыс\.|млн/i)
+    expect(result.match(/€/g)).toHaveLength(1)
+  })
+
+  it('uses adaptive classes only for long formatted values', () => {
+    expect(getDashboardCurrencyValueClass('1 500,50 ₽')).toBe('text-2xl')
+    expect(getDashboardCurrencyValueClass('123 456 789 012,34 ₽')).toBe(
+      'text-lg',
+    )
+    expect(
+      getDashboardCurrencyValueClass('900 719 925 474 099 312 345,25 ₽'),
+    ).toBe('text-sm')
+  })
+
+  it('identifies only the four explicit print studio monetary metrics', () => {
+    expect(isDashboardCurrencyCard('total_order_amount')).toBe(true)
+    expect(isDashboardCurrencyCard('paid_for_period_orders')).toBe(true)
+    expect(isDashboardCurrencyCard('awaiting_payment')).toBe(true)
+    expect(isDashboardCurrencyCard('average_order_value')).toBe(true)
+    expect(isDashboardCurrencyCard('current_orders')).toBe(false)
+    expect(isDashboardCurrencyCard('legacy_custom_card')).toBe(false)
+  })
+})
 
 const controlDate = new Date(2026, 7, 19, 12)
 

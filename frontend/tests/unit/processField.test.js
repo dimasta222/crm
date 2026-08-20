@@ -1,4 +1,139 @@
-import { processField } from '@/utils/fieldTransforms'
+import {
+  processField,
+  translateSelectOptions,
+  translateSelectValue,
+} from '@/utils/fieldTransforms'
+
+const paymentStatuses = [
+  'Paid',
+  'Partially Paid',
+  'Unpaid',
+  'Postpaid',
+  'Refunded',
+  'Cancelled',
+]
+
+const expectedRussianPaymentOptions = [
+  { label: 'Оплачено', value: 'Paid' },
+  { label: 'Частично оплачено', value: 'Partially Paid' },
+  { label: 'Не оплачено', value: 'Unpaid' },
+  { label: 'Постоплата', value: 'Postpaid' },
+  { label: 'Возврат', value: 'Refunded' },
+  { label: 'Отменено', value: 'Cancelled' },
+]
+
+function translateRussianPaymentStatus(message) {
+  switch (message) {
+    case 'Paid':
+      return 'Оплачено'
+    case 'Partially Paid':
+      return 'Частично оплачено'
+    case 'Unpaid':
+      return 'Не оплачено'
+    case 'Postpaid':
+      return 'Постоплата'
+    case 'Refunded':
+      return 'Возврат'
+    case 'Cancelled':
+      return 'Отменено'
+    case 'Not specified':
+      return 'Не указан'
+    case 'Deal':
+      return 'Заказ'
+    default:
+      return message
+  }
+}
+
+describe('payment status display in Russian', () => {
+  const originalTranslate = globalThis.__
+  const originalLanguage = globalThis.window.lang
+
+  beforeEach(() => {
+    globalThis.window.lang = 'ru'
+    globalThis.__ = translateRussianPaymentStatus
+  })
+
+  afterEach(() => {
+    globalThis.__ = originalTranslate
+    if (originalLanguage === undefined) {
+      delete globalThis.window.lang
+    } else {
+      globalThis.window.lang = originalLanguage
+    }
+  })
+
+  it('localizes all stored payment status values without changing them', () => {
+    const field = processField({
+      fieldname: 'payment_status',
+      fieldtype: 'Select',
+      options: paymentStatuses.join('\n'),
+      reqd: 1,
+    })
+
+    expect(field.options).toEqual(expectedRussianPaymentOptions)
+  })
+
+  it('localizes a missing payment status as Not specified', () => {
+    for (const value of [null, undefined, '', '   ']) {
+      expect(
+        translateSelectValue(value, 'payment_status', 'Not specified'),
+      ).toBe('Не указан')
+    }
+  })
+
+  it('keeps arbitrary Select and Link values unchanged', () => {
+    const customSelect = processField({
+      fieldname: 'custom_category',
+      fieldtype: 'Select',
+      options: 'Deal',
+      reqd: 1,
+    })
+    const link = processField({
+      fieldname: 'linked_document',
+      fieldtype: 'Link',
+      options: 'Deal',
+    })
+
+    expect(customSelect.options).toEqual([{ label: 'Deal', value: 'Deal' }])
+    expect(translateSelectValue('Deal', 'custom_category')).toBe('Deal')
+    expect(link.options).toBe('Deal')
+  })
+
+  it('builds translated filter labels while preserving raw values', () => {
+    const options = translateSelectOptions(paymentStatuses, 'payment_status')
+    expect(options).toEqual(expectedRussianPaymentOptions)
+    expect(options.map((option) => option.value)).toEqual(paymentStatuses)
+  })
+})
+
+describe('payment status display in English', () => {
+  const originalTranslate = globalThis.__
+  const originalLanguage = globalThis.window.lang
+
+  beforeEach(() => {
+    globalThis.window.lang = 'en'
+    globalThis.__ = (message) => message
+  })
+
+  afterEach(() => {
+    globalThis.__ = originalTranslate
+    if (originalLanguage === undefined) {
+      delete globalThis.window.lang
+    } else {
+      globalThis.window.lang = originalLanguage
+    }
+  })
+
+  it('shows all six raw English labels and values', () => {
+    expect(translateSelectOptions(paymentStatuses, 'payment_status')).toEqual(
+      paymentStatuses.map((value) => ({ label: value, value })),
+    )
+    expect(translateSelectValue(null, 'payment_status', 'Not specified')).toBe(
+      'Not specified',
+    )
+  })
+})
 
 describe('processField', () => {
   // ─── Cloning ──────────────────────────────────────────────────

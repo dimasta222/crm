@@ -580,6 +580,39 @@ class TestCRMDashboard(FrappeTestCase):
 			)
 			self.assertTrue(all(isinstance(balance, Decimal) for balance in balances.values()))
 
+	def test_outstanding_balance_graph_localizes_payment_status_in_russian(self):
+		owner = "dashboard-russian-payment@example.invalid"
+		self._create_order(
+			self.open_status,
+			"2026-08-05 12:00:00",
+			owner=owner,
+			balance_amount=Decimal("40.10"),
+			payment_status="Paid",
+		)
+		self._create_order(
+			self.open_status,
+			"2026-08-05 12:00:00",
+			owner=owner,
+			balance_amount=Decimal("60.15"),
+			payment_status=None,
+		)
+
+		original_language = frappe.local.lang
+		try:
+			frappe.local.lang = "ru"
+			chart = get_outstanding_balance_by_payment_status("1900-01-01", "1900-01-02", owner)
+		finally:
+			frappe.local.lang = original_language
+
+		balances = {row.payment_status: row.balance for row in chart["data"]}
+		self.assertEqual(
+			balances,
+			{
+				"Оплачено": Decimal("40.10"),
+				"Не указан": Decimal("60.15"),
+			},
+		)
+
 	def test_default_layout_has_ten_cards_and_six_print_studio_graphs(self):
 		updated = json.loads(default_manager_dashboard_layout())
 

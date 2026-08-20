@@ -266,6 +266,7 @@ import { organizationsStore } from '@/stores/organizations'
 import { statusesStore } from '@/stores/statuses'
 import { callEnabled } from '@/composables/telephony'
 import { formatDate, timeAgo, website, formatTime } from '@/utils'
+import { translateSelectValue } from '@/utils/fieldTransforms'
 import { useOnboarding, useTelemetry } from 'frappe-ui/frappe'
 import { Tooltip, Avatar, Dropdown } from 'frappe-ui'
 import { useRoute } from 'vue-router'
@@ -353,7 +354,14 @@ function getGroupedByRows(listRows, groupByField, columns) {
 
     let groupDetail = {
       label: groupByField.label,
-      group: option || __(' '),
+      group:
+        groupByField.fieldname === 'payment_status'
+          ? translateSelectValue(
+              option,
+              groupByField.fieldname,
+              'Not specified',
+            )
+          : option || __(' '),
       collapsed: false,
       rows: parseRows(filteredRows, columns),
     }
@@ -411,6 +419,10 @@ function parseRows(rows, columns = []) {
 
       if (fieldType && fieldType == 'Percent') {
         _rows[row] = getFormattedPercent(row, deal)
+      }
+
+      if (row === 'payment_status') {
+        _rows[row] = translateSelectValue(deal[row], row, 'Not specified')
       }
 
       if (row == 'organization') {

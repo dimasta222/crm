@@ -95,7 +95,7 @@
                           class="flex h-7 cursor-pointer items-center px-2 py-1 text-ink-gray-5"
                         >
                           <Tooltip :text="__(field.tooltip)">
-                            <div>{{ doc[field.fieldname] }}</div>
+                            <div>{{ getReadOnlyFieldValue(field) }}</div>
                           </Tooltip>
                         </div>
                         <PrimaryDropdown
@@ -419,7 +419,11 @@ import Link from '@/components/Controls/Link.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import SidePanelModal from '@/components/Modals/SidePanelModal.vue'
 import { getMeta } from '@/stores/meta'
-import { parseLinkFilters, processField } from '@/utils/fieldTransforms'
+import {
+  parseLinkFilters,
+  processField,
+  translateSelectValue,
+} from '@/utils/fieldTransforms'
 import { usersStore } from '@/stores/users'
 import { isMobileView } from '@/composables/settings'
 import {
@@ -479,6 +483,16 @@ const _sections = computed(() => {
     return _section
   })
 })
+
+function getReadOnlyFieldValue(field) {
+  const value = doc.value[field.fieldname]
+  if (field.fieldtype !== 'Select') return value
+  return translateSelectValue(
+    value,
+    field.fieldname,
+    field.fieldname === 'payment_status' ? 'Not specified' : '',
+  )
+}
 
 function parsedField(field) {
   // Clone to avoid mutating the cached layout data

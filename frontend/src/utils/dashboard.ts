@@ -1,4 +1,5 @@
 import { dayjs } from 'frappe-ui'
+import { getCurrentLocale } from '@/translation'
 
 export const PRINT_STUDIO_NUMBER_CHARTS = [
   { label: 'Total order amount', value: 'total_order_amount' },
@@ -48,6 +49,113 @@ export type DashboardPeriod =
   | 'Last 60 Days'
   | 'Last 90 Days'
   | 'Custom Range'
+
+export const PRINT_STUDIO_MONETARY_METRICS = new Set([
+  'total_order_amount',
+  'paid_for_period_orders',
+  'awaiting_payment',
+  'average_order_value',
+])
+
+export function isDashboardCurrencyCard(metricType: string | undefined) {
+  return Boolean(metricType && PRINT_STUDIO_MONETARY_METRICS.has(metricType))
+}
+
+export function formatDashboardCurrency(
+  value: number | string | null | undefined,
+  symbol: string,
+) {
+  if (value === null || value === undefined) return '—'
+  if (typeof value === 'string' && !value.trim()) return '—'
+
+  const precision = getCurrencyPrecision()
+  const formatted =
+    typeof value === 'string'
+      ? formatDecimalString(value, precision)
+      : formatFiniteNumber(value, precision)
+  if (!formatted) return '—'
+
+  return `${formatted}${symbol ? ` ${symbol}` : ''}`
+}
+
+export function getDashboardCurrencyValueClass(formatted: string) {
+  if (formatted.length > 26) return 'text-sm'
+  if (formatted.length > 18) return 'text-lg'
+  return 'text-2xl'
+}
+
+function getCurrencyPrecision() {
+  const rawPrecision =
+    typeof window !== 'undefined'
+      ? window.sysdefaults?.currency_precision
+      : undefined
+  if (
+    rawPrecision === null ||
+    rawPrecision === undefined ||
+    rawPrecision === ''
+  )
+    return 2
+  const configured = Number(rawPrecision)
+  if (!Number.isInteger(configured)) return 2
+  return Math.min(9, Math.max(0, configured))
+}
+
+function formatFiniteNumber(value: number, precision: number) {
+  if (!Number.isFinite(value)) return null
+  const fractionDigits = Number.isInteger(value) ? 0 : precision
+  return normalizeSpaces(
+    new Intl.NumberFormat(getCurrentLocale(), {
+      notation: 'standard',
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+      useGrouping: true,
+    }).format(value),
+  )
+}
+
+function formatDecimalString(value: string, precision: number) {
+  const match = value.trim().match(/^([+-]?)(\d+)(?:\.(\d+))?$/)
+  if (!match) return null
+
+  const [, sign, integer, fraction = ''] = match
+  const scale = 10n ** BigInt(precision)
+  let scaled = BigInt(integer) * scale
+  if (precision) {
+    scaled += BigInt(fraction.slice(0, precision).padEnd(precision, '0'))
+  }
+  if (fraction.length > precision && fraction[precision] >= '5') scaled += 1n
+
+  const scaledText = scaled.toString().padStart(precision + 1, '0')
+  const integerText = precision ? scaledText.slice(0, -precision) : scaledText
+  const fractionText = precision ? scaledText.slice(-precision) : ''
+  const locale = getCurrentLocale()
+  const integerFormatted = normalizeSpaces(
+    new Intl.NumberFormat(locale, {
+      maximumFractionDigits: 0,
+      useGrouping: true,
+    }).format(BigInt(integerText)),
+  )
+  const isZero = scaled === 0n
+  const minus =
+    sign === '-' && !isZero ? getNumberPart(locale, -1, 'minusSign') : ''
+  const decimal = getNumberPart(locale, 1.1, 'decimal') || '.'
+  const visibleFraction = fractionText && BigInt(fractionText) !== 0n
+  return `${minus}${integerFormatted}${visibleFraction ? decimal + fractionText : ''}`
+}
+
+function getNumberPart(
+  locale: string | undefined,
+  value: number,
+  type: Intl.NumberFormatPartTypes,
+) {
+  return new Intl.NumberFormat(locale)
+    .formatToParts(value)
+    .find((part) => part.type === type)?.value
+}
+
+function normalizeSpaces(value: string) {
+  return value.replace(/[\u00a0\u202f]/g, ' ')
+}
 
 export function getLastXDays(
   range: number = 30,

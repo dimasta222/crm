@@ -59,19 +59,13 @@ export function processField(rawField, options = {}) {
 
   // 4. Select options: string → array
   if (field.fieldtype === 'Select' && typeof field.options === 'string') {
-    field.options = field.options.split('\n').map((option) => ({
-      label: __(option),
-      value: option,
-    }))
+    field.options = translateSelectOptions(field.options, field.fieldname)
 
     if (field.options[0]?.value !== '' && field.reqd !== 1) {
       field.options.unshift({ label: '', value: '' })
     }
   } else if (field.fieldtype === 'Select' && Array.isArray(field.options)) {
-    field.options = field.options.map((option) => ({
-      ...option,
-      label: __(option.label ?? option.value ?? ''),
-    }))
+    field.options = translateSelectOptions(field.options, field.fieldname)
   }
 
   // 5. Link with options='User' → fieldtype='User'
@@ -80,6 +74,42 @@ export function processField(rawField, options = {}) {
   }
 
   return field
+}
+
+export function isTranslatableSelectField(fieldname) {
+  return fieldname === 'payment_status'
+}
+
+export function translateSelectOptions(options, fieldname) {
+  const values =
+    typeof options === 'string' ? options.split('\n') : options || []
+  const shouldTranslate = isTranslatableSelectField(fieldname)
+
+  return values.map((option) => {
+    if (typeof option === 'string') {
+      return { label: shouldTranslate ? __(option) : option, value: option }
+    }
+    return {
+      ...option,
+      label: shouldTranslate
+        ? __(option.label ?? option.value ?? '')
+        : (option.label ?? option.value ?? ''),
+    }
+  })
+}
+
+export function translateSelectValue(value, fieldname, fallback = '') {
+  if (
+    value === null ||
+    value === undefined ||
+    value === '' ||
+    (typeof value === 'string' && value.trim() === '')
+  ) {
+    return fallback && isTranslatableSelectField(fieldname) ? __(fallback) : ''
+  }
+  return typeof value === 'string' && isTranslatableSelectField(fieldname)
+    ? __(value)
+    : value
 }
 
 export function translateMetadataText(text) {
