@@ -1,6 +1,7 @@
 import {
   formatRange,
   formatDashboardCurrency,
+  getDashboardChartConfig,
   getDashboardCurrencyValueClass,
   getDashboardDateRange,
   getLastXDays,
@@ -12,10 +13,15 @@ import {
 
 vi.mock('frappe-ui', () => ({
   dayjs: (value) => ({
-    format: () => {
-      const year = value.getFullYear()
-      const month = String(value.getMonth() + 1).padStart(2, '0')
-      const day = String(value.getDate()).padStart(2, '0')
+    format: (format) => {
+      const date = value instanceof Date ? value : new Date(`${value}T00:00:00`)
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+      if (format === 'MMMM D, YYYY') {
+        const monthName = date.toLocaleString('en-US', { month: 'long' })
+        return `${monthName} ${date.getDate()}, ${year}`
+      }
       return `${year}-${month}-${day}`
     },
   }),
@@ -23,25 +29,41 @@ vi.mock('frappe-ui', () => ({
 
 describe('dashboard number card formatting', () => {
   const originalLanguage = document.documentElement.lang
+  const originalSysdefaults = window.sysdefaults
 
   afterEach(() => {
     document.documentElement.lang = originalLanguage
+    window.sysdefaults = originalSysdefaults
   })
 
   it('uses the current Russian application locale without compact notation', () => {
     document.documentElement.lang = 'ru-RU'
     expect(formatDashboardCurrency(0, '₽')).toBe('0 ₽')
     expect(formatDashboardCurrency('0', '₽')).toBe('0 ₽')
-    expect(formatDashboardCurrency(1000, '₽')).toBe('1 000 ₽')
-    expect(formatDashboardCurrency(1500.5, '₽')).toBe('1 500,50 ₽')
-    expect(formatDashboardCurrency(-1500.5, '₽')).toBe('-1 500,50 ₽')
-    expect(formatDashboardCurrency('1500.50', '₽')).toBe('1 500,50 ₽')
+    expect(formatDashboardCurrency(1000, '₽')).toBe('1000 ₽')
+    expect(formatDashboardCurrency(1500.5, '₽')).toBe('1500,50 ₽')
+    expect(formatDashboardCurrency(-1500.5, '₽')).toBe('-1500,50 ₽')
+    expect(formatDashboardCurrency('1500.50', '₽')).toBe('1500,50 ₽')
+    expect(formatDashboardCurrency('1500.567', '₽')).toBe('1500,57 ₽')
+    expect(formatDashboardCurrency(1000000, '₽')).toBe('1000000 ₽')
   })
+
+  it.each([0, 2, 3])(
+    'ignores system currency_precision=%s for dashboard money',
+    (currencyPrecision) => {
+      document.documentElement.lang = 'ru-RU'
+      window.sysdefaults = { currency_precision: currencyPrecision }
+      expect(formatDashboardCurrency(1000, '₽')).toBe('1000 ₽')
+      expect(formatDashboardCurrency(1500.5, '₽')).toBe('1500,50 ₽')
+      expect(formatDashboardCurrency('1500.50', '₽')).toBe('1500,50 ₽')
+      expect(formatDashboardCurrency('1500.567', '₽')).toBe('1500,57 ₽')
+    },
+  )
 
   it('uses the current English application locale', () => {
     document.documentElement.lang = 'en-US'
-    expect(formatDashboardCurrency(1000, '$')).toBe('1,000 $')
-    expect(formatDashboardCurrency('1500.50', '$')).toBe('1,500.50 $')
+    expect(formatDashboardCurrency(1000, '$')).toBe('1000 $')
+    expect(formatDashboardCurrency('1500.50', '$')).toBe('1500.50 $')
   })
 
   it.each([null, undefined, '', '   ', 'invalid', NaN, Infinity, -Infinity])(
@@ -54,12 +76,12 @@ describe('dashboard number card formatting', () => {
   it('preserves every digit of a decimal string beyond Number.MAX_SAFE_INTEGER', () => {
     document.documentElement.lang = 'ru-RU'
     expect(formatDashboardCurrency('900719925474099312345.25', '₽')).toBe(
-      '900 719 925 474 099 312 345,25 ₽',
+      '900719925474099312345,25 ₽',
     )
 
     document.documentElement.lang = 'en-US'
     expect(formatDashboardCurrency('900719925474099312345.25', '$')).toBe(
-      '900,719,925,474,099,312,345.25 $',
+      '900719925474099312345.25 $',
     )
   })
 
@@ -71,13 +93,11 @@ describe('dashboard number card formatting', () => {
   })
 
   it('uses adaptive classes only for long formatted values', () => {
-    expect(getDashboardCurrencyValueClass('1 500,50 ₽')).toBe('text-2xl')
-    expect(getDashboardCurrencyValueClass('123 456 789 012,34 ₽')).toBe(
-      'text-lg',
+    expect(getDashboardCurrencyValueClass('1500,50 ₽')).toBe('text-2xl')
+    expect(getDashboardCurrencyValueClass('123456789012,34 ₽')).toBe('text-2xl')
+    expect(getDashboardCurrencyValueClass('900719925474099312345,25 ₽')).toBe(
+      'text-sm',
     )
-    expect(
-      getDashboardCurrencyValueClass('900 719 925 474 099 312 345,25 ₽'),
-    ).toBe('text-sm')
   })
 
   it('identifies only the four explicit print studio monetary metrics', () => {
@@ -87,6 +107,54 @@ describe('dashboard number card formatting', () => {
     expect(isDashboardCurrencyCard('average_order_value')).toBe(true)
     expect(isDashboardCurrencyCard('current_orders')).toBe(false)
     expect(isDashboardCurrencyCard('legacy_custom_card')).toBe(false)
+  })
+})
+
+describe('dashboard monetary axis formatting', () => {
+  it('disables compact and grouped values on axes, labels, and tooltips', () => {
+    document.documentElement.lang = 'ru-RU'
+    const original = {
+      title: 'Amount by day',
+      data: [{ date: '2026-08-20', amount: '1500.50' }],
+      xAxis: { key: 'date', type: 'time' },
+      yAxis: { title: 'Amount (₽)' },
+      series: [{ name: 'amount', type: 'line' }],
+    }
+    const config = getDashboardChartConfig({
+      name: 'completed_order_amount_by_day',
+      type: 'axis_chart',
+      data: original,
+    })
+
+    expect(config.yAxis.echartOptions.axisLabel.formatter(1000000)).toBe(
+      '1000000',
+    )
+    expect(
+      config.series[0].echartOptions.label.formatter({
+        value: ['2026-08-20', '1500.50'],
+      }),
+    ).toBe('1500,50')
+    const tooltip = config.echartOptions.tooltip.formatter([
+      {
+        value: ['2026-08-20', '1500.50'],
+        seriesName: 'amount',
+      },
+    ])
+    expect(tooltip).toContain('1500,50')
+    expect(tooltip).toContain('August 20, 2026')
+    expect(tooltip).not.toMatch(/\d(?:K|M)|тыс\.|млн|1\s500/i)
+    expect(original.yAxis).not.toHaveProperty('echartOptions')
+  })
+
+  it('leaves count and legacy chart configs untouched', () => {
+    const data = { yAxis: {}, series: [] }
+    expect(
+      getDashboardChartConfig({
+        name: 'orders_by_production_type',
+        type: 'axis_chart',
+        data,
+      }),
+    ).toBe(data)
   })
 })
 

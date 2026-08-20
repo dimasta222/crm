@@ -35,7 +35,7 @@
       v-else-if="item.type == 'axis_chart'"
       class="h-full w-full rounded-md bg-surface-base shadow"
     >
-      <AxisChart v-if="item.data" :config="item.data" />
+      <AxisChart v-if="item.data" :config="getDashboardChartConfig(item)" />
     </div>
     <div
       v-else-if="item.type == 'donut_chart'"
@@ -49,6 +49,7 @@
 import { AxisChart, DonutChart, NumberChart, Tooltip } from 'frappe-ui'
 import {
   formatDashboardCurrency,
+  getDashboardChartConfig,
   getDashboardCurrencyValueClass,
   isDashboardCurrencyCard,
 } from '@/utils/dashboard'

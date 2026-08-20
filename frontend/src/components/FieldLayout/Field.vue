@@ -324,7 +324,7 @@ import { getMeta } from '@/stores/meta'
 import {
   parseLinkFilters,
   applyStateFieldOptions,
-  translateSelectValue,
+  translatePaymentStatusValue,
 } from '@/utils/fieldTransforms'
 import { usersStore } from '@/stores/users'
 import { useDocument } from '@/data/document'
@@ -457,7 +457,7 @@ function getFieldOverrides(fieldname) {
 function getReadOnlyFieldValue(field) {
   const value = data.value?.[field.fieldname]
   if (field.fieldtype !== 'Select') return value
-  return translateSelectValue(
+  return translatePaymentStatusValue(
     value,
     field.fieldname,
     field.fieldname === 'payment_status' ? 'Not specified' : '',

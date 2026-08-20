@@ -47,7 +47,7 @@ import {
   DatePicker,
 } from 'frappe-ui'
 import { ref, computed, onMounted, h } from 'vue'
-import { translateSelectOptions } from '@/utils/fieldTransforms'
+import { translatePaymentStatusOptions } from '@/utils/fieldTransforms'
 
 const typeCheck = ['Check']
 const typeLink = ['Link', 'Dynamic Link']
@@ -155,7 +155,7 @@ function getValueComponent(f) {
       fieldtype == 'Check' ? ['Yes', 'No'] : getSelectOptions(options)
     return h(FormControl, {
       type: 'select',
-      options: translateSelectOptions(_options, f.fieldname),
+      options: translatePaymentStatusOptions(_options, f.fieldname),
       modelValue: newValue.value,
     })
   } else if (typeLink.includes(fieldtype)) {

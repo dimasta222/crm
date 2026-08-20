@@ -87,10 +87,11 @@ describe('DashboardItem number card rendering', () => {
   it.each([
     [0, '0 ₽'],
     ['0', '0 ₽'],
-    [1000, '1 000 ₽'],
-    [1500.5, '1 500,50 ₽'],
-    [-1500.5, '-1 500,50 ₽'],
-    ['1500.50', '1 500,50 ₽'],
+    [1000, '1000 ₽'],
+    [1500.5, '1500,50 ₽'],
+    [-1500.5, '-1500,50 ₽'],
+    ['1500.50', '1500,50 ₽'],
+    [1000000, '1000000 ₽'],
     [null, '—'],
     [undefined, '—'],
     ['', '—'],
@@ -121,7 +122,7 @@ describe('DashboardItem number card rendering', () => {
 
   it('shrinks a long value while keeping its complete title and text', () => {
     document.documentElement.lang = 'en-US'
-    const expected = '900,719,925,474,099,312,345.25 $'
+    const expected = '900719925474099312345.25 $'
     const view = renderDashboardItem({
       name: 'total_order_amount',
       type: 'number_chart',

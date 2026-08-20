@@ -229,10 +229,9 @@ const deletedColumns = computed(() => {
 })
 
 function getColumnLabel(name) {
-  if (kanban.value?.params?.column_field === 'payment_status') {
-    return translateSelectValue(name, 'payment_status', 'Not specified')
-  }
-  return name
+  const fieldname = kanban.value?.params?.column_field
+  const fallback = fieldname === 'payment_status' ? 'Not specified' : ''
+  return translateSelectValue(name, fieldname, fallback)
 }
 
 function actions(column) {
