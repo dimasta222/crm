@@ -49,7 +49,7 @@
             <span>
               {{
                 __('mentioned you in document {0}', [
-                  __(n.reference_doctype),
+                  __(n.reference_doctype.replace(/^(CRM|FCRM)\s*/, '')),
                 ])
               }}
             </span>

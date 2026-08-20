@@ -126,6 +126,7 @@ import {
   Rating,
 } from 'frappe-ui'
 import { filterableFields } from './filterableFields'
+import { translateSelectOptions } from '@/utils/fieldTransforms'
 import { reactive, computed, h, ref } from 'vue'
 
 const show = ref(false)
@@ -239,10 +240,7 @@ function getValueControl() {
       fieldtype == 'Check' ? ['Yes', 'No'] : getSelectOptions(options)
     return h(FormControl, {
       type: 'select',
-      options: _options.map((o) => ({
-        label: __(o),
-        value: o,
-      })),
+      options: translateSelectOptions(_options, fieldData.fieldname),
     })
   } else if (typeLink.includes(fieldtype)) {
     if (fieldtype == 'Dynamic Link') {

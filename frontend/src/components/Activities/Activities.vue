@@ -292,7 +292,7 @@
                     {{ getUser(activity.data.old_value).full_name }}
                   </div>
                   <div v-else class="truncate">
-                    {{ activity.data.old_value }}
+                    {{ getActivityValue(activity, activity.data.old_value) }}
                   </div>
                 </span>
                 <span v-if="activity.to">{{ __('to') }}</span>
@@ -308,7 +308,7 @@
                     {{ getUser(activity.data.value).full_name }}
                   </div>
                   <div v-else class="truncate">
-                    {{ activity.data.value }}
+                    {{ getActivityValue(activity, activity.data.value) }}
                   </div>
                 </span>
               </div>
@@ -355,7 +355,7 @@
                       {{ getUser(a.data.old_value).full_name }}
                     </div>
                     <div v-else class="truncate">
-                      {{ a.data.old_value }}
+                      {{ getActivityValue(a, a.data.old_value) }}
                     </div>
                   </span>
                   <span v-if="a.to">{{ __('to') }}</span>
@@ -371,7 +371,7 @@
                       {{ getUser(a.data.value).full_name }}
                     </div>
                     <div v-else class="truncate">
-                      {{ a.data.value }}
+                      {{ getActivityValue(a, a.data.value) }}
                     </div>
                   </span>
                 </div>
@@ -454,6 +454,7 @@ import TaskArea from '@/components/Activities/TaskArea.vue'
 import AttachmentArea from '@/components/Activities/AttachmentArea.vue'
 import ChannelMessagesArea from '@/components/Activities/ChannelMessagesArea.vue'
 import DataFields from '@/components/Activities/DataFields.vue'
+import { translateSelectValue } from '@/utils/fieldTransforms'
 import UserAvatar from '@/components/UserAvatar.vue'
 import ActivityIcon from '@/components/Icons/ActivityIcon.vue'
 import EmailIcon from '@/components/Icons/EmailIcon.vue'
@@ -742,6 +743,13 @@ function update_activities_details(activity) {
     activity.value = 'from'
     activity.to = 'to'
   }
+}
+
+function getActivityValue(activity, value) {
+  if (activity.data?.field === 'payment_status') {
+    return translateSelectValue(value, 'payment_status', 'Not specified')
+  }
+  return value
 }
 
 const top = computed(() => {

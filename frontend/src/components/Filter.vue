@@ -173,6 +173,7 @@ import {
 } from 'frappe-ui'
 import { h, computed, onMounted } from 'vue'
 import { isMobileView } from '@/composables/settings'
+import { translateSelectOptions } from '@/utils/fieldTransforms'
 
 const typeCheck = ['Check']
 const typeLink = ['Link', 'Dynamic Link']
@@ -433,10 +434,7 @@ function getValueControl(f) {
       fieldtype == 'Check' ? ['Yes', 'No'] : getSelectOptions(options)
     return h(Combobox, {
       trigger: 'button',
-      options: _options.map((o) => ({
-        label: o,
-        value: o,
-      })),
+      options: translateSelectOptions(_options, field.fieldname),
       modelValue: f.value,
       'onUpdate:modelValue': (v) => updateValue(v, f),
     })
