@@ -57,67 +57,79 @@ export const PRINT_STUDIO_MONETARY_METRICS = new Set([
   'average_order_value',
 ])
 
+export const PRINT_STUDIO_MONETARY_AXIS_CHARTS = new Set([
+  'completed_order_amount_by_day',
+  'outstanding_balance_by_payment_status',
+])
+
+type ChartValue = number | string | null | undefined
+type EChartOptions = Record<string, unknown>
+type DashboardSeries = Record<string, unknown> & {
+  echartOptions?: EChartOptions & { label?: EChartOptions }
+}
+type DashboardAxisConfig = Record<string, unknown> & {
+  swapXY?: boolean
+  xAxis?: Record<string, unknown> & {
+    type?: string
+    timeGrain?: string
+  }
+  yAxis?: Record<string, unknown> & {
+    echartOptions?: EChartOptions & { axisLabel?: EChartOptions }
+  }
+  series?: DashboardSeries[]
+  echartOptions?: EChartOptions & { tooltip?: EChartOptions }
+}
+type EChartFormatterParams = {
+  value?: unknown[]
+  marker?: string
+  seriesName?: string
+}
+
 export function isDashboardCurrencyCard(metricType: string | undefined) {
   return Boolean(metricType && PRINT_STUDIO_MONETARY_METRICS.has(metricType))
 }
 
 export function formatDashboardCurrency(
   value: number | string | null | undefined,
-  symbol: string,
+  symbol = '',
 ) {
   if (value === null || value === undefined) return '—'
   if (typeof value === 'string' && !value.trim()) return '—'
 
-  const precision = getCurrencyPrecision()
   const formatted =
     typeof value === 'string'
-      ? formatDecimalString(value, precision)
-      : formatFiniteNumber(value, precision)
+      ? formatDecimalString(value)
+      : formatFiniteNumber(value)
   if (!formatted) return '—'
 
   return `${formatted}${symbol ? ` ${symbol}` : ''}`
 }
 
 export function getDashboardCurrencyValueClass(formatted: string) {
-  if (formatted.length > 26) return 'text-sm'
+  if (formatted.length >= 26) return 'text-sm'
   if (formatted.length > 18) return 'text-lg'
   return 'text-2xl'
 }
 
-function getCurrencyPrecision() {
-  const rawPrecision =
-    typeof window !== 'undefined'
-      ? window.sysdefaults?.currency_precision
-      : undefined
-  if (
-    rawPrecision === null ||
-    rawPrecision === undefined ||
-    rawPrecision === ''
-  )
-    return 2
-  const configured = Number(rawPrecision)
-  if (!Number.isInteger(configured)) return 2
-  return Math.min(9, Math.max(0, configured))
-}
-
-function formatFiniteNumber(value: number, precision: number) {
+function formatFiniteNumber(value: number) {
   if (!Number.isFinite(value)) return null
-  const fractionDigits = Number.isInteger(value) ? 0 : precision
+  const fractionDigits = Number.isInteger(value) ? 0 : 2
   return normalizeSpaces(
     new Intl.NumberFormat(getCurrentLocale(), {
       notation: 'standard',
       minimumFractionDigits: fractionDigits,
       maximumFractionDigits: fractionDigits,
-      useGrouping: true,
+      useGrouping: false,
     }).format(value),
   )
 }
 
-function formatDecimalString(value: string, precision: number) {
+function formatDecimalString(value: string) {
   const match = value.trim().match(/^([+-]?)(\d+)(?:\.(\d+))?$/)
   if (!match) return null
 
   const [, sign, integer, fraction = ''] = match
+  const precision = 2
   const scale = 10n ** BigInt(precision)
   let scaled = BigInt(integer) * scale
   if (precision) {
@@ -129,18 +141,100 @@ function formatDecimalString(value: string, precision: number) {
   const integerText = precision ? scaledText.slice(0, -precision) : scaledText
   const fractionText = precision ? scaledText.slice(-precision) : ''
   const locale = getCurrentLocale()
-  const integerFormatted = normalizeSpaces(
-    new Intl.NumberFormat(locale, {
-      maximumFractionDigits: 0,
-      useGrouping: true,
-    }).format(BigInt(integerText)),
-  )
   const isZero = scaled === 0n
   const minus =
     sign === '-' && !isZero ? getNumberPart(locale, -1, 'minusSign') : ''
   const decimal = getNumberPart(locale, 1.1, 'decimal') || '.'
   const visibleFraction = fractionText && BigInt(fractionText) !== 0n
-  return `${minus}${integerFormatted}${visibleFraction ? decimal + fractionText : ''}`
+  return `${minus}${integerText}${visibleFraction ? decimal + fractionText : ''}`
+}
+
+export function getDashboardChartConfig(item: {
+  name?: string
+  type?: string
+  data?: DashboardAxisConfig
+}) {
+  const config = item.data
+  if (
+    item.type !== 'axis_chart' ||
+    !item.name ||
+    !PRINT_STUDIO_MONETARY_AXIS_CHARTS.has(item.name) ||
+    !config
+  ) {
+    return config
+  }
+
+  const formatAmount = (value: unknown) =>
+    formatDashboardCurrency(asChartValue(value))
+  const formatSeriesValue = (params: EChartFormatterParams) => {
+    const value = config.swapXY ? params?.value?.[0] : params?.value?.[1]
+    return formatAmount(value)
+  }
+
+  return {
+    ...config,
+    yAxis: {
+      ...config.yAxis,
+      echartOptions: {
+        ...config.yAxis?.echartOptions,
+        axisLabel: {
+          ...config.yAxis?.echartOptions?.axisLabel,
+          formatter: formatAmount,
+        },
+      },
+    },
+    series: (config.series || []).map((series) => ({
+      ...series,
+      echartOptions: {
+        ...series.echartOptions,
+        label: {
+          ...series.echartOptions?.label,
+          formatter: formatSeriesValue,
+        },
+      },
+    })),
+    echartOptions: {
+      ...config.echartOptions,
+      tooltip: {
+        ...config.echartOptions?.tooltip,
+        formatter: (params: EChartFormatterParams | EChartFormatterParams[]) =>
+          formatMonetaryAxisTooltip(params, config, formatAmount),
+      },
+    },
+  }
+}
+
+function formatMonetaryAxisTooltip(
+  params: EChartFormatterParams | EChartFormatterParams[],
+  config: DashboardAxisConfig,
+  formatAmount: (value: unknown) => string,
+) {
+  const entries = Array.isArray(params) ? params : [params]
+  return entries
+    .map((entry, index) => {
+      const xValue = config.swapXY ? entry?.value?.[1] : entry?.value?.[0]
+      const yValue = config.swapXY ? entry?.value?.[0] : entry?.value?.[1]
+      const category = formatDashboardTooltipCategory(xValue, config)
+      const heading = index === 0 ? `<div>${category}</div>` : ''
+      return `${heading}<div>${entry?.marker || ''}${entry?.seriesName || ''}: <strong>${formatAmount(yValue)}</strong></div>`
+    })
+    .join('')
+}
+
+function formatDashboardTooltipCategory(
+  value: unknown,
+  config: DashboardAxisConfig,
+) {
+  if (config.xAxis?.type === 'time' && value) {
+    return dayjs(String(value)).format('MMMM D, YYYY')
+  }
+  return value ?? ''
+}
+
+function asChartValue(value: unknown): ChartValue {
+  return typeof value === 'number' || typeof value === 'string' || value == null
+    ? value
+    : undefined
 }
 
 function getNumberPart(

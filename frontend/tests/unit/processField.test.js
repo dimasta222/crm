@@ -1,5 +1,7 @@
 import {
   processField,
+  translatePaymentStatusOptions,
+  translatePaymentStatusValue,
   translateSelectOptions,
   translateSelectValue,
 } from '@/utils/fieldTransforms'
@@ -13,6 +15,21 @@ const paymentStatuses = [
   'Cancelled',
 ]
 
+const otherSelectValues = [
+  'New',
+  'Contacted',
+  'Qualified',
+  'In Progress',
+  'Ready',
+  'Completed',
+  'Prepayment',
+  'Postpayment',
+  'Cash',
+  'Bank Card',
+  'Bank Transfer',
+  'Online Payment',
+]
+
 const expectedRussianPaymentOptions = [
   { label: 'Оплачено', value: 'Paid' },
   { label: 'Частично оплачено', value: 'Partially Paid' },
@@ -23,26 +40,29 @@ const expectedRussianPaymentOptions = [
 ]
 
 function translateRussianPaymentStatus(message) {
-  switch (message) {
-    case 'Paid':
-      return 'Оплачено'
-    case 'Partially Paid':
-      return 'Частично оплачено'
-    case 'Unpaid':
-      return 'Не оплачено'
-    case 'Postpaid':
-      return 'Постоплата'
-    case 'Refunded':
-      return 'Возврат'
-    case 'Cancelled':
-      return 'Отменено'
-    case 'Not specified':
-      return 'Не указан'
-    case 'Deal':
-      return 'Заказ'
-    default:
-      return message
+  const translations = {
+    Paid: 'Оплачено',
+    'Partially Paid': 'Частично оплачено',
+    Unpaid: 'Не оплачено',
+    Postpaid: 'Постоплата',
+    Refunded: 'Возврат',
+    Cancelled: 'Отменено',
+    'Not specified': 'Не указан',
+    Deal: 'Заказ',
+    New: 'Новый',
+    Contacted: 'Связались',
+    Qualified: 'Квалифицирован',
+    'In Progress': 'В работе',
+    Ready: 'Готов',
+    Completed: 'Завершено',
+    Prepayment: 'Предоплата',
+    Postpayment: 'Постоплата',
+    Cash: 'Наличные',
+    'Bank Card': 'Банковская карта',
+    'Bank Transfer': 'Банковский перевод',
+    'Online Payment': 'Онлайн-оплата',
   }
+  return translations[message] || message
 }
 
 describe('payment status display in Russian', () => {
@@ -82,7 +102,7 @@ describe('payment status display in Russian', () => {
     }
   })
 
-  it('keeps arbitrary Select and Link values unchanged', () => {
+  it('translates an arbitrary Select label but leaves its raw value intact', () => {
     const customSelect = processField({
       fieldname: 'custom_category',
       fieldtype: 'Select',
@@ -95,15 +115,43 @@ describe('payment status display in Russian', () => {
       options: 'Deal',
     })
 
-    expect(customSelect.options).toEqual([{ label: 'Deal', value: 'Deal' }])
-    expect(translateSelectValue('Deal', 'custom_category')).toBe('Deal')
+    expect(customSelect.options).toEqual([{ label: 'Заказ', value: 'Deal' }])
+    expect(translateSelectValue('Deal', 'custom_category')).toBe('Заказ')
     expect(link.options).toBe('Deal')
   })
 
+  it.each([
+    ['lead statuses', ['New', 'Contacted', 'Qualified']],
+    ['order statuses', ['In Progress', 'Ready', 'Completed']],
+    ['payment terms', ['Prepayment', 'Postpayment']],
+    [
+      'payment methods',
+      ['Cash', 'Bank Card', 'Bank Transfer', 'Online Payment'],
+    ],
+  ])('translates %s for display and preserves every raw value', (_, values) => {
+    const options = translateSelectOptions(values, 'any_select_field')
+    expect(options.map((option) => option.label)).toEqual(
+      values.map(translateRussianPaymentStatus),
+    )
+    expect(options.map((option) => option.value)).toEqual(values)
+  })
+
   it('builds translated filter labels while preserving raw values', () => {
-    const options = translateSelectOptions(paymentStatuses, 'payment_status')
+    const options = translatePaymentStatusOptions(
+      paymentStatuses,
+      'payment_status',
+    )
     expect(options).toEqual(expectedRussianPaymentOptions)
     expect(options.map((option) => option.value)).toEqual(paymentStatuses)
+  })
+
+  it('keeps arbitrary values raw in payment-only display paths', () => {
+    expect(translatePaymentStatusOptions(['Deal'], 'custom_category')).toEqual([
+      { label: 'Deal', value: 'Deal' },
+    ])
+    expect(
+      translatePaymentStatusValue('Deal', 'custom_category', 'Not specified'),
+    ).toBe('Deal')
   })
 })
 
@@ -125,9 +173,10 @@ describe('payment status display in English', () => {
     }
   })
 
-  it('shows all six raw English labels and values', () => {
-    expect(translateSelectOptions(paymentStatuses, 'payment_status')).toEqual(
-      paymentStatuses.map((value) => ({ label: value, value })),
+  it('shows all raw English Select labels and values', () => {
+    const values = [...paymentStatuses, ...otherSelectValues]
+    expect(translateSelectOptions(values, 'any_select_field')).toEqual(
+      values.map((value) => ({ label: value, value })),
     )
     expect(translateSelectValue(null, 'payment_status', 'Not specified')).toBe(
       'Not specified',

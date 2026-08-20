@@ -26,6 +26,20 @@ const expectedTranslations = {
   'Deal Value': 'Стоимость заказа',
 }
 
+const existingSelectTranslations = {
+  New: 'Новый',
+  Contacted: 'Связались',
+  Qualified: 'Квалифицирован',
+  Ready: 'Готов',
+  Completed: 'Завершено',
+  Prepayment: 'Предоплата',
+  Postpayment: 'Постоплата',
+  Cash: 'Наличные',
+  'Bank Card': 'Банковская карта',
+  'Bank Transfer': 'Банковский перевод',
+  'Online Payment': 'Онлайн-оплата',
+}
+
 function parseCsv(input) {
   const rows = []
   let row = []
@@ -110,4 +124,24 @@ describe('Russian UI terminology catalogs', () => {
     expect(csv).not.toMatch(/[Сс]делк/)
     expect(po).not.toMatch(/[Сс]делк/)
   })
+
+  it.each(Object.entries(existingSelectTranslations))(
+    'reuses the existing %s translation without a frontend lookup table',
+    (source, translation) => {
+      expect(csvEntries.get(source) || poEntries.get(source)).toBe(translation)
+    },
+  )
+
+  it.each([
+    'src/components/Layouts/AppSidebar.vue',
+    'src/components/Mobile/MobileSidebar.vue',
+  ])(
+    'keeps raw Deals routing and translates only the %s menu label',
+    (file) => {
+      const source = readFileSync(resolve(process.cwd(), file), 'utf8')
+      expect(source).toMatch(/label:\s*['"]Deals['"]/)
+      expect(source).toMatch(/to:\s*['"]Deals['"]/)
+      expect(source).toContain(':label="__(link.label)"')
+    },
+  )
 })

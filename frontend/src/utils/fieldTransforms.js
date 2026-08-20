@@ -76,40 +76,50 @@ export function processField(rawField, options = {}) {
   return field
 }
 
-export function isTranslatableSelectField(fieldname) {
-  return fieldname === 'payment_status'
-}
-
-export function translateSelectOptions(options, fieldname) {
-  const values =
-    typeof options === 'string' ? options.split('\n') : options || []
-  const shouldTranslate = isTranslatableSelectField(fieldname)
+export function translateSelectOptions(options) {
+  const values = normalizeSelectOptions(options)
 
   return values.map((option) => {
     if (typeof option === 'string') {
-      return { label: shouldTranslate ? __(option) : option, value: option }
+      return { label: __(option), value: option }
     }
     return {
       ...option,
-      label: shouldTranslate
-        ? __(option.label ?? option.value ?? '')
-        : (option.label ?? option.value ?? ''),
+      label: __(option.label ?? option.value ?? ''),
     }
   })
 }
 
-export function translateSelectValue(value, fieldname, fallback = '') {
+export function translatePaymentStatusOptions(options, fieldname) {
+  if (fieldname === 'payment_status') return translateSelectOptions(options)
+  return normalizeSelectOptions(options).map((option) => {
+    if (typeof option === 'string') return { label: option, value: option }
+    return {
+      ...option,
+      label: option.label ?? option.value ?? '',
+    }
+  })
+}
+
+export function translateSelectValue(value, _fieldname, fallback = '') {
   if (
     value === null ||
     value === undefined ||
     value === '' ||
     (typeof value === 'string' && value.trim() === '')
   ) {
-    return fallback && isTranslatableSelectField(fieldname) ? __(fallback) : ''
+    return fallback ? __(fallback) : ''
   }
-  return typeof value === 'string' && isTranslatableSelectField(fieldname)
-    ? __(value)
-    : value
+  return typeof value === 'string' ? __(value) : value
+}
+
+export function translatePaymentStatusValue(value, fieldname, fallback = '') {
+  if (fieldname !== 'payment_status') return value
+  return translateSelectValue(value, fieldname, fallback)
+}
+
+function normalizeSelectOptions(options) {
+  return typeof options === 'string' ? options.split('\n') : options || []
 }
 
 export function translateMetadataText(text) {

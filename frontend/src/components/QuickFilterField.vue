@@ -11,7 +11,7 @@
     v-model="filter.value"
     class="form-control cursor-pointer [&_select]:cursor-pointer"
     type="select"
-    :options="translateSelectOptions(filter.options, filter.fieldname)"
+    :options="translatePaymentStatusOptions(filter.options, filter.fieldname)"
     :placeholder="filter.label"
     @update:modelValue="updateFilter(filter, $event)"
   />
@@ -43,7 +43,7 @@ import Link from '@/components/Controls/Link.vue'
 import { FormControl, DatePicker, DateTimePicker } from 'frappe-ui'
 import { useDebounceFn } from '@vueuse/core'
 import { reactive, watch } from 'vue'
-import { translateSelectOptions } from '@/utils/fieldTransforms'
+import { translatePaymentStatusOptions } from '@/utils/fieldTransforms'
 
 const props = defineProps({
   filter: { type: Object, required: true },

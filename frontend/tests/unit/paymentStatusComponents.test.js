@@ -171,6 +171,7 @@ describe('payment status component events preserve raw values', () => {
     Paid: 'Оплачено',
     Unpaid: 'Не оплачено',
     Deal: 'Заказ',
+    'In Progress': 'В работе',
   }
 
   beforeEach(() => {
@@ -208,7 +209,7 @@ describe('payment status component events preserve raw values', () => {
     view.unmount()
   })
 
-  it('Filter leaves an arbitrary Select value Deal unchanged', async () => {
+  it('Filter displays and emits an arbitrary raw Select value', async () => {
     testState.filterFields = [
       {
         label: 'Custom category',
@@ -254,7 +255,28 @@ describe('payment status component events preserve raw values', () => {
     view.unmount()
   })
 
-  it('Kanban leaves an arbitrary Deal column and its raw event unchanged', async () => {
+  it('Kanban translates an order status and emits its raw value', async () => {
+    const update = vi.fn()
+    testState.dragEvent = {
+      to: { dataset: { column: 'In Progress' } },
+      from: { dataset: { column: 'Other' } },
+      item: { dataset: { name: 'ORDER-3' } },
+    }
+    const view = mount(KanbanView, {
+      modelValue: kanbanModel('status', ['Other', 'In Progress']),
+      options: { onNewClick: vi.fn() },
+      onUpdate: update,
+    })
+    expect(view.container.textContent).toContain('В работе')
+    view.container.querySelector('[data-testid="move-Other"]').click()
+    await nextTick()
+    expect(update).toHaveBeenLastCalledWith(
+      expect.objectContaining({ item: 'ORDER-3', to: 'In Progress' }),
+    )
+    view.unmount()
+  })
+
+  it('Kanban translates an arbitrary Deal column and keeps its raw event', async () => {
     const update = vi.fn()
     testState.dragEvent = {
       to: { dataset: { column: 'Deal' } },
@@ -266,8 +288,7 @@ describe('payment status component events preserve raw values', () => {
       options: { onNewClick: vi.fn() },
       onUpdate: update,
     })
-    expect(view.container.textContent).toContain('Deal')
-    expect(view.container.textContent).not.toContain('Заказ')
+    expect(view.container.textContent).toContain('Заказ')
     view.container.querySelector('[data-testid="move-Other"]').click()
     await nextTick()
     expect(update).toHaveBeenLastCalledWith(

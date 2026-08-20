@@ -422,7 +422,7 @@ import { getMeta } from '@/stores/meta'
 import {
   parseLinkFilters,
   processField,
-  translateSelectValue,
+  translatePaymentStatusValue,
 } from '@/utils/fieldTransforms'
 import { usersStore } from '@/stores/users'
 import { isMobileView } from '@/composables/settings'
@@ -487,7 +487,7 @@ const _sections = computed(() => {
 function getReadOnlyFieldValue(field) {
   const value = doc.value[field.fieldname]
   if (field.fieldtype !== 'Select') return value
-  return translateSelectValue(
+  return translatePaymentStatusValue(
     value,
     field.fieldname,
     field.fieldname === 'payment_status' ? 'Not specified' : '',
