@@ -35,6 +35,7 @@
     <span>{{ __('Loading...') }}</span>
   </div>
   <div v-else class="pb-8">
+    <OrderEditor v-if="doctype === 'CRM Deal'" :doc="document.doc" />
     <FieldLayout
       v-if="tabs.data"
       :tabs="tabs.data"
@@ -59,6 +60,7 @@
 import EditIcon from '@/components/Icons/EditIcon.vue'
 import DataFieldsModal from '@/components/Modals/DataFieldsModal.vue'
 import FieldLayout from '@/components/FieldLayout/FieldLayout.vue'
+import OrderEditor from '@/components/OrderEditor/OrderEditor.vue'
 import { Badge, createResource } from 'frappe-ui'
 import LoadingIndicator from '@/components/Icons/LoadingIndicator.vue'
 import { usersStore } from '@/stores/users'
