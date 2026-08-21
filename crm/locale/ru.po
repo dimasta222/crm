@@ -4092,7 +4092,7 @@ msgstr "Отменить"
 #. Label of the discount_percentage (Percent) field in DocType 'CRM Products'
 #: crm/fcrm/doctype/crm_products/crm_products.json
 msgid "Discount %"
-msgstr "Скидка %"
+msgstr "Скидка, %"
 
 #. Label of the discount_amount (Currency) field in DocType 'CRM Products'
 #: crm/fcrm/doctype/crm_products/crm_products.json
@@ -5751,7 +5751,7 @@ msgstr "Требуются обязательные поля: {0}"
 #. Option for the 'Telephony Medium' (Select) field in DocType 'CRM Call Log'
 #: crm/fcrm/doctype/crm_call_log/crm_call_log.json
 msgid "Manual"
-msgstr "Руководство"
+msgstr "Вручную"
 
 #. Label of the mapped_to_crm_field (Autocomplete) field in DocType 'Facebook
 #. Lead Form Question'
@@ -7759,7 +7759,7 @@ msgstr "Завтра"
 #: crm/fcrm/doctype/crm_deal/crm_deal.json
 #: crm/fcrm/doctype/crm_lead/crm_lead.json
 msgid "Total"
-msgstr "Общий"
+msgstr "Итого"
 
 #. Label of the total_holidays (Int) field in DocType 'CRM Holiday List'
 #: crm/fcrm/doctype/crm_holiday_list/crm_holiday_list.json
@@ -9222,7 +9222,7 @@ msgid "Sublimation"
 msgstr "Сублимация"
 
 msgid "Heat Transfer Printing"
-msgstr "Термопечать"
+msgstr "Термоперенос"
 
 msgid "Combined"
 msgstr "Комбинированное нанесение"
@@ -9297,7 +9297,7 @@ msgid "Supply Type"
 msgstr "Тип поставки"
 
 msgid "Customer Item"
-msgstr "Изделие заказчика"
+msgstr "Изделие клиента"
 
 msgid "Studio Product"
 msgstr "Товар студии"
@@ -9360,7 +9360,7 @@ msgid "Format"
 msgstr "Формат"
 
 msgid "Custom Size"
-msgstr "Произвольный размер"
+msgstr "Свой размер"
 
 msgid "Quantity Only"
 msgstr "Только количество"
@@ -9523,3 +9523,132 @@ msgstr "Заказ поштучной DTF-печати не может соде�
 
 msgid "{0}: Item Key must reference an order item."
 msgstr "{0}: ключ изделия должен ссылаться на изделие заказа."
+
+msgid "Order composition"
+msgstr "Состав заказа"
+
+msgid "Order type"
+msgstr "Тип заказа"
+
+msgid "Select order type"
+msgstr "Выберите тип заказа"
+
+msgid "Items"
+msgstr "Изделия"
+
+msgid "Add item"
+msgstr "Добавить изделие"
+
+msgid "Add application"
+msgstr "Добавить нанесение"
+
+msgid "Add roll"
+msgstr "Добавить рулон"
+
+msgid "Add position"
+msgstr "Добавить позицию"
+
+msgid "Preliminary calculation"
+msgstr "Предварительный расчёт"
+
+msgid "Items cost"
+msgstr "Стоимость изделий"
+
+msgid "Applications cost"
+msgstr "Стоимость нанесений"
+
+msgid "Discount"
+msgstr "Скидка"
+
+msgid "Set amount manually"
+msgstr "Указать сумму вручную"
+
+msgid "Back placement"
+msgstr "Спина"
+
+msgid "Applications"
+msgstr "Нанесения"
+
+msgid "Combined order"
+msgstr "Комбинированный"
+
+msgid "The order retains rows from other types: {0}."
+msgstr "В заказе сохранены строки других типов: {0}."
+
+msgid "This item has applications. Remove or reassign them before deleting the item."
+msgstr "У изделия есть нанесения. Перед удалением удалите их или назначьте другому изделию."
+
+msgid "Name / Product"
+msgstr "Название / изделие"
+
+msgid "Supply"
+msgstr "Поставка"
+
+msgid "Qty"
+msgstr "Кол-во"
+
+msgid "Item name"
+msgstr "Название изделия"
+
+msgid "Select CRM Product"
+msgstr "Выберите изделие CRM"
+
+msgid "Set rate manually"
+msgstr "Указать цену вручную"
+
+msgid "Delete row"
+msgstr "Удалить строку"
+
+msgid "No items added"
+msgstr "Изделия не добавлены"
+
+msgid "The selected product has no standard rate."
+msgstr "У выбранного изделия не указана стандартная цена."
+
+msgid "Unable to load the product rate."
+msgstr "Не удалось загрузить цену изделия."
+
+msgid "Item"
+msgstr "Изделие"
+
+msgid "Production type"
+msgstr "Тип производства"
+
+msgid "No applications added"
+msgstr "Нанесения не добавлены"
+
+msgid "Add an item before adding an application"
+msgstr "Сначала добавьте изделие"
+
+msgid "Rate per meter"
+msgstr "Цена за метр"
+
+msgid "No rolls added"
+msgstr "Рулоны не добавлены"
+
+msgid "Sizing"
+msgstr "Способ задания размера"
+
+msgid "Unit price"
+msgstr "Цена за единицу"
+
+msgid "No positions added"
+msgstr "Позиции не добавлены"
+
+msgid "Order total"
+msgstr "Итого по заказу"
+
+msgid "Enter amount"
+msgstr "Введите сумму"
+
+msgid "DTF Roll cost"
+msgstr "Стоимость DTF в рулоне"
+
+msgid "DTF Pieces cost"
+msgstr "Стоимость DTF поштучно"
+
+msgid "Height"
+msgstr "Высота"
+
+msgid "Select option"
+msgstr "Выберите значение"
