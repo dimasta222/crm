@@ -1,46 +1,52 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
-  <div class="mb-5">
-    <div class="mb-2 flex items-center justify-between">
-      <h3 class="font-medium">{{ __('Items') }}</h3>
-      <Button :label="__('Add item')" @click="add" />
-    </div>
-    <p v-if="blockedRemoval" class="mb-2 text-sm text-ink-amber-3">
+  <Section :label="__('Items')" :collapsible="false" label-class="font-medium">
+    <template #actions>
+      <Button
+        :label="__('Add item')"
+        icon-left="plus"
+        size="sm"
+        variant="subtle"
+        @click="add"
+      />
+    </template>
+
+    <p v-if="blockedRemoval" class="mb-2 mt-2 text-sm text-ink-amber-3">
       {{
         __(
-          'This item has applications and cannot be removed until they are removed or reassigned.',
+          'This item has applications. Remove or reassign them before deleting the item.',
         )
       }}
     </p>
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm">
+    <div class="order-grid mt-2 overflow-x-auto">
+      <table class="w-full min-w-[760px] text-sm">
         <thead>
           <tr>
             <th>{{ __('Name / Product') }}</th>
             <th>{{ __('Supply') }}</th>
-            <th>{{ __('Qty') }}</th>
-            <th>{{ __('Rate') }}</th>
-            <th>{{ __('Discount %') }}</th>
-            <th />
+            <th class="w-24 text-right">{{ __('Qty') }}</th>
+            <th class="w-32 text-right">{{ __('Rate') }}</th>
+            <th class="w-28 text-right">{{ __('Discount %') }}</th>
+            <th class="w-10" />
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="rows.length">
           <tr
             v-for="(row, index) in rows"
             :key="row.name || row.item_key || index"
           >
-            <td>
-              <input
+            <td class="min-w-52">
+              <FormControl
                 v-model="row.item_name"
+                type="text"
                 :placeholder="__('Item name')"
-                class="input"
               />
               <Link
                 v-if="row.supply_type === 'Studio Product'"
-                :model-value="row.product"
+                v-model="row.product"
                 doctype="CRM Product"
-                :placeholder="__('CRM Product')"
-                class="input mt-1"
+                :placeholder="__('Select CRM Product')"
+                class="mt-1"
                 @update:model-value="
                   (product) => onStudioProductChange(row, product)
                 "
@@ -53,63 +59,75 @@
                 {{ studioProductErrors[rowKey(row)] }}
               </p>
             </td>
-            <td>
-              <select v-model="row.supply_type" class="input">
-                <option>Customer Item</option>
-                <option>Studio Product</option>
-              </select>
+            <td class="min-w-40">
+              <Select
+                v-model="row.supply_type"
+                :options="supplyOptions"
+                :placeholder="__('Select option')"
+              />
             </td>
+            <td><FormControl v-model="row.qty" type="number" min="0" /></td>
             <td>
-              <input
-                v-model.number="row.qty"
+              <FormControl
+                v-model="row.manual_rate"
                 type="number"
                 min="0"
-                class="input"
+                @input="row.use_manual_rate = 1"
+              />
+              <Checkbox
+                v-model="row.use_manual_rate"
+                class="mt-1"
+                :label="__('Set rate manually')"
               />
             </td>
             <td>
-              <input
-                v-model.number="row.manual_rate"
-                type="number"
-                min="0"
-                class="input"
-                @input="row.use_manual_rate = 1"
-              /><label class="text-xs"
-                ><input v-model="row.use_manual_rate" type="checkbox" />
-                {{ __('Manual') }}</label
-              >
-            </td>
-            <td>
-              <input
-                v-model.number="row.discount_percentage"
+              <FormControl
+                v-model="row.discount_percentage"
                 type="number"
                 min="0"
                 max="100"
-                class="input"
               />
             </td>
             <td>
               <Button
-                :label="__('Remove')"
-                theme="red"
+                :tooltip="__('Delete row')"
+                icon="trash-2"
+                size="sm"
+                variant="ghost"
                 @click="remove(index)"
               />
             </td>
           </tr>
         </tbody>
       </table>
+      <div v-if="!rows.length" class="order-grid-empty">
+        {{ __('No items added') }}
+      </div>
     </div>
-  </div>
+  </Section>
 </template>
+
 <script setup>
-import { computed, reactive, ref } from 'vue'
-import { Button, createResource } from 'frappe-ui'
+import Section from '@/components/Section.vue'
 import Link from '@/components/Controls/Link.vue'
+import { computed, reactive, ref } from 'vue'
+import {
+  Button,
+  Checkbox,
+  createResource,
+  FormControl,
+  Select,
+} from 'frappe-ui'
 import { canRemoveOrderItem, selectStudioProduct } from '@/utils/orderEditor'
+
 const props = defineProps({ doc: { type: Object, required: true } })
 const rows = computed(() => props.doc.order_items || [])
 const blockedRemoval = ref(false)
 const studioProductErrors = reactive({})
+const supplyOptions = [
+  { label: __('Customer Item'), value: 'Customer Item' },
+  { label: __('Studio Product'), value: 'Studio Product' },
+]
 const rowKey = (row) => row.name || row.item_key
 
 async function onStudioProductChange(row, product) {
@@ -122,13 +140,9 @@ async function onStudioProductChange(row, product) {
     }).fetch(),
   )
   if (result.error === 'missing-standard-rate') {
-    studioProductErrors[key] = __(
-      'The selected CRM Product has no Standard Rate.',
-    )
+    studioProductErrors[key] = __('The selected product has no standard rate.')
   } else if (result.error === 'load-failed') {
-    studioProductErrors[key] = __(
-      'Unable to load the selected CRM Product rate.',
-    )
+    studioProductErrors[key] = __('Unable to load the product rate.')
   }
 }
 function add() {
@@ -149,12 +163,7 @@ function remove(index) {
   rows.value.splice(index, 1)
 }
 </script>
+
 <style scoped>
-.input {
-  @apply w-full rounded border border-outline-gray-2 px-2 py-1;
-}
-th,
-td {
-  @apply p-1 text-left align-top;
-}
+@import './orderEditor.css';
 </style>

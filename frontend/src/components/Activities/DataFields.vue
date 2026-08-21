@@ -35,10 +35,10 @@
     <span>{{ __('Loading...') }}</span>
   </div>
   <div v-else class="pb-8">
-    <OrderEditor v-if="doctype === 'CRM Deal'" :doc="document.doc" />
+    <OrderEditor v-if="showOrderEditor" :doc="document.doc" />
     <FieldLayout
-      v-if="tabs.data"
-      :tabs="tabs.data"
+      v-if="layoutTabs"
+      :tabs="layoutTabs"
       :data="document.doc"
       :doctype="doctype"
     />
@@ -66,7 +66,8 @@ import LoadingIndicator from '@/components/Icons/LoadingIndicator.vue'
 import { usersStore } from '@/stores/users'
 import { useDocument } from '@/data/document'
 import { isMobileView } from '@/composables/settings'
-import { ref, watch, getCurrentInstance } from 'vue'
+import { computed, ref, watch, getCurrentInstance } from 'vue'
+import { withoutLegacyOrderFields } from '@/utils/orderEditorLayout'
 
 const props = defineProps({
   doctype: { type: String, required: true },
@@ -81,6 +82,7 @@ const instance = getCurrentInstance()
 const attrs = instance?.vnode?.props ?? {}
 
 const showDataFieldsModal = ref(false)
+const showOrderEditor = computed(() => props.doctype === 'CRM Deal')
 
 const { document } = useDocument(props.doctype, props.docname)
 
@@ -90,6 +92,10 @@ const tabs = createResource({
   params: { doctype: props.doctype, type: 'Data Fields' },
   auto: true,
 })
+
+const layoutTabs = computed(() =>
+  showOrderEditor.value ? withoutLegacyOrderFields(tabs.data) : tabs.data,
+)
 
 function saveChanges() {
   if (!document.isDirty) return

@@ -1,0 +1,31 @@
+.order-grid {
+  @apply rounded-md border border-outline-gray-modals;
+}
+
+.order-grid table {
+  @apply border-collapse;
+}
+
+.order-grid thead {
+  @apply bg-surface-gray-2 text-ink-gray-5;
+}
+
+.order-grid th {
+  @apply h-8 border-r border-outline-gray-2 px-2 py-1.5 text-left font-normal last:border-r-0;
+}
+
+.order-grid td {
+  @apply border-r border-t border-outline-gray-modals bg-surface-white p-1 align-top text-ink-gray-8 last:border-r-0;
+}
+
+.order-grid tbody tr:last-child td:first-child {
+  @apply rounded-bl-md;
+}
+
+.order-grid tbody tr:last-child td:last-child {
+  @apply rounded-br-md;
+}
+
+.order-grid-empty {
+  @apply border-t border-outline-gray-modals bg-surface-white px-4 py-6 text-center text-sm text-ink-gray-5;
+}

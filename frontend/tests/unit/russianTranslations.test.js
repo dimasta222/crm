@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { describe, expect, it } from 'vitest'
 
 const csv = readFileSync(
   resolve(process.cwd(), '../crm/translations/ru.csv'),
@@ -24,6 +25,74 @@ const expectedTranslations = {
   'Won Deals': 'Выполненные заказы',
   'Deal Owner': 'Ответственный за заказ',
   'Deal Value': 'Стоимость заказа',
+  'Order composition': 'Состав заказа',
+  'Order type': 'Тип заказа',
+  'Select order type': 'Выберите тип заказа',
+  'Select option': 'Выберите значение',
+  Items: 'Изделия',
+  'Add item': 'Добавить изделие',
+  Applications: 'Нанесения',
+  'Add application': 'Добавить нанесение',
+  'DTF Roll': 'DTF в рулоне',
+  'Add roll': 'Добавить рулон',
+  'DTF Pieces': 'DTF поштучно',
+  'Add position': 'Добавить позицию',
+  'Preliminary calculation': 'Предварительный расчёт',
+  'Items cost': 'Стоимость изделий',
+  'Applications cost': 'Стоимость нанесений',
+  Discount: 'Скидка',
+  Total: 'Итого',
+  'Set amount manually': 'Указать сумму вручную',
+  'Back placement': 'Спина',
+  Back: 'Назад',
+  'Combined order': 'Комбинированный',
+  'The order retains rows from other types: {0}.':
+    'В заказе сохранены строки других типов: {0}.',
+  'This item has applications. Remove or reassign them before deleting the item.':
+    'У изделия есть нанесения. Перед удалением удалите их или назначьте другому изделию.',
+  'Name / Product': 'Название / изделие',
+  Supply: 'Поставка',
+  Qty: 'Кол-во',
+  Rate: 'Цена',
+  'Discount %': 'Скидка, %',
+  'Item name': 'Название изделия',
+  'Select CRM Product': 'Выберите изделие CRM',
+  'Set rate manually': 'Указать цену вручную',
+  'Delete row': 'Удалить строку',
+  'No items added': 'Изделия не добавлены',
+  'Customer Item': 'Изделие клиента',
+  'Studio Product': 'Товар студии',
+  'DTF Printing': 'DTF-печать',
+  'Screen Printing': 'Шелкография',
+  Embroidery: 'Вышивка',
+  Sublimation: 'Сублимация',
+  'Heat Transfer Printing': 'Термоперенос',
+  Combined: 'Комбинированное нанесение',
+  Chest: 'Грудь',
+  Sleeve: 'Рукав',
+  'Tag / Inner Part': 'Бирка / внутренняя часть',
+  Other: 'Другое',
+  Format: 'Формат',
+  'Custom Size': 'Свой размер',
+  'Quantity Only': 'Только количество',
+  Manual: 'Вручную',
+  'The selected product has no standard rate.':
+    'У выбранного изделия не указана стандартная цена.',
+  'Unable to load the product rate.': 'Не удалось загрузить цену изделия.',
+  Item: 'Изделие',
+  'Production type': 'Тип производства',
+  Placement: 'Расположение',
+  'No applications added': 'Нанесения не добавлены',
+  'Add an item before adding an application': 'Сначала добавьте изделие',
+  'Rate per meter': 'Цена за метр',
+  'No rolls added': 'Рулоны не добавлены',
+  Sizing: 'Способ задания размера',
+  'Unit price': 'Цена за единицу',
+  'No positions added': 'Позиции не добавлены',
+  'Order total': 'Итого по заказу',
+  'Enter amount': 'Введите сумму',
+  'DTF Roll cost': 'Стоимость DTF в рулоне',
+  'DTF Pieces cost': 'Стоимость DTF поштучно',
 }
 
 const existingSelectTranslations = {
@@ -108,6 +177,15 @@ function parsePo(input) {
 
 const csvEntries = parseCsv(csv)
 const poEntries = parsePo(po)
+const orderEditorFiles = [
+  'OrderEditor.vue',
+  'OrderItemsTable.vue',
+  'OrderApplicationsTable.vue',
+  'DtfRollTable.vue',
+  'DtfPiecesTable.vue',
+  'OrderTotalsPreview.vue',
+]
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 describe('Russian UI terminology catalogs', () => {
   it.each(Object.entries(expectedTranslations))(
@@ -117,6 +195,12 @@ describe('Russian UI terminology catalogs', () => {
       expect(poEntries.has(source)).toBe(true)
       expect(csvEntries.get(source)).toBe(translation)
       expect(poEntries.get(source)).toBe(translation)
+      expect(
+        csv.match(new RegExp(`^${escapeRegExp(source)},`, 'gm')) || [],
+      ).toHaveLength(1)
+      expect(
+        po.match(new RegExp(`^msgid "${escapeRegExp(source)}"$`, 'gm')) || [],
+      ).toHaveLength(1)
     },
   )
 
@@ -131,6 +215,38 @@ describe('Russian UI terminology catalogs', () => {
       expect(csvEntries.get(source) || poEntries.get(source)).toBe(translation)
     },
   )
+
+  it('localizes every literal OrderEditor message in both catalogs', () => {
+    const messages = new Set()
+    for (const file of orderEditorFiles) {
+      const source = readFileSync(
+        resolve(process.cwd(), 'src/components/OrderEditor', file),
+        'utf8',
+      )
+      for (const match of source.matchAll(/__\(\s*(['"])(.*?)\1/gs)) {
+        if (match[2] !== '—') messages.add(match[2])
+      }
+    }
+
+    for (const message of messages) {
+      expect(
+        csvEntries.get(message),
+        `${message} is missing in ru.csv`,
+      ).toBeTruthy()
+      expect(
+        poEntries.get(message),
+        `${message} is missing in ru.po`,
+      ).toBeTruthy()
+      expect(
+        csv.match(new RegExp(`^${escapeRegExp(message)},`, 'gm')) || [],
+        `${message} is duplicated in ru.csv`,
+      ).toHaveLength(1)
+      expect(
+        po.match(new RegExp(`^msgid "${escapeRegExp(message)}"$`, 'gm')) || [],
+        `${message} is duplicated in ru.po`,
+      ).toHaveLength(1)
+    }
+  })
 
   it.each([
     'src/components/Layouts/AppSidebar.vue',

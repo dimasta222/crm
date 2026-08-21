@@ -520,6 +520,12 @@ msgstr "Добавить задачу"
 msgid "Add a name for your source"
 msgstr "Добавить имя для источника"
 
+msgid "Add an item before adding an application"
+msgstr "Сначала добавьте изделие"
+
+msgid "Add application"
+msgstr "Добавить нанесение"
+
 #: frontend/src/components/Telephony/TaskPanel.vue:16
 msgid "Add description..."
 msgstr "Добавить описание..."
@@ -536,11 +542,20 @@ msgstr ""
 "Добавить существующих системных пользователей в эту CRM. Назначьте им роль "
 "для предоставления доступа с их текущими учетными данными."
 
+msgid "Add item"
+msgstr "Добавить изделие"
+
 #: frontend/src/components/Settings/AssignmentRules/AssignmentRulesList.vue:11
 #: frontend/src/components/Settings/EmailAccountList.vue:51
 #: frontend/src/components/Settings/Users.vue:53
 msgid "Add one to get started."
 msgstr "Добавьте один, чтобы начать."
+
+msgid "Add position"
+msgstr "Добавить позицию"
+
+msgid "Add roll"
+msgstr "Добавить рулон"
 
 #. Description of the 'Icon' (Code) field in DocType 'CRM Dropdown Item'
 #: crm/fcrm/doctype/crm_dropdown_item/crm_dropdown_item.json
@@ -741,8 +756,14 @@ msgstr ""
 msgid "Application {0}"
 msgstr "Нанесение {0}"
 
+msgid "Applications"
+msgstr "Нанесения"
+
 msgid "Applications Subtotal"
 msgstr "Итого по нанесениям"
+
+msgid "Applications cost"
+msgstr "Стоимость нанесений"
 
 #: frontend/src/components/Kanban/KanbanSettings.vue:94
 #: frontend/src/components/Kanban/KanbanView.vue:46
@@ -1195,6 +1216,9 @@ msgstr "BCC"
 #: frontend/src/components/Settings/EmailEdit.vue:68
 msgid "Back"
 msgstr "Назад"
+
+msgid "Back placement"
+msgstr "Спина"
 
 #: frontend/src/components/Settings/LeadSyncing/FailureLogs.vue:9
 msgid "Back to All Logs"
@@ -1840,6 +1864,9 @@ msgid "Combined Product Printing requires both items and applications."
 msgstr ""
 "Для комбинированного заказа печать на изделиях требует и изделия и нанесения."
 
+msgid "Combined order"
+msgstr "Комбинированный"
+
 msgid "Combined requires at least two complete business categories."
 msgstr "Комбинированный заказ требует минимум две полные бизнес-категории."
 
@@ -2412,6 +2439,9 @@ msgstr "DTF поштучно не может содержать изделия, 
 msgid "DTF Pieces cannot contain other order categories."
 msgstr "Заказ поштучной DTF-печати не может содержать другие категории заказа."
 
+msgid "DTF Pieces cost"
+msgstr "Стоимость DTF поштучно"
+
 msgid "DTF Pieces requires at least one piece line."
 msgstr "Для DTF поштучно требуется хотя бы одна строка."
 
@@ -2436,6 +2466,9 @@ msgstr ""
 
 msgid "DTF Roll cannot contain other order categories."
 msgstr "Заказ DTF-рулона не может содержать другие категории заказа."
+
+msgid "DTF Roll cost"
+msgstr "Стоимость DTF в рулоне"
 
 msgid "DTF Roll requires at least one roll line."
 msgstr "Для DTF в рулоне требуется хотя бы одна строка рулона."
@@ -2812,6 +2845,9 @@ msgid "Delete or unlink these linked documents before deleting this document"
 msgstr ""
 "Удалите или отвяжите эти связанные документы перед удалением этого документа"
 
+msgid "Delete row"
+msgstr "Удалить строку"
+
 #: frontend/src/components/DeleteLinkedDocModal.vue:70
 msgid "Delete {0} Item(s)"
 msgstr "Удалить элементы: {0}"
@@ -2919,6 +2955,9 @@ msgstr "Отменить изменения"
 #: frontend/src/components/Calendar/CalendarEventPanel.vue:911
 msgid "Discard Unsaved Changes?"
 msgstr "Отменить несохранённые изменения?"
+
+msgid "Discount"
+msgstr "Скидка"
 
 #. Label of the discount_percentage (Percent) field in DocType 'CRM Products'
 #: crm/fcrm/doctype/crm_products/crm_products.json
@@ -3512,6 +3551,9 @@ msgstr "Введите номер Twilio"
 #: frontend/src/components/Filter.vue:605
 msgid "Enter Value"
 msgstr "Введите значение"
+
+msgid "Enter amount"
+msgstr "Введите сумму"
 
 #: frontend/src/components/Settings/LeadSyncing/leadSyncSourceConfig.js:31
 msgid "Enter your Facebook Access Token"
@@ -4252,6 +4294,9 @@ msgstr "Завершить звонок"
 msgid "Heat Transfer Printing"
 msgstr "Термопечать"
 
+msgid "Height"
+msgstr "Высота"
+
 #: crm/templates/emails/helpdesk_invitation.html:2
 msgid "Hello"
 msgstr "Привет"
@@ -4745,6 +4790,9 @@ msgstr ""
 "Это сделает обязательными поля «Ожидаемая дата закрытия» и «Ожидаемая "
 "стоимость сделки» для получения точных прогнозов"
 
+msgid "Item"
+msgstr "Изделие"
+
 msgid "Item Key"
 msgstr "Ключ изделия"
 
@@ -4757,8 +4805,14 @@ msgstr "Наименование изделия"
 msgid "Item key {0} must be unique within the order."
 msgstr "Ключ изделия {0} должен быть уникальным в пределах заказа."
 
+msgid "Item name"
+msgstr "Название изделия"
+
 msgid "Item {0}"
 msgstr "Изделие {0}"
+
+msgid "Items"
+msgstr "Изделия"
 
 msgid "Items Subtotal"
 msgstr "Итого по изделиям"
@@ -4766,6 +4820,9 @@ msgstr "Итого по изделиям"
 #: crm/api/doc.py:806
 msgid "Items are required"
 msgstr "Необходимо указать элементы"
+
+msgid "Items cost"
+msgstr "Стоимость изделий"
 
 #: crm/api/doc.py:810
 msgid "Items must be a list"
@@ -5578,6 +5635,9 @@ msgstr "Мои открытые сделки"
 msgid "Name"
 msgstr "Имя"
 
+msgid "Name / Product"
+msgstr "Название / изделие"
+
 #: frontend/src/components/Settings/AssignmentRules/AssignmentRuleView.vue:417
 #: frontend/src/components/Settings/EmailTemplate/EditEmailTemplate.vue:148
 #: frontend/src/components/Settings/EmailTemplate/NewEmailTemplate.vue:154
@@ -5865,6 +5925,9 @@ msgstr "Сообщений WhatsApp нет"
 msgid "No Workdays in the List"
 msgstr "В списке нет рабочих дней"
 
+msgid "No applications added"
+msgstr "Нанесения не добавлены"
+
 #: frontend/src/components/Settings/EmailEdit.vue:153
 msgid "No changes made"
 msgstr "Изменения не внесены"
@@ -5890,9 +5953,15 @@ msgstr "Вложений пока нет. Загрузите файл, и он �
 msgid "No holiday list found"
 msgstr "Список праздников не найден"
 
+msgid "No items added"
+msgstr "Изделия не добавлены"
+
 #: frontend/src/components/Settings/Hierarchy/Hierarchy.vue:107
 msgid "No matching users"
 msgstr ""
+
+msgid "No positions added"
+msgstr "Позиции не добавлены"
 
 msgid "No recent calls to display. Log a call or call someone now!"
 msgstr "Недавних звонков нет. Запишите звонок или позвоните клиенту."
@@ -5902,6 +5971,9 @@ msgstr "Недавних звонков нет. Запишите звонок и
 #: frontend/src/components/frappe-ui/Autocomplete.vue:120
 msgid "No results found"
 msgstr "Результаты не найдены"
+
+msgid "No rolls added"
+msgstr "Рулоны не добавлены"
 
 #: frontend/src/components/Settings/Hierarchy/UserMultiSelect.vue:64
 msgid "No users found"
@@ -6301,6 +6373,9 @@ msgstr "Тип заказа"
 msgid "Order amount"
 msgstr "Сумма заказов"
 
+msgid "Order composition"
+msgstr "Состав заказа"
+
 #: frontend/src/components/Settings/GeneralSettings.vue:111
 msgid "Order of activities, emails, comments and calls in the timeline"
 msgstr ""
@@ -6312,8 +6387,14 @@ msgid ""
 "Order of activities, emails, comments and calls in the timeline for all users"
 msgstr ""
 
+msgid "Order total"
+msgstr "Итого по заказу"
+
 msgid "Order total for completed orders by closure date"
 msgstr "Сумма выполненных заказов по дате закрытия"
+
+msgid "Order type"
+msgstr "Тип заказа"
 
 msgid "Orders by acquisition manager"
 msgstr "Заказы по менеджерам привлечения"
@@ -6697,6 +6778,9 @@ msgstr "Предпочтения"
 msgid "Preferences Updated Successfully"
 msgstr "Настройки успешно обновлены"
 
+msgid "Preliminary calculation"
+msgstr "Предварительный расчёт"
+
 #: frontend/src/pages/Deal.vue:215 frontend/src/pages/MobileDeal.vue:153
 msgid "Primary"
 msgstr "Главная"
@@ -6817,6 +6901,9 @@ msgstr "Вид производства"
 msgid "Production methods for orders created in the selected period"
 msgstr "Виды производства в заказах, созданных за выбранный период"
 
+msgid "Production type"
+msgstr "Тип производства"
+
 #. Label of the products_tab (Tab Break) field in DocType 'CRM Deal'
 #. Label of the products (Table) field in DocType 'CRM Deal'
 #. Label of the products_tab (Tab Break) field in DocType 'CRM Lead'
@@ -6860,6 +6947,9 @@ msgstr "Общедоступное представление"
 #: frontend/src/components/ViewControls.vue:679
 msgid "Public Views"
 msgstr "Публичный просмотр"
+
+msgid "Qty"
+msgstr "Кол-во"
 
 msgid "Qualification"
 msgstr "Квалификация"
@@ -6913,6 +7003,9 @@ msgid "Rate"
 msgstr "Цена"
 
 msgid "Rate per Meter"
+msgstr "Цена за метр"
+
+msgid "Rate per meter"
 msgstr "Цена за метр"
 
 #. Label of the read (Check) field in DocType 'CRM Notification'
@@ -7602,6 +7695,9 @@ msgstr "Показать всех участников"
 msgid "Select"
 msgstr "Выбрать"
 
+msgid "Select CRM Product"
+msgstr "Выберите изделие CRM"
+
 #: frontend/src/components/Settings/ERPNextSettings.vue:176
 msgid "Select Company"
 msgstr "Выберите компанию"
@@ -7674,6 +7770,12 @@ msgstr "Выберите дату"
 
 msgid "Select date & time"
 msgstr "Выберите дату и время"
+
+msgid "Select option"
+msgstr "Выберите значение"
+
+msgid "Select order type"
+msgstr "Выберите тип заказа"
 
 #: frontend/src/components/Settings/AssignmentRules/AssigneeRules.vue:84
 msgid "Select the assignees for {0}."
@@ -7794,6 +7896,9 @@ msgstr "Сделать все приватным"
 msgid "Set all as public"
 msgstr "Сделать все общедоступными"
 
+msgid "Set amount manually"
+msgstr "Указать сумму вручную"
+
 #: frontend/src/pages/Deal.vue:78
 msgid "Set an Organization"
 msgstr "Указать организацию"
@@ -7815,6 +7920,9 @@ msgstr "Указать место…"
 #: crm/fcrm/doctype/fcrm_settings/fcrm_settings.json
 msgid "Set once the first admin completes the onboarding persona questionnaire"
 msgstr ""
+
+msgid "Set rate manually"
+msgstr "Указать цену вручную"
 
 #: frontend/src/components/Settings/Telephony/TelephonySettings.vue:102
 msgid "Set the Exotel number to be used for outgoing calls."
@@ -8032,6 +8140,9 @@ msgstr "Подключение к сайту проверено"
 
 msgid "Size"
 msgstr "Размер"
+
+msgid "Sizing"
+msgstr "Способ задания размера"
 
 msgid "Sizing Mode"
 msgstr "Режим размера"
@@ -8261,6 +8372,9 @@ msgstr "Воскресенье"
 msgid "Supplier Reference"
 msgstr "Рекомендация поставщика"
 
+msgid "Supply"
+msgstr "Поставка"
+
 msgid "Supply Type"
 msgstr "Тип поставки"
 
@@ -8469,6 +8583,9 @@ msgstr "Условие «{0}» недопустимо: {1}"
 msgid "The holiday on {0} is not between From Date and To Date"
 msgstr "Праздник на {0} не между From Date и To Date"
 
+msgid "The order retains rows from other types: {0}."
+msgstr "В заказе сохранены строки других типов: {0}."
+
 #. Description of the 'Exchange Rate' (Float) field in DocType 'CRM Deal'
 #: crm/fcrm/doctype/crm_deal/crm_deal.json
 msgid ""
@@ -8491,6 +8608,9 @@ msgstr ""
 "Курс, используемый для конвертации валюты организации в базовую валюту вашей "
 "CRM-системы (задаётся в настройках CRM). Он устанавливается один раз при "
 "первом добавлении валюты и не меняется автоматически."
+
+msgid "The selected product has no standard rate."
+msgstr "У выбранного изделия не указана стандартная цена."
 
 #: frontend/src/components/Settings/PreferencesSettings.vue:23
 msgid "Theme"
@@ -8536,6 +8656,12 @@ msgstr "Это поле обязательно для заполнения"
 #: frontend/src/pages/PersonaForm.vue:58
 msgid "This is my first CRM"
 msgstr ""
+
+msgid ""
+"This item has applications. Remove or reassign them before deleting the item."
+msgstr ""
+"У изделия есть нанесения. Перед удалением удалите их или назначьте другому "
+"изделию."
 
 #: crm/www/crm.py:31
 msgid "This method is only meant for developer mode"
@@ -8861,6 +8987,9 @@ msgstr ""
 "Не удалось подключиться к учётной записи Twilio для получения списка "
 "приложений."
 
+msgid "Unable to load the product rate."
+msgstr "Не удалось загрузить цену изделия."
+
 #: frontend/src/components/Settings/AssignmentRules/AssignmentRuleView.vue:454
 msgid "Unassign Conditions are invalid"
 msgstr "Условия снятия назначения некорректны"
@@ -8883,6 +9012,9 @@ msgid "Ungroup Conditions"
 msgstr "Разгруппировать условия"
 
 msgid "Unit Price"
+msgstr "Цена за единицу"
+
+msgid "Unit price"
 msgstr "Цена за единицу"
 
 #: frontend/src/components/Telephony/TwilioCallUI.vue:24
