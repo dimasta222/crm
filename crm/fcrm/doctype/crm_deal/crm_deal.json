@@ -71,6 +71,19 @@
   "payment_method",
   "payment_due_date",
   "last_payment_date",
+  "order_type",
+  "order_items",
+  "order_applications",
+  "dtf_roll_lines",
+  "dtf_piece_lines",
+  "items_subtotal",
+  "applications_subtotal",
+  "dtf_roll_subtotal",
+  "dtf_piece_subtotal",
+  "discount_amount",
+  "subtotal",
+  "use_manual_total",
+  "manual_order_total",
   "attribution_tab",
   "attracted_by",
   "first_touch_source",
@@ -449,6 +462,104 @@
    "fieldtype": "Table",
    "label": "Applications",
    "options": "CRM Deal Application"
+  },
+  {
+   "fieldname": "order_type",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Order Type",
+   "options": "\nProduct Printing\nDTF Roll\nDTF Pieces\nCombined"
+  },
+  {
+   "fieldname": "order_items",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "Order Items",
+   "options": "CRM Order Item"
+  },
+  {
+   "fieldname": "order_applications",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "Order Applications",
+   "options": "CRM Order Application"
+  },
+  {
+   "fieldname": "dtf_roll_lines",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "DTF Roll Lines",
+   "options": "CRM DTF Roll Line"
+  },
+  {
+   "fieldname": "dtf_piece_lines",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "DTF Piece Lines",
+   "options": "CRM DTF Piece Line"
+  },
+  {
+   "fieldname": "items_subtotal",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "Items Subtotal",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "applications_subtotal",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "Applications Subtotal",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "dtf_roll_subtotal",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "DTF Roll Subtotal",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "dtf_piece_subtotal",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "DTF Piece Subtotal",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "discount_amount",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "Discount Amount",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "subtotal",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "Subtotal",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "use_manual_total",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Use Manual Total"
+  },
+  {
+   "depends_on": "use_manual_total",
+   "fieldname": "manual_order_total",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "Manual Order Total",
+   "options": "currency"
   },
   {
    "fieldname": "payment_tab",

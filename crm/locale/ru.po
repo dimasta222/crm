@@ -738,6 +738,12 @@ msgstr ""
 "Появляется рядом с заголовком на вкладке браузера. Рекомендуемый размер "
 "32x32 px в формате PNG или ICO"
 
+msgid "Application {0}"
+msgstr "Нанесение {0}"
+
+msgid "Applications Subtotal"
+msgstr "Итого по нанесениям"
+
 #: frontend/src/components/Kanban/KanbanSettings.vue:94
 #: frontend/src/components/Kanban/KanbanView.vue:46
 msgid "Apply"
@@ -850,6 +856,9 @@ msgstr "Действительно отсоединить связанные д�
 #: frontend/src/components/DeleteLinkedDocModal.vue:237
 msgid "Are you sure you want to unlink {0} linked item(s)?"
 msgstr "Вы уверены, что хотите отвязать {0} связанных элемента(ов)?"
+
+msgid "Artwork"
+msgstr "Макет"
 
 #: crm/api/exchange_rate.py:144
 msgid ""
@@ -1211,6 +1220,9 @@ msgstr "Частота фоновой синхронизации"
 msgid "Backlog"
 msgstr "Бэклог"
 
+msgid "Base Rate"
+msgstr "Базовая цена"
+
 msgid "Be the first to add one."
 msgstr "Добавьте первый комментарий."
 
@@ -1277,6 +1289,12 @@ msgstr "CRM Статус коммуникации"
 #: crm/fcrm/doctype/crm_contacts/crm_contacts.json
 msgid "CRM Contacts"
 msgstr "CRM Контакты"
+
+msgid "CRM DTF Piece Line"
+msgstr "Строка поштучной DTF-печати CRM"
+
+msgid "CRM DTF Roll Line"
+msgstr "Строка рулонной DTF-печати CRM"
 
 #. Name of a DocType
 #: crm/fcrm/doctype/crm_dashboard/crm_dashboard.json
@@ -1363,6 +1381,12 @@ msgstr "Причина потери CRM"
 #: crm/fcrm/doctype/crm_notification/crm_notification.json
 msgid "CRM Notification"
 msgstr "Уведомление CRM"
+
+msgid "CRM Order Application"
+msgstr "Нанесение заказа CRM"
+
+msgid "CRM Order Item"
+msgstr "Позиция заказа CRM"
 
 #. Name of a DocType
 #: crm/fcrm/doctype/crm_organization/crm_organization.json
@@ -1456,6 +1480,9 @@ msgstr "CSV"
 #: frontend/src/pages/PersonaForm.vue:81
 msgid "CSV imports"
 msgstr ""
+
+msgid "Calculated Amount"
+msgstr "Расчётная сумма"
 
 #. Label of the calendar_tab (Tab Break) field in DocType 'FCRM Settings'
 #: crm/fcrm/doctype/fcrm_settings/fcrm_settings.json
@@ -1661,6 +1688,9 @@ msgstr "Диаграмма"
 msgid "Chart Type"
 msgstr "Тип графика"
 
+msgid "Chest"
+msgstr "Грудь"
+
 #: frontend/src/components/Modals/ConvertToDealModal.vue:29
 #: frontend/src/components/Modals/ConvertToDealModal.vue:55
 msgid "Choose Existing"
@@ -1805,6 +1835,16 @@ msgstr "Колонки"
 
 msgid "Combined"
 msgstr "Комбинированное нанесение"
+
+msgid "Combined Product Printing requires both items and applications."
+msgstr ""
+"Для комбинированного заказа печать на изделиях требует и изделия и нанесения."
+
+msgid "Combined requires at least two complete business categories."
+msgstr "Комбинированный заказ требует минимум две полные бизнес-категории."
+
+msgid "Combined requires at least two non-empty order categories."
+msgstr "Для комбинированного заказа нужны как минимум две непустые категории."
 
 #. Label of the comment (Link) field in DocType 'CRM Notification'
 #: crm/fcrm/doctype/crm_notification/crm_notification.json
@@ -2328,6 +2368,9 @@ msgstr "Пользовательские действия со списком"
 msgid "Custom Range"
 msgstr "Пользовательский диапазон"
 
+msgid "Custom Size"
+msgstr "Произвольный размер"
+
 #: frontend/src/components/Layouts/AppSidebar.vue:616
 msgid "Custom Statuses"
 msgstr "Пользовательские статусы"
@@ -2335,6 +2378,9 @@ msgstr "Пользовательские статусы"
 #: frontend/src/pages/Deal.vue:498
 msgid "Customer Created Successfully"
 msgstr "Клиент успешно создан"
+
+msgid "Customer Item"
+msgstr "Изделие заказчика"
 
 msgid "Customer's Vendor"
 msgstr "Поставщик клиента"
@@ -2348,8 +2394,51 @@ msgstr "Настройка"
 msgid "Customize Quick Filters"
 msgstr "Настройка быстрых фильтров"
 
+msgid "DTF Piece Line {0}"
+msgstr "Строка DTF поштучно {0}"
+
+msgid "DTF Piece Lines"
+msgstr "Строки DTF поштучно"
+
+msgid "DTF Piece Subtotal"
+msgstr "Итого по DTF поштучно"
+
+msgid "DTF Pieces"
+msgstr "DTF поштучно"
+
+msgid "DTF Pieces cannot contain item, application, or roll lines."
+msgstr "DTF поштучно не может содержать изделия, нанесения или строки рулона."
+
+msgid "DTF Pieces cannot contain other order categories."
+msgstr "Заказ поштучной DTF-печати не может содержать другие категории заказа."
+
+msgid "DTF Pieces requires at least one piece line."
+msgstr "Для DTF поштучно требуется хотя бы одна строка."
+
 msgid "DTF Printing"
 msgstr "DTF-печать"
+
+msgid "DTF Roll"
+msgstr "DTF в рулоне"
+
+msgid "DTF Roll Line {0}"
+msgstr "Строка DTF-рулона {0}"
+
+msgid "DTF Roll Lines"
+msgstr "Строки DTF-рулона"
+
+msgid "DTF Roll Subtotal"
+msgstr "Итого по DTF-рулону"
+
+msgid "DTF Roll cannot contain item, application, or piece lines."
+msgstr ""
+"DTF в рулоне не может содержать изделия, нанесения или строки DTF поштучно."
+
+msgid "DTF Roll cannot contain other order categories."
+msgstr "Заказ DTF-рулона не может содержать другие категории заказа."
+
+msgid "DTF Roll requires at least one roll line."
+msgstr "Для DTF в рулоне требуется хотя бы одна строка рулона."
 
 #. Option for the 'Default Calendar View' (Select) field in DocType 'FCRM
 #. Settings'
@@ -2840,6 +2929,9 @@ msgstr "Скидка %"
 #: crm/fcrm/doctype/crm_products/crm_products.json
 msgid "Discount Amount"
 msgstr "Сумма скидки"
+
+msgid "Discount Percentage"
+msgstr "Процент скидки"
 
 #: frontend/src/components/SalesHierarchyBanner.vue:13
 msgid "Dismiss"
@@ -3993,6 +4085,9 @@ msgstr "Название формы"
 msgid "Form Script updated successfully"
 msgstr "Скрипт формы успешно обновлён"
 
+msgid "Format"
+msgstr "Формат"
+
 #. Name of a Workspace
 #: crm/fcrm/workspace/frappe_crm/frappe_crm.json
 msgid "Frappe CRM"
@@ -4130,6 +4225,9 @@ msgstr "Больше или равно"
 #: crm/fcrm/doctype/crm_fields_layout/crm_fields_layout.json
 msgid "Grid Row"
 msgstr "Строка таблицы"
+
+msgid "Gross Amount"
+msgstr "Сумма без скидки"
 
 #. Label of the group_by_tab (Tab Break) field in DocType 'CRM View Settings'
 #: crm/fcrm/doctype/crm_view_settings/crm_view_settings.json
@@ -4525,6 +4623,9 @@ msgstr "Некорректный формат. Примеры: 1h 30m 45s, 1:30:
 msgid "Invalid lead details supplied."
 msgstr "Переданы некорректные данные лида."
 
+msgid "Invalid monetary value: {0}"
+msgstr "Некорректное денежное значение: {0}"
+
 #: crm/api/__init__.py:81 crm/api/__init__.py:85
 #: crm/fcrm/doctype/crm_invitation/crm_invitation.py:61
 msgid "Invalid or expired key"
@@ -4643,6 +4744,24 @@ msgid ""
 msgstr ""
 "Это сделает обязательными поля «Ожидаемая дата закрытия» и «Ожидаемая "
 "стоимость сделки» для получения точных прогнозов"
+
+msgid "Item Key"
+msgstr "Ключ изделия"
+
+msgid "Item Key must be unique: {0}."
+msgstr "Ключ изделия должен быть уникальным: {0}."
+
+msgid "Item Name"
+msgstr "Наименование изделия"
+
+msgid "Item key {0} must be unique within the order."
+msgstr "Ключ изделия {0} должен быть уникальным в пределах заказа."
+
+msgid "Item {0}"
+msgstr "Изделие {0}"
+
+msgid "Items Subtotal"
+msgstr "Итого по изделиям"
 
 #: crm/api/doc.py:806
 msgid "Items are required"
@@ -4962,6 +5081,9 @@ msgstr "Узнать больше"
 msgid "Left"
 msgstr "Левый"
 
+msgid "Length (m)"
+msgstr "Длина (м)"
+
 #: frontend/src/components/Filter.vue:367
 msgid "Less than"
 msgstr "Меньше"
@@ -5250,6 +5372,15 @@ msgstr "Требуются обязательные поля: {0}"
 #: crm/fcrm/doctype/crm_call_log/crm_call_log.json
 msgid "Manual"
 msgstr "Руководство"
+
+msgid "Manual Amount"
+msgstr "Сумма вручную"
+
+msgid "Manual Order Total"
+msgstr "Итог заказа вручную"
+
+msgid "Manual Rate"
+msgstr "Цена вручную"
 
 #. Label of the mapped_to_crm_field (Autocomplete) field in DocType 'Facebook
 #. Lead Form Question'
@@ -6146,11 +6277,26 @@ msgstr "Параметры"
 msgid "Or create leads manually"
 msgstr "Или создавайте лиды вручную"
 
+msgid "Order Application {0}"
+msgstr "Нанесение заказа {0}"
+
+msgid "Order Applications"
+msgstr "Нанесения заказа"
+
 #. Label of the order_by_tab (Tab Break) field in DocType 'CRM View Settings'
 #. Label of the order_by (Code) field in DocType 'CRM View Settings'
 #: crm/fcrm/doctype/crm_view_settings/crm_view_settings.json
 msgid "Order By"
 msgstr "Сортировать по"
+
+msgid "Order Item {0}"
+msgstr "Изделие заказа {0}"
+
+msgid "Order Items"
+msgstr "Изделия заказа"
+
+msgid "Order Type"
+msgstr "Тип заказа"
 
 msgid "Order amount"
 msgstr "Сумма заказов"
@@ -6443,6 +6589,9 @@ msgstr "Закрепленные просмотры"
 msgid "Pipedrive"
 msgstr ""
 
+msgid "Placement"
+msgstr "Расположение"
+
 #: frontend/src/components/Activities/AudioPlayer.vue:176
 msgid "Playback Speed"
 msgstr "Скорость воспроизведения"
@@ -6637,6 +6786,22 @@ msgstr "Код продукта"
 msgid "Product Name"
 msgstr "Название продукта"
 
+msgid "Product Printing"
+msgstr "Печать на изделиях"
+
+msgid "Product Printing cannot contain DTF Roll or DTF Piece lines."
+msgstr ""
+"Печать на изделиях не может содержать строки DTF-рулона или поштучной DTF-"
+"печати."
+
+msgid "Product Printing cannot contain DTF roll or piece lines."
+msgstr ""
+"Печать на изделиях не может содержать строки DTF-рулона или DTF поштучно."
+
+msgid "Product Printing requires at least one item and one application."
+msgstr ""
+"Для печати на изделиях требуется хотя бы одно изделие и одно нанесение."
+
 #. Label of the sync_issues (Table) field in DocType 'ERPNext CRM Settings'
 #: crm/fcrm/doctype/erpnext_crm_settings/erpnext_crm_settings.json
 msgid "Product Sync Issues"
@@ -6707,6 +6872,9 @@ msgstr "Квалифицирован"
 msgid "Quantity"
 msgstr "Количество"
 
+msgid "Quantity Only"
+msgstr "Только количество"
+
 #. Label of the questions (Table) field in DocType 'Facebook Lead Form'
 #: crm/lead_syncing/doctype/facebook_lead_form/facebook_lead_form.json
 msgid "Questions"
@@ -6743,6 +6911,9 @@ msgstr "Случайно"
 #: crm/fcrm/doctype/crm_products/crm_products.json
 msgid "Rate"
 msgstr "Цена"
+
+msgid "Rate per Meter"
+msgstr "Цена за метр"
 
 #. Label of the read (Check) field in DocType 'CRM Notification'
 #: crm/fcrm/doctype/crm_notification/crm_notification.json
@@ -7484,6 +7655,12 @@ msgstr "Выберите приложение Twilio для CRM"
 msgid "Select a Value"
 msgstr "Выберите значение"
 
+msgid "Select a valid Order Type for the print-studio order."
+msgstr "Выберите допустимый тип заказа принт-студии."
+
+msgid "Select a valid Order Type."
+msgstr "Выберите допустимый тип заказа."
+
 #: frontend/src/components/Questionnaire.vue:93
 msgid "Select all that apply"
 msgstr ""
@@ -7765,6 +7942,9 @@ msgstr ""
 msgid "Setup your password"
 msgstr "Настройте свой пароль"
 
+msgid "Sheet Format"
+msgstr "Формат листа"
+
 #: frontend/src/components/Activities/Activities.vue:246
 msgid "Show"
 msgstr "Показать"
@@ -7850,9 +8030,18 @@ msgstr "Необходимо указать адрес сайта"
 msgid "Site connection validated"
 msgstr "Подключение к сайту проверено"
 
+msgid "Size"
+msgstr "Размер"
+
+msgid "Sizing Mode"
+msgstr "Режим размера"
+
 #: frontend/src/components/Questionnaire.vue:97
 msgid "Skip for now"
 msgstr ""
+
+msgid "Sleeve"
+msgstr "Рукав"
 
 #: frontend/src/components/Settings/Sla/SlaPolicyView.vue:439
 msgid "Some error occurred while creating SLA Policy"
@@ -8030,6 +8219,9 @@ msgstr "Укажите статус"
 msgid "Step {0} of {1}"
 msgstr ""
 
+msgid "Studio Product"
+msgstr "Товар студии"
+
 #. Label of the subdomain (Data) field in DocType 'CRM Exotel Settings'
 #: crm/fcrm/doctype/crm_exotel_settings/crm_exotel_settings.json
 #: frontend/src/components/Settings/Telephony/ExotelSettings.vue:75
@@ -8053,6 +8245,9 @@ msgstr "Тема: {0}"
 msgid "Sublimation"
 msgstr "Сублимация"
 
+msgid "Subtotal"
+msgstr "Промежуточный итог"
+
 msgid "Sum of order totals for orders created in the selected period"
 msgstr "Сумма заказов, созданных за выбранный период"
 
@@ -8065,6 +8260,9 @@ msgstr "Воскресенье"
 
 msgid "Supplier Reference"
 msgstr "Рекомендация поставщика"
+
+msgid "Supply Type"
+msgstr "Тип поставки"
 
 #: frontend/src/components/Settings/emailConfig.js:16
 msgid "Support / Sales"
@@ -8170,6 +8368,9 @@ msgstr "Системный менеджер"
 #: frontend/src/components/EmailEditor.vue:39
 msgid "TO"
 msgstr "К"
+
+msgid "Tag / Inner Part"
+msgstr "Бирка / внутренняя часть"
 
 #: frontend/src/components/Telephony/ExotelCallUI.vue:148
 msgid "Take a note..."
@@ -8681,6 +8882,9 @@ msgstr "Неразборный"
 msgid "Ungroup Conditions"
 msgstr "Разгруппировать условия"
 
+msgid "Unit Price"
+msgstr "Цена за единицу"
+
 #: frontend/src/components/Telephony/TwilioCallUI.vue:24
 #: frontend/src/components/Telephony/TwilioCallUI.vue:123
 msgid "Unknown"
@@ -8847,6 +9051,15 @@ msgstr "Загрузка {0}%"
 #: crm/fcrm/doctype/crm_product/crm_product.py:45
 msgid "Use ERPNext to Create Products"
 msgstr ""
+
+msgid "Use Manual Amount"
+msgstr "Задать сумму вручную"
+
+msgid "Use Manual Rate"
+msgstr "Задать цену вручную"
+
+msgid "Use Manual Total"
+msgstr "Задать итог вручную"
 
 #. Label of the user (Link) field in DocType 'CRM Dashboard'
 #. Label of the user (Link) field in DocType 'CRM Telephony Agent'
@@ -9702,6 +9915,9 @@ msgstr "{0} участников"
 msgid "{0} awaiting"
 msgstr "{0} ожидается"
 
+msgid "{0} cannot be negative."
+msgstr "{0} не может быть отрицательным."
+
 #: frontend/src/utils/index.js:158
 msgid "{0} d"
 msgstr "{0} д"
@@ -9767,6 +9983,9 @@ msgstr "{0} мин назад"
 msgid "{0} months ago"
 msgstr "{0} месяцев назад"
 
+msgid "{0} must be greater than zero."
+msgstr "{0} должно быть больше нуля."
+
 #: frontend/src/components/Calendar/CalendarEventPanel.vue:647
 msgid "{0} no"
 msgstr "{0} нет"
@@ -9802,6 +10021,69 @@ msgstr "{0} да"
 #, python-format
 msgid "{0}% complete"
 msgstr ""
+
+msgid "{0}: Base Rate"
+msgstr "{0}: базовая цена"
+
+msgid "{0}: Discount Percentage must be between 0 and 100."
+msgstr "{0}: процент скидки должен быть от 0 до 100."
+
+msgid "{0}: Height"
+msgstr "{0}: высота"
+
+msgid "{0}: Item Key is required."
+msgstr "{0}: укажите ключ изделия."
+
+msgid "{0}: Item Key must reference an existing order item."
+msgstr "{0}: ключ изделия должен ссылаться на существующее изделие заказа."
+
+msgid "{0}: Item Key must reference an order item."
+msgstr "{0}: ключ изделия должен ссылаться на изделие заказа."
+
+msgid "{0}: Length"
+msgstr "{0}: длина"
+
+msgid "{0}: Manual Amount"
+msgstr "{0}: сумма вручную"
+
+msgid "{0}: Manual Rate"
+msgstr "{0}: цена вручную"
+
+msgid "{0}: Product is required for a Studio Product."
+msgstr "{0}: для товара студии требуется товар."
+
+msgid "{0}: Quantity"
+msgstr "{0}: количество"
+
+msgid "{0}: Quantity cannot exceed the linked item quantity."
+msgstr "{0}: количество не может превышать количество связанного изделия."
+
+msgid "{0}: Rate"
+msgstr "{0}: цена"
+
+msgid "{0}: Rate per Meter"
+msgstr "{0}: цена за метр"
+
+msgid "{0}: Select a valid Placement."
+msgstr "{0}: выберите допустимое расположение."
+
+msgid "{0}: Select a valid Production Type."
+msgstr "{0}: выберите допустимый тип производства."
+
+msgid "{0}: Select a valid Sheet Format."
+msgstr "{0}: выберите допустимый формат листа."
+
+msgid "{0}: Select a valid Sizing Mode."
+msgstr "{0}: выберите допустимый режим размера."
+
+msgid "{0}: Select a valid Supply Type."
+msgstr "{0}: выберите допустимый тип поставки."
+
+msgid "{0}: Unit Price"
+msgstr "{0}: цена за единицу"
+
+msgid "{0}: Width"
+msgstr "{0}: ширина"
 
 #: frontend/src/utils/scriptHelpers.js:43
 msgid ""
