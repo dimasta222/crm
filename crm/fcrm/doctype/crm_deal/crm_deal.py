@@ -29,6 +29,10 @@ class CRMDeal(Document):
 		from frappe.types import DF
 
 		from crm.fcrm.doctype.crm_contacts.crm_contacts import CRMContacts
+		from crm.fcrm.doctype.crm_dtf_piece_line.crm_dtf_piece_line import CRMDTFPieceLine
+		from crm.fcrm.doctype.crm_dtf_roll_line.crm_dtf_roll_line import CRMDTFRollLine
+		from crm.fcrm.doctype.crm_order_application.crm_order_application import CRMOrderApplication
+		from crm.fcrm.doctype.crm_order_item.crm_order_item import CRMOrderItem
 		from crm.fcrm.doctype.crm_products.crm_products import CRMProducts
 		from crm.fcrm.doctype.crm_rolling_response_time.crm_rolling_response_time import (
 			CRMRollingResponseTime,
@@ -36,6 +40,7 @@ class CRMDeal(Document):
 		from crm.fcrm.doctype.crm_status_change_log.crm_status_change_log import CRMStatusChangeLog
 
 		annual_revenue: DF.Currency
+		applications_subtotal: DF.Currency
 		closed_date: DF.Date | None
 		communication_status: DF.Link | None
 		contact: DF.Link | None
@@ -43,6 +48,11 @@ class CRMDeal(Document):
 		currency: DF.Link | None
 		deal_owner: DF.Link | None
 		deal_value: DF.Currency
+		discount_amount: DF.Currency
+		dtf_piece_lines: DF.Table[CRMDTFPieceLine]
+		dtf_piece_subtotal: DF.Currency
+		dtf_roll_lines: DF.Table[CRMDTFRollLine]
+		dtf_roll_subtotal: DF.Currency
 		email: DF.Data | None
 		exchange_rate: DF.Float
 		expected_closure_date: DF.Date | None
@@ -52,6 +62,7 @@ class CRMDeal(Document):
 		first_response_time: DF.Duration | None
 		gender: DF.Link | None
 		industry: DF.Link | None
+		items_subtotal: DF.Currency
 		job_title: DF.Data | None
 		last_name: DF.Data | None
 		last_responded_on: DF.Datetime | None
@@ -61,12 +72,16 @@ class CRMDeal(Document):
 		lost_notes: DF.Text | None
 		lost_reason: DF.Link | None
 		mobile_no: DF.Data | None
+		manual_order_total: DF.Currency
 		naming_series: DF.Literal["CRM-DEAL-.YYYY.-"]
 		net_total: DF.Currency
 		next_step: DF.Data | None
 		no_of_employees: DF.Literal["1-10", "11-50", "51-200", "201-500", "501-1000", "1000+"]
 		organization: DF.Link | None
 		organization_name: DF.Data | None
+		order_applications: DF.Table[CRMOrderApplication]
+		order_items: DF.Table[CRMOrderItem]
+		order_type: DF.Literal["", "Product Printing", "DTF Roll", "DTF Pieces", "Combined"]
 		phone: DF.Data | None
 		probability: DF.Percent
 		products: DF.Table[CRMProducts]
@@ -79,12 +94,17 @@ class CRMDeal(Document):
 		source: DF.Link | None
 		status: DF.Link
 		status_change_log: DF.Table[CRMStatusChangeLog]
+		subtotal: DF.Currency
 		territory: DF.Link | None
 		total: DF.Currency
+		use_manual_total: DF.Check
 		website: DF.Data | None
 	# end: auto-generated types
 
 	def before_validate(self):
+		from crm.fcrm.doctype.crm_deal.order_calculations import ensure_item_keys
+
+		ensure_item_keys(self)
 		if not self.currency:
 			self.currency = frappe.db.get_single_value("FCRM Settings", "currency") or "RUB"
 		if self.source and not self.first_touch_source:
@@ -94,9 +114,17 @@ class CRMDeal(Document):
 
 	def validate(self):
 		self.validate_status()
-		self.set_item_references()
-		self.validate_application_references()
-		self.calculate_order_totals()
+		from crm.fcrm.doctype.crm_deal.order_calculations import (
+			uses_new_order_model,
+			validate_and_calculate_order,
+		)
+
+		if uses_new_order_model(self):
+			validate_and_calculate_order(self)
+		else:
+			self.set_item_references()
+			self.validate_application_references()
+			self.calculate_order_totals()
 		self.update_payment_summary()
 		self.validate_first_touch()
 		self.set_primary_contact()
@@ -149,9 +177,7 @@ class CRMDeal(Document):
 		item_references = set(item_reference_list)
 		for application in self.applications or []:
 			if not application.item_reference:
-				frappe.throw(
-					_("Select an order item for application row {0}.").format(application.idx)
-				)
+				frappe.throw(_("Select an order item for application row {0}.").format(application.idx))
 			if application.item_reference not in item_references:
 				frappe.throw(
 					_("Application row {0} refers to an unknown item: {1}").format(
@@ -160,9 +186,7 @@ class CRMDeal(Document):
 				)
 			if flt(application.quantity) <= 0:
 				frappe.throw(
-					_("Application row {0} must have a quantity greater than zero.").format(
-						application.idx
-					)
+					_("Application row {0} must have a quantity greater than zero.").format(application.idx)
 				)
 
 	def calculate_order_totals(self):
@@ -192,6 +216,8 @@ class CRMDeal(Document):
 		if flt(self.order_total) > 0 and self.paid_amount > flt(self.order_total):
 			frappe.throw(_("Paid amount cannot exceed the order total."))
 		self.balance_amount = max(flt(self.order_total) - self.paid_amount, 0)
+		if self.payment_status in {"Cancelled", "Refunded"}:
+			return
 		if flt(self.order_total) > 0 and self.paid_amount >= flt(self.order_total):
 			self.payment_status = "Paid"
 		elif self.paid_amount > 0:
