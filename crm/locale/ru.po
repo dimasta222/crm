@@ -783,6 +783,9 @@ msgstr "Применить на"
 msgid "Apply To"
 msgstr "Применить к"
 
+msgid "Apply as rate per meter"
+msgstr "Применить как цену за метр"
+
 #: frontend/src/components/Apps.vue:19
 msgid "Apps"
 msgstr "Приложения"
@@ -1508,6 +1511,9 @@ msgstr ""
 msgid "Calculated Amount"
 msgstr "Расчётная сумма"
 
+msgid "Calculated amount"
+msgstr "Расчётная сумма"
+
 #. Label of the calendar_tab (Tab Break) field in DocType 'FCRM Settings'
 #: crm/fcrm/doctype/fcrm_settings/fcrm_settings.json
 #: frontend/src/components/Settings/Settings.vue:138
@@ -2188,6 +2194,9 @@ msgid ""
 "its CRM Settings, Otherwise check the Error Log."
 msgstr ""
 
+msgid "Could not move the card. The change was not saved."
+msgstr "Не удалось переместить карточку. Изменение не сохранено."
+
 #: frontend/src/components/Settings/Hierarchy/useRemoveNode.js:16
 msgid "Could not remove."
 msgstr ""
@@ -2281,6 +2290,9 @@ msgstr "Создавать клиента в ERPNext при изменении �
 #: crm/fcrm/doctype/erpnext_crm_settings/erpnext_crm_settings.json
 msgid "Create customer on status change"
 msgstr "Создать клиента при изменении статуса"
+
+msgid "Create product"
+msgstr "Создать изделие"
 
 #: crm/fcrm/doctype/crm_product/crm_product.js:12
 #: crm/fcrm/doctype/crm_product/crm_product_list.js:10
@@ -3579,6 +3591,9 @@ msgstr "Введите {0}"
 msgid "Equals"
 msgstr "Равняется"
 
+msgid "Equivalent rate per meter"
+msgstr "Эквивалентная цена за метр"
+
 #: frontend/src/pages/MobileLead.vue:204
 msgid "Error Occurred"
 msgstr "Произошла ошибка"
@@ -4028,6 +4043,9 @@ msgstr "Фильтр"
 msgid "Filters"
 msgstr "Фильтры"
 
+msgid "Final amount"
+msgstr "Итоговая сумма"
+
 #: frontend/src/components/Questionnaire.vue:96
 msgid "Finish"
 msgstr "Завершить"
@@ -4296,6 +4314,9 @@ msgstr "Термопечать"
 
 msgid "Height"
 msgstr "Высота"
+
+msgid "Height (cm)"
+msgstr "Высота, см"
 
 #: crm/templates/emails/helpdesk_invitation.html:2
 msgid "Hello"
@@ -5439,6 +5460,9 @@ msgstr "Итог заказа вручную"
 msgid "Manual Rate"
 msgstr "Цена вручную"
 
+msgid "Manual amount"
+msgstr "Ручная сумма"
+
 #. Label of the mapped_to_crm_field (Autocomplete) field in DocType 'Facebook
 #. Lead Form Question'
 #: crm/lead_syncing/doctype/facebook_lead_form_question/facebook_lead_form_question.json
@@ -6328,6 +6352,9 @@ msgstr "Открыть в портале"
 #: crm/fcrm/doctype/crm_dropdown_item/crm_dropdown_item.json
 msgid "Open in new window"
 msgstr "Открыть в новом окне"
+
+msgid "Open product"
+msgstr "Открыть изделие"
 
 #: frontend/src/doctypes/crm_task/form.js:9
 #: frontend/src/doctypes/fcrm_note/form.js:9
@@ -8987,6 +9014,9 @@ msgstr ""
 "Не удалось подключиться к учётной записи Twilio для получения списка "
 "приложений."
 
+msgid "Unable to create the product."
+msgstr "Не удалось создать изделие."
+
 msgid "Unable to load the product rate."
 msgstr "Не удалось загрузить цену изделия."
 
@@ -9407,6 +9437,9 @@ msgstr "Где"
 #: frontend/src/components/ColumnSettings.vue:109
 msgid "Width"
 msgstr "Ширина"
+
+msgid "Width (cm)"
+msgstr "Ширина, см"
 
 #: frontend/src/components/ColumnSettings.vue:113
 msgid "Width can be in number, pixel or rem (eg. 3, 30px, 10rem)"

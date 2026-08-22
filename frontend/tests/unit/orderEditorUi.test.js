@@ -36,7 +36,9 @@ describe('order editor CRM UI', () => {
   it('uses compact ghost trash buttons for every row removal', () => {
     const rowTables = sources.slice(1, 5).join('\n')
     expect(rowTables.match(/icon="trash-2"/g)).toHaveLength(4)
-    expect(rowTables.match(/variant="ghost"/g)).toHaveLength(4)
+    expect(
+      rowTables.match(/icon="trash-2"[\s\S]{0,100}variant="ghost"/g),
+    ).toHaveLength(4)
   })
 
   it('keeps placement Back as the raw value with a contextual label', () => {

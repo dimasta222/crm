@@ -4,7 +4,7 @@
       class="flex items-center justify-between gap-2 text-base bg-surface-gray-2 rounded py-2 px-2.5 overflow-x-auto max-w-full"
     >
       <Draggable
-        v-if="tabs.length && tabs[tabIndex].label"
+        v-if="tabs.length > 1 || tabs[tabIndex]?.label"
         :list="tabs"
         item-key="name"
         class="flex items-center gap-2 w-full overflow-auto py-1 [&::-webkit-scrollbar]:h-0"
@@ -29,7 +29,7 @@
           >
             <div @dblclick="() => (tab.editingLabel = true)">
               <div v-if="!tab.editingLabel" class="flex items-center gap-2">
-                {{ __(tab.label) || __('Untitled') }}
+                {{ getTabLabel(tab, i) }}
               </div>
               <div v-else class="flex gap-1 items-center">
                 <Input
@@ -152,10 +152,7 @@
                 >
                   {{
                     formatFieldCount(
-                      section.columns.reduce(
-                        (n, c) => n + c.fields.length,
-                        0,
-                      ),
+                      section.columns.reduce((n, c) => n + c.fields.length, 0),
                     )
                   }}
                 </span>
@@ -276,6 +273,7 @@
 import DragVerticalIcon from '@/components/Icons/DragVerticalIcon.vue'
 import Draggable from 'vuedraggable'
 import { getRandom } from '@/utils'
+import { shouldUseDetailsTabFallback } from '@/utils/fieldLayoutTabs'
 import { getMeta } from '@/stores/meta'
 import { globalStore } from '@/stores/global'
 import { Combobox, Dropdown } from 'frappe-ui'
@@ -358,9 +356,7 @@ function formatFieldCount(count) {
     navigator.language ||
     ''
   ).toLowerCase()
-  const isRussian =
-    language.startsWith('ru') ||
-    /[А-Яа-яЁё]/.test(__('Create'))
+  const isRussian = language.startsWith('ru') || /[А-Яа-яЁё]/.test(__('Create'))
 
   if (isRussian) {
     const mod10 = count % 10
@@ -377,20 +373,14 @@ function formatFieldCount(count) {
   return `${count} ${count === 1 ? __('field') : __('fields')}`
 }
 
-function addTab() {
-  if (tabs.value.length == 1 && !tabs.value[0].label) {
-    tabs.value[0].label = __('New Tab')
-    tabIndex.value = 0
-    nextTick(() => {
-      tabItemRefs.value[0]?.scrollIntoView({
-        behavior: 'smooth',
-        inline: 'nearest',
-        block: 'nearest',
-      })
-    })
-    return
-  }
+function getTabLabel(tab, index) {
+  if (tab.label) return __(tab.label)
+  return shouldUseDetailsTabFallback(props.doctype, tabs.value, index)
+    ? __('Details')
+    : __('Untitled')
+}
 
+function addTab() {
   tabs.value.push({
     label: __('New Tab'),
     name: 'tab_' + getRandom(),
