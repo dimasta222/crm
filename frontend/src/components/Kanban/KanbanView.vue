@@ -76,6 +76,7 @@
               :list="column.data"
               group="fields"
               item-key="name"
+              :disabled="movePending"
               class="flex flex-col gap-3.5 flex-1"
               :delay="isTouchScreenDevice() ? 200 : 0"
               :data-column="column.column.name"
@@ -180,10 +181,10 @@ import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
 import { isTouchScreenDevice, colors, parseColor } from '@/utils'
 import { translateSelectValue } from '@/utils/fieldTransforms'
 import Draggable from 'vuedraggable'
-import { Dropdown, Popover } from 'frappe-ui'
-import { computed } from 'vue'
+import { Dropdown, Popover, toast } from 'frappe-ui'
+import { computed, ref } from 'vue'
 
-defineProps({
+const props = defineProps({
   options: {
     type: Object,
     default: () => ({
@@ -197,6 +198,8 @@ defineProps({
 const emit = defineEmits(['update', 'loadMore'])
 
 const kanban = defineModel({ type: Object })
+const pendingMoveCount = ref(0)
+const movePending = computed(() => pendingMoveCount.value > 0)
 
 const titleField = computed(() => {
   return kanban.value?.data?.title_field
@@ -258,7 +261,34 @@ function addColumn(e) {
   updateColumn()
 }
 
-function updateColumn(d, fetchNewColumns = false) {
+function getColumn(name) {
+  return columns.value.find((column) => column.column.name === name)
+}
+
+function removeItem(column, itemName) {
+  if (!column) return null
+  const index = column.data.findIndex((item) => item.name === itemName)
+  if (index === -1) return null
+  return column.data.splice(index, 1)[0]
+}
+
+function moveItem(itemName, fromColumn, toColumn, index) {
+  const item =
+    removeItem(fromColumn, itemName) ||
+    toColumn?.data.find((entry) => entry.name === itemName)
+  if (!item || !toColumn) return
+
+  removeItem(toColumn, itemName)
+  toColumn.data.splice(Math.min(index, toColumn.data.length), 0, item)
+}
+
+function syncColumnOrders() {
+  columns.value.forEach((column) => {
+    column.column.order = column.data.map((item) => item.name)
+  })
+}
+
+async function updateColumn(d, fetchNewColumns = false) {
   let toColumn = d?.to?.dataset.column
   let fromColumn = d?.from?.dataset.column
   let itemName = d?.item?.dataset.name
@@ -275,7 +305,57 @@ function updateColumn(d, fetchNewColumns = false) {
   let data = { kanban_columns: _columns, fetchNewColumns }
 
   if (toColumn != fromColumn) {
-    data = { item: itemName, to: toColumn, kanban_columns: _columns }
+    data = {
+      item: itemName,
+      to: toColumn,
+      from: fromColumn,
+      fieldname: kanban.value?.params?.column_field,
+      kanban_columns: _columns,
+    }
+
+    if (props.options.onMove) {
+      const source = getColumn(fromColumn)
+      const target = getColumn(toColumn)
+      const oldIndex = d?.oldIndex ?? source?.data.length ?? 0
+      const newIndex = d?.newIndex ?? target?.data.length ?? 0
+
+      moveItem(itemName, target, source, oldIndex)
+      syncColumnOrders()
+
+      let serverRequestPending = false
+      let moveFinished = false
+      try {
+        const move = props.options.onMove(data)
+        const startServerRequest = () => {
+          if (serverRequestPending || moveFinished) return
+          serverRequestPending = true
+          pendingMoveCount.value += 1
+        }
+
+        if (move?.serverRequestStarted) {
+          move.serverRequestStarted.then((started) => {
+            if (started) startServerRequest()
+          })
+        } else if (move !== false) {
+          startServerRequest()
+        }
+
+        const result = await move
+        if (result !== false) {
+          moveItem(itemName, source, target, newIndex)
+          syncColumnOrders()
+        }
+      } catch (error) {
+        toast.error(
+          error?.messages?.[0] ||
+            __('Could not move the card. The change was not saved.'),
+        )
+      } finally {
+        moveFinished = true
+        if (serverRequestPending) pendingMoveCount.value -= 1
+      }
+      return
+    }
   }
 
   emit('update', data)

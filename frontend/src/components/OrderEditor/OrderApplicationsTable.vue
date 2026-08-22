@@ -17,12 +17,14 @@
     </template>
 
     <div class="order-grid mt-2 overflow-x-auto">
-      <table class="w-full min-w-[720px] text-sm">
+      <table class="w-full min-w-[920px] text-sm">
         <thead>
           <tr>
             <th>{{ __('Item') }}</th>
             <th>{{ __('Production type') }}</th>
             <th>{{ __('Placement') }}</th>
+            <th class="w-28 text-right">{{ __('Width (cm)') }}</th>
+            <th class="w-28 text-right">{{ __('Height (cm)') }}</th>
             <th class="w-24 text-right">{{ __('Qty') }}</th>
             <th class="w-28 text-right">{{ __('Rate') }}</th>
             <th class="w-10" />
@@ -50,6 +52,12 @@
                 :options="placementOptions"
                 :placeholder="__('Select option')"
               />
+            </td>
+            <td>
+              <FormControl v-model="row.width_cm" type="number" min="0" />
+            </td>
+            <td>
+              <FormControl v-model="row.height_cm" type="number" min="0" />
             </td>
             <td><FormControl v-model="row.qty" type="number" min="0" /></td>
             <td><FormControl v-model="row.rate" type="number" min="0" /></td>

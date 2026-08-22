@@ -79,6 +79,18 @@ const expectedTranslations = {
   'The selected product has no standard rate.':
     'У выбранного изделия не указана стандартная цена.',
   'Unable to load the product rate.': 'Не удалось загрузить цену изделия.',
+  'Unable to create the product.': 'Не удалось создать изделие.',
+  'Could not move the card. The change was not saved.':
+    'Не удалось переместить карточку. Изменение не сохранено.',
+  'Create product': 'Создать изделие',
+  'Open product': 'Открыть изделие',
+  'Width (cm)': 'Ширина, см',
+  'Height (cm)': 'Высота, см',
+  'Calculated amount': 'Расчётная сумма',
+  'Manual amount': 'Ручная сумма',
+  'Final amount': 'Итоговая сумма',
+  'Equivalent rate per meter': 'Эквивалентная цена за метр',
+  'Apply as rate per meter': 'Применить как цену за метр',
   Item: 'Изделие',
   'Production type': 'Тип производства',
   Placement: 'Расположение',

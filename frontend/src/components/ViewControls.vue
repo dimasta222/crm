@@ -862,7 +862,6 @@ function updateFilter(filters) {
   list.value.params.filters = filters
   view.value.filters = filters
   list.value.reload()
-
 }
 
 function updateSort(order_by) {
@@ -929,15 +928,14 @@ function updateColumns(obj) {
   }
 }
 
-function updateKanbanSettings(data) {
+async function updateKanbanSettings(data) {
   if (data.item && data.to) {
-    call('frappe.client.set_value', {
+    return await call('frappe.client.set_value', {
       doctype: props.doctype,
       name: data.item,
       fieldname: view.value.column_field,
       value: data.to,
     })
-    return
   }
 
   if (data.fetchNewColumns) {

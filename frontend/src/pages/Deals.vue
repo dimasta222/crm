@@ -37,6 +37,7 @@
         query: { view: route.query.view, viewType: route.params.viewType },
       }),
       onNewClick: (column) => onNewClick(column),
+      onMove: beforeStatusChange,
     }"
     @update="(data) => viewControls.updateKanbanSettings(data)"
     @loadMore="(columnName) => viewControls.loadMoreKanban(columnName)"
@@ -239,6 +240,12 @@
     v-model="showDealModal"
     :defaults="defaults"
   />
+  <LostReasonModal
+    v-if="lostReasonDocument"
+    v-model="showLostReasonModal"
+    doctype="CRM Deal"
+    :document="lostReasonDocument"
+  />
 </template>
 
 <script setup>
@@ -257,6 +264,7 @@ import DealsListView from '@/components/ListViews/DealsListView.vue'
 import EmptyState from '@/components/ListViews/EmptyState.vue'
 import KanbanView from '@/components/Kanban/KanbanView.vue'
 import DealModal from '@/components/Modals/DealModal.vue'
+import LostReasonModal from '@/components/Modals/LostReasonModal.vue'
 import ViewControls from '@/components/ViewControls.vue'
 import { useDoctypeModal } from '@/composables/doctypeModal'
 import { getMeta } from '@/stores/meta'
@@ -265,6 +273,7 @@ import { usersStore } from '@/stores/users'
 import { organizationsStore } from '@/stores/organizations'
 import { statusesStore } from '@/stores/statuses'
 import { callEnabled } from '@/composables/telephony'
+import { useKanbanStatusChange } from '@/composables/useKanbanStatusChange'
 import { formatDate, timeAgo, website, formatTime } from '@/utils'
 import { translateSelectValue } from '@/utils/fieldTransforms'
 import { useOnboarding, useTelemetry } from 'frappe-ui/frappe'
@@ -295,6 +304,14 @@ const loadMore = ref(1)
 const triggerResize = ref(1)
 const updatedPageCount = ref(20)
 const viewControls = ref(null)
+
+const { showLostReasonModal, lostReasonDocument, beforeStatusChange } =
+  useKanbanStatusChange({
+    doctype: 'CRM Deal',
+    getStatus: getDealStatus,
+    updateKanbanSettings: (data) =>
+      viewControls.value.updateKanbanSettings(data),
+  })
 
 function getRow(name, field) {
   function getValue(value) {

@@ -29,6 +29,7 @@
 <script setup>
 import Section from '@/components/FieldLayout/Section.vue'
 import { useDocument } from '@/data/document'
+import { shouldUseDetailsTabFallback } from '@/utils/fieldLayoutTabs'
 import { Tabs } from 'frappe-ui'
 import { ref, computed, provide } from 'vue'
 
@@ -57,7 +58,7 @@ if (props.context) {
 
 const processedTabs = computed(() => {
   const ov = overrides.value
-  return props.tabs
+  const visibleTabs = props.tabs
     .map((tab) => {
       const tabOverrides = ov[tab.name]
       const processedTab = tabOverrides ? { ...tab, ...tabOverrides } : tab
@@ -73,6 +74,12 @@ const processedTabs = computed(() => {
       }
     })
     .filter((tab) => !tab.hidden)
+
+  if (shouldUseDetailsTabFallback(props.doctype, visibleTabs, 0)) {
+    visibleTabs[0] = { ...visibleTabs[0], label: __('Details') }
+  }
+
+  return visibleTabs
 })
 
 const hasTabs = computed(() => {

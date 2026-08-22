@@ -9652,3 +9652,36 @@ msgstr "Высота"
 
 msgid "Select option"
 msgstr "Выберите значение"
+
+msgid "Width (cm)"
+msgstr "Ширина, см"
+
+msgid "Height (cm)"
+msgstr "Высота, см"
+
+msgid "Calculated amount"
+msgstr "Расчётная сумма"
+
+msgid "Manual amount"
+msgstr "Ручная сумма"
+
+msgid "Final amount"
+msgstr "Итоговая сумма"
+
+msgid "Equivalent rate per meter"
+msgstr "Эквивалентная цена за метр"
+
+msgid "Apply as rate per meter"
+msgstr "Применить как цену за метр"
+
+msgid "Create product"
+msgstr "Создать изделие"
+
+msgid "Open product"
+msgstr "Открыть изделие"
+
+msgid "Unable to create the product."
+msgstr "Не удалось создать изделие."
+
+msgid "Could not move the card. The change was not saved."
+msgstr "Не удалось переместить карточку. Изменение не сохранено."

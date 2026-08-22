@@ -51,6 +51,26 @@
                   (product) => onStudioProductChange(row, product)
                 "
               />
+              <div
+                v-if="row.supply_type === 'Studio Product'"
+                class="mt-1 flex flex-wrap gap-1"
+              >
+                <Button
+                  :label="__('Create product')"
+                  icon-left="plus"
+                  size="sm"
+                  variant="ghost"
+                  @click="createStudioProduct(row)"
+                />
+                <Button
+                  :label="__('Open product')"
+                  icon-left="external-link"
+                  size="sm"
+                  variant="ghost"
+                  :disabled="!row.product"
+                  @click="openStudioProduct(row)"
+                />
+              </div>
               <p
                 v-if="studioProductErrors[rowKey(row)]"
                 class="mt-1 text-xs text-ink-red-3"
@@ -110,6 +130,7 @@
 <script setup>
 import Section from '@/components/Section.vue'
 import Link from '@/components/Controls/Link.vue'
+import { createDocument } from '@/composables/document'
 import { computed, reactive, ref } from 'vue'
 import {
   Button,
@@ -144,6 +165,25 @@ async function onStudioProductChange(row, product) {
   } else if (result.error === 'load-failed') {
     studioProductErrors[key] = __('Unable to load the product rate.')
   }
+}
+function createStudioProduct(row) {
+  const key = rowKey(row)
+  delete studioProductErrors[key]
+  createDocument('CRM Product', {}, null, async (product) => {
+    if (!product?.name) {
+      studioProductErrors[key] = __('Unable to create the product.')
+      return
+    }
+    await onStudioProductChange(row, product.name)
+  })
+}
+function openStudioProduct(row) {
+  if (!row.product) return
+  window.open(
+    `/app/crm-product/${encodeURIComponent(row.product)}`,
+    '_blank',
+    'noopener',
+  )
 }
 function add() {
   rows.value.push({
