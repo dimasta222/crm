@@ -43,12 +43,13 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { Checkbox, FormControl } from 'frappe-ui'
 import { getMeta } from '@/stores/meta'
 import {
   calculateOrderPreview,
   getOrderCurrencyPrecision,
+  synchronizeOrderSummary,
 } from '@/utils/orderEditor'
 
 const props = defineProps({ doc: { type: Object, required: true } })
@@ -64,6 +65,7 @@ const precision = computed(() =>
 const preview = computed(() =>
   calculateOrderPreview(props.doc, precision.value),
 )
+watchEffect(() => synchronizeOrderSummary(props.doc, precision.value))
 const totalsRows = computed(() => {
   const rows = []
   if (['Product Printing', 'Combined'].includes(props.doc.order_type)) {

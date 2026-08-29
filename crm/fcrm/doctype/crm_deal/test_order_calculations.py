@@ -444,7 +444,11 @@ class TestOrderPaymentRegression(FrappeTestCase):
 
 	def test_payment_summary_and_balance_still_work(self):
 		doc = self.payment_doc()
-		CRMDeal.update_payment_summary(doc)
+		with patch(
+			"crm.fcrm.doctype.crm_deal.order_calculations.get_currency_precision",
+			return_value=2,
+		):
+			CRMDeal.update_payment_summary(doc)
 		self.assertEqual(doc.balance_amount, 75)
 		self.assertEqual(doc.payment_status, "Partially Paid")
 
@@ -458,6 +462,43 @@ class TestOrderPaymentRegression(FrappeTestCase):
 	def test_paid_amount_above_order_total_is_rejected(self):
 		with self.assertRaises(frappe.ValidationError):
 			CRMDeal.update_payment_summary(self.payment_doc(paid_amount=101))
+
+	def test_payment_history_calculates_paid_balance_status_and_last_date(self):
+		doc = self.payment_doc(paid_amount=999)
+		doc.meta = MagicMock()
+		doc.meta.get_field.return_value = frappe._dict(fieldname="payments")
+		doc.payments = [
+			frappe._dict(amount=25, paid_at="2026-08-28 10:15:00", payment_method="Cash"),
+			frappe._dict(amount=35, paid_at="2026-08-29 18:45:00", payment_method="Bank Card"),
+		]
+
+		with patch(
+			"crm.fcrm.doctype.crm_deal.order_calculations.get_currency_precision",
+			return_value=2,
+		):
+			CRMDeal.update_payment_summary(doc)
+
+		self.assertEqual(doc.paid_amount, 60)
+		self.assertEqual(doc.balance_amount, 40)
+		self.assertEqual(doc.payment_status, "Partially Paid")
+		self.assertEqual(str(doc.last_payment_date), "2026-08-29")
+		self.assertEqual(doc.payment_method, "Bank Card")
+
+	def test_empty_payment_history_clears_the_derived_paid_amount(self):
+		doc = self.payment_doc(paid_amount=25)
+		doc.meta = MagicMock()
+		doc.meta.get_field.return_value = frappe._dict(fieldname="payments")
+		doc.payments = []
+
+		with patch(
+			"crm.fcrm.doctype.crm_deal.order_calculations.get_currency_precision",
+			return_value=2,
+		):
+			CRMDeal.update_payment_summary(doc)
+
+		self.assertEqual(doc.paid_amount, 0)
+		self.assertEqual(doc.balance_amount, 100)
+		self.assertEqual(doc.payment_status, "Unpaid")
 
 
 class TestOrderPersistence(FrappeTestCase):

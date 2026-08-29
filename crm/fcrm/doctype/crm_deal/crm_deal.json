@@ -71,6 +71,7 @@
   "payment_method",
   "payment_due_date",
   "last_payment_date",
+  "payments",
   "order_type",
   "order_items",
   "order_applications",
@@ -577,7 +578,8 @@
    "fieldname": "paid_amount",
    "fieldtype": "Currency",
    "label": "Paid Amount",
-   "options": "currency"
+   "options": "currency",
+   "read_only": 1
   },
   {
    "fieldname": "balance_amount",
@@ -618,7 +620,14 @@
   {
    "fieldname": "last_payment_date",
    "fieldtype": "Date",
-   "label": "Last Payment Date"
+   "label": "Last Payment Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payments",
+   "fieldtype": "Table",
+   "label": "Payment History",
+   "options": "CRM Deal Payment"
   },
   {
    "fieldname": "attribution_tab",
