@@ -21,8 +21,10 @@ export const viewsStore = defineStore('crm-views', (doctype) => {
     initialData: [],
     auto: true,
     transform(views) {
+      for (const name of Object.keys(viewsByName)) delete viewsByName[name]
       pinnedViews.value = []
       publicViews.value = []
+      standardViews.value = {}
       defaultView.value = null
       for (let view of views) {
         viewsByName[view.name] = view

@@ -234,12 +234,20 @@ def create_or_update_standard_view(view: dict):
 	elif not columns:
 		columns = sync_default_columns(view)
 
-	doc = frappe.db.exists(
+	standard_view_names = frappe.get_all(
 		"CRM View Settings",
-		{"dt": view.doctype, "type": view.type or "list", "is_standard": True, "user": frappe.session.user},
+		filters={
+			"dt": view.doctype,
+			"type": view.type or "list",
+			"is_standard": True,
+			"user": frappe.session.user,
+		},
+		pluck="name",
+		order_by="modified desc",
+		limit=1,
 	)
-	if doc:
-		doc = frappe.get_doc("CRM View Settings", doc)
+	if standard_view_names:
+		doc = frappe.get_doc("CRM View Settings", standard_view_names[0])
 		doc.label = view.label
 		doc.type = view.type or "list"
 		doc.route_name = view.route_name or get_route_name(view.doctype)

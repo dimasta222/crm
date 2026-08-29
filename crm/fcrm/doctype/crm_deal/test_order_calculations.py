@@ -114,6 +114,90 @@ class TestOrderCalculations(FrappeTestCase):
 		self.assertEqual(doc.order_total, 1140)
 		self.assertEqual(doc.deal_value, 1140)
 
+	def test_embroidery_uses_full_stitch_count_without_rounding_up(self):
+		item = studio_item(qty=32)
+		print_application = application(
+			production_type="Embroidery",
+			qty=32,
+			stitch_count=12500,
+			stitch_rate_per_1000=70,
+			embroidery_setup_fee=500,
+			rate=0,
+		)
+		doc = product_printing(item, print_application)
+
+		validate_and_calculate_order(doc)
+
+		self.assertEqual(Decimal(str(print_application.rate)), Decimal("875"))
+		self.assertEqual(
+			Decimal(str(print_application.calculated_amount)), Decimal("28500")
+		)
+		self.assertEqual(Decimal(str(doc.applications_subtotal)), Decimal("28500"))
+
+	def test_embroidery_preserves_an_explicit_zero_stitch_rate(self):
+		item = studio_item(qty=2)
+		print_application = application(
+			production_type="Embroidery",
+			qty=2,
+			stitch_count=12500,
+			stitch_rate_per_1000=0,
+			embroidery_setup_fee=500,
+			rate=999,
+		)
+
+		validate_and_calculate_order(product_printing(item, print_application))
+
+		self.assertEqual(Decimal(str(print_application.rate)), Decimal("0"))
+		self.assertEqual(Decimal(str(print_application.calculated_amount)), Decimal("500"))
+
+	def test_one_order_mixes_customer_and_studio_items_with_dtf_and_embroidery(self):
+		customer_item = row(
+			1,
+			item_key="ITEM-CUSTOMER",
+			supply_type="Customer Item",
+			item_name="32 футболки клиента",
+			qty=32,
+			base_rate=0,
+			manual_rate=0,
+			use_manual_rate=0,
+			discount_percentage=0,
+		)
+		studio_product = studio_item(2, key="ITEM-STUDIO", qty=2)
+		dtf = application(
+			1,
+			key="ITEM-CUSTOMER",
+			qty=32,
+			rate=10,
+			comment="На каждой футболке своё имя",
+		)
+		embroidery = application(
+			2,
+			key="ITEM-STUDIO",
+			production_type="Embroidery",
+			qty=2,
+			stitch_count=12500,
+			stitch_rate_per_1000=70,
+			embroidery_setup_fee=500,
+			rate=0,
+			comment="Логотип на груди",
+		)
+		doc = deal(
+			"Product Printing",
+			order_items=[customer_item, studio_product],
+			order_applications=[dtf, embroidery],
+		)
+
+		validate_and_calculate_order(doc)
+
+		self.assertEqual(customer_item.amount, 0)
+		self.assertEqual(studio_product.amount, 1000)
+		self.assertEqual(dtf.amount, 320)
+		self.assertEqual(embroidery.amount, 2250)
+		self.assertEqual(doc.order_total, 3570)
+		self.assertEqual(dtf.comment, "На каждой футболке своё имя")
+		self.assertIsNone(dtf.get("width_cm"))
+		self.assertIsNone(dtf.get("height_cm"))
+
 	def test_server_generates_unique_item_keys_and_retries_collision(self):
 		doc = deal(
 			"Product Printing",
@@ -313,6 +397,7 @@ class TestOrderCalculations(FrappeTestCase):
 			"Embroidery",
 			"Sublimation",
 			"Heat Transfer Printing",
+			"Artwork Preparation",
 			"Combined",
 		)
 		for production_type in expected_types:

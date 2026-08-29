@@ -30,9 +30,27 @@ describe('product editor and contact column regressions', () => {
       'utf8',
     )
 
-    expect(api).toContain(
-      'views.sort(key=lambda view: bool(view.get("user")))',
+    expect(api).toContain('bool(view.get("user"))')
+    const controls = src('components', 'ViewControls.vue')
+    expect(controls).toContain(
+      'load_default_columns: Boolean(_view?.load_default_columns)',
     )
+    expect(controls).not.toContain('load_default_columns: _view?.row || true')
+
+    const dataApi = fs.readFileSync(
+      path.resolve(dirname, '../../../crm/api/doc.py'),
+      'utf8',
+    )
+    expect(dataApi).toContain('order_by="modified desc"')
+
+    const viewSettings = fs.readFileSync(
+      path.resolve(
+        dirname,
+        '../../../crm/fcrm/doctype/crm_view_settings/crm_view_settings.py',
+      ),
+      'utf8',
+    )
+    expect(viewSettings).toContain('order_by="modified desc"')
   })
 
   it('uses the CRM Product title instead of its internal codes', () => {

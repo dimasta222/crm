@@ -490,7 +490,7 @@ function getParams() {
     columns: columns,
     rows: rows,
     route_name: _view?.route_name || route.name,
-    load_default_columns: _view?.row || true,
+    load_default_columns: Boolean(_view?.load_default_columns),
     pinned: _view?.pinned || false,
     public: _view?.public || false,
   }

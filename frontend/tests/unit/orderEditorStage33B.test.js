@@ -54,20 +54,23 @@ vi.mock('frappe-ui', async () => {
           ]),
     }),
     FormControl: defineComponent({
-      props: ['modelValue', 'placeholder', 'type'],
+      props: ['modelValue', 'label', 'placeholder', 'type'],
       emits: ['update:modelValue', 'input'],
       setup:
         (props, { emit }) =>
         () =>
-          h('input', {
-            type: props.type || 'text',
-            value: props.modelValue,
-            placeholder: props.placeholder,
-            onInput: (event) => {
-              emit('update:modelValue', event.target.value)
-              emit('input', event)
-            },
-          }),
+          h('label', [
+            props.label,
+            h('input', {
+              type: props.type || 'text',
+              value: props.modelValue,
+              placeholder: props.placeholder,
+              onInput: (event) => {
+                emit('update:modelValue', event.target.value)
+                emit('input', event)
+              },
+            }),
+          ]),
     }),
     Select: defineComponent({
       props: ['modelValue'],
@@ -139,7 +142,7 @@ afterEach(() => {
 })
 
 describe('order editor stage 3.3B components', () => {
-  it('renders optional print dimensions for every application row', () => {
+  it('renders optional print dimensions for every application row', async () => {
     const container = mount(OrderApplicationsTable, {
       order_items: [{ item_key: 'ITEM-1', item_name: 'Футболка' }],
       order_applications: [
@@ -158,12 +161,84 @@ describe('order editor stage 3.3B components', () => {
       ],
     })
 
+    const parametersButtons = [...container.querySelectorAll('button')].filter(
+      (candidate) => candidate.textContent === 'Parameters',
+    )
+    for (const parametersButton of parametersButtons) {
+      parametersButton.click()
+    }
+    await nextTick()
+
     expect(container.textContent).toContain('Width (cm)')
     expect(container.textContent).toContain('Height (cm)')
     const values = [...container.querySelectorAll('input')].map(
       (input) => input.value,
     )
     expect(values).toEqual(expect.arrayContaining(['20', '30', '8', '5']))
+    expect(container.querySelector('[required]')).toBeNull()
+  })
+
+  it('shows compact embroidery parameters and an optional service comment', async () => {
+    const container = mount(OrderApplicationsTable, {
+      currency: 'RUB',
+      order_items: [{ item_key: 'ITEM-1', item_name: 'Футболка' }],
+      order_applications: [
+        {
+          item_key: 'ITEM-1',
+          production_type: 'Embroidery',
+          placement: 'Chest',
+          qty: 32,
+          stitch_count: 12500,
+          stitch_rate_per_1000: 70,
+          embroidery_setup_fee: 500,
+          comment: 'На каждой футболке своё имя',
+        },
+      ],
+    })
+
+    button(container, 'Parameters').click()
+    await nextTick()
+
+    expect(container.textContent).toContain('Stitch count')
+    expect(container.textContent).toContain('Rate per 1,000 stitches')
+    expect(container.textContent).toContain('Embroidery artwork preparation')
+    expect(container.textContent).toContain('Comment')
+    expect(
+      [...container.querySelectorAll('input')].map((input) => input.value),
+    ).toEqual(
+      expect.arrayContaining([
+        '12500',
+        '70',
+        '500',
+        'На каждой футболке своё имя',
+      ]),
+    )
+    expect(container.querySelector('[required]')).toBeNull()
+  })
+
+  it('shows screen-printing colors and fabric without requiring dimensions', async () => {
+    const container = mount(OrderApplicationsTable, {
+      currency: 'RUB',
+      order_items: [{ item_key: 'ITEM-1', item_name: 'Футболка' }],
+      order_applications: [
+        {
+          item_key: 'ITEM-1',
+          production_type: 'Screen Printing',
+          placement: 'Chest',
+          qty: 10,
+          rate: 250,
+          screen_color_count: 3,
+          fabric_type: 'Dark',
+        },
+      ],
+    })
+
+    button(container, 'Parameters').click()
+    await nextTick()
+
+    expect(container.textContent).toContain('Number of colors')
+    expect(container.textContent).toContain('Fabric type')
+    expect(container.textContent).toContain('Dark')
     expect(container.querySelector('[required]')).toBeNull()
   })
 
@@ -239,11 +314,17 @@ describe('order editor stage 3.3B components', () => {
       expect.any(Function),
     )
     await mocks.createDocument.mock.calls[0][3]({ name: 'PRODUCT-001' })
+    await nextTick()
 
     expect(row).toMatchObject({
       product: 'PRODUCT-001',
       base_rate: 1250,
+      manual_rate: 1250,
+      use_manual_rate: 1,
     })
+    expect(
+      [...container.querySelectorAll('input')].map((input) => input.value),
+    ).toContain('1250')
   })
 
   it('opens the selected product in the CRM editor', () => {
@@ -301,5 +382,6 @@ describe('order editor stage 3.3B components', () => {
 
     expect(button(container, 'Create product')).toBeUndefined()
     expect(button(container, 'Open product')).toBeUndefined()
+    expect(container.textContent).toContain('Not charged')
   })
 })

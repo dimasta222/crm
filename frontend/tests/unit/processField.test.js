@@ -145,13 +145,13 @@ describe('payment status display in Russian', () => {
     expect(options.map((option) => option.value)).toEqual(paymentStatuses)
   })
 
-  it('keeps arbitrary values raw in payment-only display paths', () => {
+  it('translates arbitrary Select labels in shared display paths', () => {
     expect(translatePaymentStatusOptions(['Deal'], 'custom_category')).toEqual([
-      { label: 'Deal', value: 'Deal' },
+      { label: 'Заказ', value: 'Deal' },
     ])
     expect(
       translatePaymentStatusValue('Deal', 'custom_category', 'Not specified'),
-    ).toBe('Deal')
+    ).toBe('Заказ')
   })
 })
 
