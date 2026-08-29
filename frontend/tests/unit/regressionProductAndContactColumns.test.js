@@ -23,4 +23,30 @@ describe('product editor and contact column regressions', () => {
     expect(component).toContain('rows.value.push(c.fieldname)')
     expect(component).not.toContain('rows.value.push(c.value)')
   })
+
+  it('loads global views before the current user view', () => {
+    const api = fs.readFileSync(
+      path.resolve(dirname, '../../../crm/api/views.py'),
+      'utf8',
+    )
+
+    expect(api).toContain(
+      'views.sort(key=lambda view: bool(view.get("user")))',
+    )
+  })
+
+  it('uses the CRM Product title instead of its internal codes', () => {
+    const items = src('components', 'OrderEditor', 'OrderItemsTable.vue')
+    const applications = src(
+      'components',
+      'OrderEditor',
+      'OrderApplicationsTable.vue',
+    )
+
+    expect(items).toContain(':selected-label="row.item_name"')
+    expect(items).toContain('selectedProduct?.product_name')
+    expect(applications).toContain(
+      'label: item.item_name || item.product || item.item_key',
+    )
+  })
 })

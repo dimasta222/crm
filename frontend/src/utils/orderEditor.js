@@ -212,6 +212,8 @@ export async function selectStudioProduct(row, product, getProduct) {
   try {
     const selectedProduct = await getProduct(product)
     if (row.product !== product) return { error: null }
+    row.item_name =
+      selectedProduct?.product_name || selectedProduct?.name || product
     if (
       selectedProduct?.standard_rate == null ||
       selectedProduct.standard_rate === ''

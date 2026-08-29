@@ -484,6 +484,27 @@ class TestOrderPaymentRegression(FrappeTestCase):
 		self.assertEqual(str(doc.last_payment_date), "2026-08-29")
 		self.assertEqual(doc.payment_method, "Bank Card")
 
+	def test_payment_history_accepts_decimal_paid_amount_from_currency_rounding(self):
+		doc = self.payment_doc(order_total=100.5)
+		doc.meta = MagicMock()
+		doc.meta.get_field.return_value = frappe._dict(fieldname="payments")
+		doc.payments = [
+			frappe._dict(
+				amount=Decimal("25.25"),
+				paid_at="2026-08-29 18:45:00",
+				payment_method="Cash",
+			)
+		]
+
+		with patch(
+			"crm.fcrm.doctype.crm_deal.order_calculations.get_currency_precision",
+			return_value=2,
+		):
+			CRMDeal.update_payment_summary(doc)
+
+		self.assertEqual(doc.paid_amount, Decimal("25.25"))
+		self.assertEqual(doc.balance_amount, 75.25)
+
 	def test_empty_payment_history_clears_the_derived_paid_amount(self):
 		doc = self.payment_doc(paid_amount=25)
 		doc.meta = MagicMock()
