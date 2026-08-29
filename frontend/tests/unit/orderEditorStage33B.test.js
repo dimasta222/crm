@@ -7,10 +7,15 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 const mocks = vi.hoisted(() => ({
   createDocument: vi.fn(),
   fetchProduct: vi.fn(),
+  showModal: vi.fn(),
 }))
 
 vi.mock('@/composables/document', () => ({
   createDocument: mocks.createDocument,
+}))
+
+vi.mock('@/composables/doctypeModal', () => ({
+  useDoctypeModal: () => ({ showModal: mocks.showModal }),
 }))
 
 vi.mock('frappe-ui', async () => {
@@ -130,6 +135,7 @@ afterEach(() => {
   vi.restoreAllMocks()
   mocks.createDocument.mockReset()
   mocks.fetchProduct.mockReset()
+  mocks.showModal.mockReset()
 })
 
 describe('order editor stage 3.3B components', () => {
@@ -240,8 +246,7 @@ describe('order editor stage 3.3B components', () => {
     })
   })
 
-  it('opens the selected product in a new tab', () => {
-    const open = vi.spyOn(window, 'open').mockImplementation(() => null)
+  it('opens the selected product in the CRM editor', () => {
     const container = mount(OrderItemsTable, {
       order_items: [
         {
@@ -254,11 +259,12 @@ describe('order editor stage 3.3B components', () => {
     })
 
     button(container, 'Open product').click()
-    expect(open).toHaveBeenCalledWith(
-      '/app/crm-product/PRODUCT%20%2F%20001',
-      '_blank',
-      'noopener',
-    )
+    expect(mocks.showModal).toHaveBeenCalledWith({
+      name: 'PRODUCT / 001',
+      doctype: 'CRM Product',
+      title: 'Product',
+      callbacks: { afterUpdate: expect.any(Function) },
+    })
   })
 
   it('shows creation and rate errors without substituting a zero rate', async () => {
