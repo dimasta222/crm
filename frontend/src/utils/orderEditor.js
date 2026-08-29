@@ -172,6 +172,38 @@ export function calculateOrderPreview(doc, precision = 2) {
   }
 }
 
+export function synchronizeOrderSummary(doc, precision = 2) {
+  const preview = calculateOrderPreview(doc, precision)
+  const hasPaymentHistory = Array.isArray(doc.payments)
+  const paid = hasPaymentHistory
+    ? toNumber(
+        sumMoney(
+          doc.payments.map((payment) => money(payment.amount, precision)),
+          precision,
+        ),
+      )
+    : toNumber(money(doc.paid_amount, precision))
+
+  doc.order_total = preview.orderTotal
+  doc.deal_value = preview.orderTotal
+  doc.paid_amount = paid
+  doc.balance_amount = Math.max(preview.orderTotal - paid, 0)
+
+  if (!['Cancelled', 'Refunded'].includes(doc.payment_status)) {
+    if (preview.orderTotal > 0 && paid >= preview.orderTotal) {
+      doc.payment_status = 'Paid'
+    } else if (paid > 0) {
+      doc.payment_status = 'Partially Paid'
+    } else if (doc.payment_terms === 'Postpayment' && preview.orderTotal > 0) {
+      doc.payment_status = 'Postpaid'
+    } else {
+      doc.payment_status = 'Unpaid'
+    }
+  }
+
+  return { ...preview, paidAmount: paid, balanceAmount: doc.balance_amount }
+}
+
 export async function selectStudioProduct(row, product, getProduct) {
   row.product = product
   row.base_rate = null

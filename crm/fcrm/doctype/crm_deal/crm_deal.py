@@ -1,11 +1,13 @@
 # Copyright (c) 2023, Frappe Technologies Pvt. Ltd. and contributors
 # For license information, please see license.txt
 
+from decimal import Decimal
+
 import frappe
 from frappe import _
 from frappe.desk.form.assign_to import _add as assign
 from frappe.model.document import Document
-from frappe.utils import flt
+from frappe.utils import flt, get_datetime, getdate, now_datetime
 
 from crm.api.exchange_rate import get_exchange_rate
 from crm.api.tracking import (
@@ -32,6 +34,7 @@ class CRMDeal(Document):
 		from crm.fcrm.doctype.crm_dtf_piece_line.crm_dtf_piece_line import CRMDTFPieceLine
 		from crm.fcrm.doctype.crm_dtf_roll_line.crm_dtf_roll_line import CRMDTFRollLine
 		from crm.fcrm.doctype.crm_order_application.crm_order_application import CRMOrderApplication
+		from crm.fcrm.doctype.crm_deal_payment.crm_deal_payment import CRMDealPayment
 		from crm.fcrm.doctype.crm_order_item.crm_order_item import CRMOrderItem
 		from crm.fcrm.doctype.crm_products.crm_products import CRMProducts
 		from crm.fcrm.doctype.crm_rolling_response_time.crm_rolling_response_time import (
@@ -81,6 +84,7 @@ class CRMDeal(Document):
 		organization_name: DF.Data | None
 		order_applications: DF.Table[CRMOrderApplication]
 		order_items: DF.Table[CRMOrderItem]
+		payments: DF.Table[CRMDealPayment]
 		order_type: DF.Literal["", "Product Printing", "DTF Roll", "DTF Pieces", "Combined"]
 		phone: DF.Data | None
 		probability: DF.Percent
@@ -212,7 +216,38 @@ class CRMDeal(Document):
 		self.deal_value = self.order_total
 
 	def update_payment_summary(self):
-		self.paid_amount = max(flt(self.paid_amount), 0)
+		payments = self.get("payments") or []
+		has_payment_history = bool(
+			getattr(self, "meta", None) and self.meta.get_field("payments")
+		)
+		if has_payment_history:
+			from crm.fcrm.doctype.crm_deal.order_calculations import (
+				get_currency_precision,
+				round_money,
+			)
+
+			paid_amount = Decimal("0")
+			latest_payment = None
+			for index, payment in enumerate(payments, 1):
+				amount = Decimal(str(payment.amount or 0))
+				if amount <= 0:
+					frappe.throw(
+						_("Payment row {0} must have an amount greater than zero.").format(index)
+					)
+				if not payment.paid_at:
+					payment.paid_at = now_datetime()
+				paid_amount += amount
+				paid_at = get_datetime(payment.paid_at)
+				if latest_payment is None or paid_at > latest_payment.paid_at:
+					latest_payment = frappe._dict(
+						paid_at=paid_at, payment_method=payment.payment_method
+					)
+
+			self.paid_amount = round_money(paid_amount, get_currency_precision(self))
+			self.last_payment_date = getdate(latest_payment.paid_at) if latest_payment else None
+			self.payment_method = latest_payment.payment_method if latest_payment else None
+		else:
+			self.paid_amount = max(flt(self.paid_amount), 0)
 		if flt(self.order_total) > 0 and self.paid_amount > flt(self.order_total):
 			frappe.throw(_("Paid amount cannot exceed the order total."))
 		self.balance_amount = max(flt(self.order_total) - self.paid_amount, 0)

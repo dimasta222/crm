@@ -348,6 +348,7 @@ def _deal_payment_tab():
 					"payment_method",
 					"payment_due_date",
 					"last_payment_date",
+					"payments",
 				],
 			)
 		],
