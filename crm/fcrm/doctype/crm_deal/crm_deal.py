@@ -250,7 +250,7 @@ class CRMDeal(Document):
 			self.paid_amount = max(flt(self.paid_amount), 0)
 		if flt(self.order_total) > 0 and self.paid_amount > flt(self.order_total):
 			frappe.throw(_("Paid amount cannot exceed the order total."))
-		self.balance_amount = max(flt(self.order_total) - self.paid_amount, 0)
+		self.balance_amount = max(flt(self.order_total) - flt(self.paid_amount), 0)
 		if self.payment_status in {"Cancelled", "Refunded"}:
 			return
 		if flt(self.order_total) > 0 and self.paid_amount >= flt(self.order_total):

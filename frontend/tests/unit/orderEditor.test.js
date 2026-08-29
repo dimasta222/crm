@@ -150,13 +150,21 @@ describe('order editor preview', () => {
 
   it('selects a Studio Product and stores its loaded standard rate', async () => {
     const row = { product: '', base_rate: 1 }
-    const getProduct = vi.fn().mockResolvedValue({ standard_rate: 19.95 })
+    const getProduct = vi.fn().mockResolvedValue({
+      name: 'PRODUCT-001',
+      product_name: 'Футболка оверсайз',
+      standard_rate: 19.95,
+    })
 
     await expect(
       selectStudioProduct(row, 'PRODUCT-001', getProduct),
     ).resolves.toEqual({ error: null })
     expect(getProduct).toHaveBeenCalledWith('PRODUCT-001')
-    expect(row).toMatchObject({ product: 'PRODUCT-001', base_rate: 19.95 })
+    expect(row).toMatchObject({
+      product: 'PRODUCT-001',
+      item_name: 'Футболка оверсайз',
+      base_rate: 19.95,
+    })
   })
 
   it('ignores a late Studio Product response after another product is selected', async () => {

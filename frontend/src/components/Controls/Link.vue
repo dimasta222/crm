@@ -89,6 +89,7 @@ const props = defineProps({
   doctype: { type: String, required: true },
   filters: { type: [Array, Object, String], default: () => [] },
   modelValue: { type: String, default: '' },
+  selectedLabel: { type: String, default: '' },
   hideMe: { type: Boolean, default: false },
 })
 
@@ -107,6 +108,9 @@ const value = computed({
       translatedReferenceDoctypes.has(props.doctype)
     )
       return __(v)
+    if (v && props.selectedLabel) {
+      return { label: props.selectedLabel, value: v }
+    }
     return v
   },
   set: (val) => {

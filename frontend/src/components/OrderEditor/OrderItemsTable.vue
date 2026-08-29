@@ -45,6 +45,7 @@
                 v-if="row.supply_type === 'Studio Product'"
                 v-model="row.product"
                 doctype="CRM Product"
+                :selected-label="row.item_name"
                 :placeholder="__('Select CRM Product')"
                 class="mt-1"
                 @update:model-value="
@@ -132,7 +133,7 @@ import Section from '@/components/Section.vue'
 import Link from '@/components/Controls/Link.vue'
 import { createDocument } from '@/composables/document'
 import { useDoctypeModal } from '@/composables/doctypeModal'
-import { computed, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import {
   Button,
   Checkbox,
@@ -153,15 +154,30 @@ const supplyOptions = [
 const rowKey = (row) => row.name || row.item_key
 const { showModal } = useDoctypeModal()
 
+function getStudioProduct(name) {
+  return createResource({
+    url: 'frappe.client.get',
+    params: { doctype: 'CRM Product', name },
+  }).fetch()
+}
+
+async function hydrateStudioProductName(row) {
+  const product = row.product
+  if (!product || row.supply_type !== 'Studio Product') return
+  try {
+    const selectedProduct = await getStudioProduct(product)
+    if (row.product !== product) return
+    row.item_name =
+      selectedProduct?.product_name || selectedProduct?.name || product
+  } catch {
+    // A failed label lookup must not block editing an existing order.
+  }
+}
+
 async function onStudioProductChange(row, product) {
   const key = rowKey(row)
   delete studioProductErrors[key]
-  const result = await selectStudioProduct(row, product, (name) =>
-    createResource({
-      url: 'frappe.client.get',
-      params: { doctype: 'CRM Product', name },
-    }).fetch(),
-  )
+  const result = await selectStudioProduct(row, product, getStudioProduct)
   if (result.error === 'missing-standard-rate') {
     studioProductErrors[key] = __('The selected product has no standard rate.')
   } else if (result.error === 'load-failed') {
@@ -209,6 +225,10 @@ function remove(index) {
   blockedRemoval.value = false
   rows.value.splice(index, 1)
 }
+
+onMounted(() => {
+  rows.value.forEach((row) => hydrateStudioProductName(row))
+})
 </script>
 
 <style scoped>

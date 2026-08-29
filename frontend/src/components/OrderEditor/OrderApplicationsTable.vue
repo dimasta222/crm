@@ -94,7 +94,7 @@ const rows = computed(() => props.doc.order_applications || [])
 const items = computed(() => props.doc.order_items || [])
 const itemOptions = computed(() =>
   items.value.map((item) => ({
-    label: item.item_name || item.item_key,
+    label: item.item_name || item.product || item.item_key,
     value: item.item_key,
   })),
 )
