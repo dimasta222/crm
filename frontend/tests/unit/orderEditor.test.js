@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import {
   canRemoveOrderItem,
+  calculateApplicationAmount,
   calculateOrderPreview,
   getOrderCurrencyPrecision,
   incompatibleOrderCategories,
@@ -9,6 +10,37 @@ import {
 } from '@/utils/orderEditor'
 
 describe('order editor preview', () => {
+  it('prices embroidery from the full stitch count without rounding it up', () => {
+    const application = {
+      production_type: 'Embroidery',
+      stitch_count: 12500,
+      stitch_rate_per_1000: 70,
+      embroidery_setup_fee: 500,
+      qty: 32,
+      use_manual_amount: 0,
+    }
+
+    expect(calculateApplicationAmount(application, 2)).toBe(28500)
+    expect(
+      calculateOrderPreview({ order_applications: [application] }, 2),
+    ).toMatchObject({ applicationsSubtotal: 28500, orderTotal: 28500 })
+  })
+
+  it('preserves an explicitly edited zero stitch rate', () => {
+    expect(
+      calculateApplicationAmount(
+        {
+          production_type: 'Embroidery',
+          stitch_count: 12500,
+          stitch_rate_per_1000: 0,
+          embroidery_setup_fee: 500,
+          qty: 32,
+        },
+        2,
+      ),
+    ).toBe(500)
+  })
+
   it('always prices a Customer Item at zero, ignoring its manual rate', () => {
     expect(
       calculateOrderPreview({
@@ -164,6 +196,8 @@ describe('order editor preview', () => {
       product: 'PRODUCT-001',
       item_name: 'Футболка оверсайз',
       base_rate: 19.95,
+      manual_rate: 19.95,
+      use_manual_rate: 1,
     })
   })
 

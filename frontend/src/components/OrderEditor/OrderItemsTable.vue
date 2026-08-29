@@ -90,16 +90,15 @@
             <td><FormControl v-model="row.qty" type="number" min="0" /></td>
             <td>
               <FormControl
+                v-if="row.supply_type === 'Studio Product'"
                 v-model="row.manual_rate"
                 type="number"
                 min="0"
                 @input="row.use_manual_rate = 1"
               />
-              <Checkbox
-                v-model="row.use_manual_rate"
-                class="mt-1"
-                :label="__('Set rate manually')"
-              />
+              <span v-else class="px-2 text-sm text-ink-gray-5">
+                {{ __('Not charged') }}
+              </span>
             </td>
             <td>
               <FormControl
@@ -134,13 +133,7 @@ import Link from '@/components/Controls/Link.vue'
 import { createDocument } from '@/composables/document'
 import { useDoctypeModal } from '@/composables/doctypeModal'
 import { computed, onMounted, reactive, ref } from 'vue'
-import {
-  Button,
-  Checkbox,
-  createResource,
-  FormControl,
-  Select,
-} from 'frappe-ui'
+import { Button, createResource, FormControl, Select } from 'frappe-ui'
 import { canRemoveOrderItem, selectStudioProduct } from '@/utils/orderEditor'
 
 const props = defineProps({ doc: { type: Object, required: true } })
@@ -169,6 +162,11 @@ async function hydrateStudioProductName(row) {
     if (row.product !== product) return
     row.item_name =
       selectedProduct?.product_name || selectedProduct?.name || product
+    if (!row.use_manual_rate) {
+      row.manual_rate =
+        row.rate ?? row.base_rate ?? selectedProduct?.standard_rate
+      row.use_manual_rate = 1
+    }
   } catch {
     // A failed label lookup must not block editing an existing order.
   }

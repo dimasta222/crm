@@ -128,6 +128,8 @@ const ru = {
   'Add item': 'Добавить изделие',
   Applications: 'Нанесения',
   'Add application': 'Добавить нанесение',
+  'Services and applications': 'Услуги и нанесения',
+  'Add service': 'Добавить услугу',
   'Add roll': 'Добавить рулон',
   'Add position': 'Добавить позицию',
   'Name / Product': 'Название / изделие',
@@ -138,6 +140,7 @@ const ru = {
   'Item name': 'Название изделия',
   'Select CRM Product': 'Выберите изделие CRM',
   'Set rate manually': 'Указать цену вручную',
+  'Not charged': 'Не оплачивается',
   'Delete row': 'Удалить строку',
   'No items added': 'Изделия не добавлены',
   'Customer Item': 'Изделие клиента',
@@ -152,7 +155,9 @@ const ru = {
   Embroidery: 'Вышивка',
   Sublimation: 'Сублимация',
   'Heat Transfer Printing': 'Термоперенос',
+  'Artwork Preparation': 'Подготовка и правка макета',
   Combined: 'Комбинированное нанесение',
+  Parameters: 'Параметры',
   Chest: 'Грудь',
   'Back placement': 'Спина',
   Sleeve: 'Рукав',
@@ -185,7 +190,7 @@ const ru = {
   'Apply as rate per meter': 'Применить как цену за метр',
   'Preliminary calculation': 'Предварительный расчёт',
   'Items cost': 'Стоимость изделий',
-  'Applications cost': 'Стоимость нанесений',
+  'Applications cost': 'Стоимость услуг и нанесений',
   Discount: 'Скидка',
   Total: 'Итого',
   'DTF Roll cost': 'Стоимость DTF в рулоне',
@@ -311,6 +316,10 @@ describe('OrderEditor Russian component UI', () => {
         { label: 'Вышивка', value: 'Embroidery' },
         { label: 'Сублимация', value: 'Sublimation' },
         { label: 'Термоперенос', value: 'Heat Transfer Printing' },
+        {
+          label: 'Подготовка и правка макета',
+          value: 'Artwork Preparation',
+        },
         { label: 'Комбинированное нанесение', value: 'Combined' },
         { label: 'Грудь', value: 'Chest' },
         { label: 'Спина', value: 'Back' },
@@ -319,7 +328,7 @@ describe('OrderEditor Russian component UI', () => {
         { label: 'Другое', value: 'Other' },
       ]),
     )
-    expect(container.textContent).toContain('Указать цену вручную')
+    expect(container.textContent).not.toContain('Указать цену вручную')
     expect(container.textContent).not.toContain('item-1780000000000')
     expectNoUserFacingEnglish(container)
   })

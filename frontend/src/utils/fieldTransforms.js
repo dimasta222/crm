@@ -90,15 +90,8 @@ export function translateSelectOptions(options) {
   })
 }
 
-export function translatePaymentStatusOptions(options, fieldname) {
-  if (fieldname === 'payment_status') return translateSelectOptions(options)
-  return normalizeSelectOptions(options).map((option) => {
-    if (typeof option === 'string') return { label: option, value: option }
-    return {
-      ...option,
-      label: option.label ?? option.value ?? '',
-    }
-  })
+export function translatePaymentStatusOptions(options, _fieldname) {
+  return translateSelectOptions(options)
 }
 
 export function translateSelectValue(value, _fieldname, fallback = '') {
@@ -114,7 +107,6 @@ export function translateSelectValue(value, _fieldname, fallback = '') {
 }
 
 export function translatePaymentStatusValue(value, fieldname, fallback = '') {
-  if (fieldname !== 'payment_status') return value
   return translateSelectValue(value, fieldname, fallback)
 }
 

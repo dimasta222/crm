@@ -13,6 +13,7 @@ PRODUCTION_TYPES = {
 	"Embroidery",
 	"Sublimation",
 	"Heat Transfer Printing",
+	"Artwork Preparation",
 	"Combined",
 }
 PLACEMENTS = {"Chest", "Back", "Sleeve", "Tag / Inner Part", "Other"}
@@ -199,8 +200,34 @@ def _calculate_applications(deal, items_by_key, precision):
 		_validate_optional_positive(row.get("height_cm"), _("{0}: Height").format(label))
 		_validate_non_negative(row.get("rate"), _("{0}: Rate").format(label))
 		_validate_optional_non_negative(row.get("manual_amount"), _("{0}: Manual Amount").format(label))
+		_validate_optional_positive(row.get("stitch_count"), _("{0}: Stitch Count").format(label))
+		_validate_optional_non_negative(
+			row.get("stitch_rate_per_1000"), _("{0}: Rate per 1,000 Stitches").format(label)
+		)
+		_validate_optional_non_negative(
+			row.get("embroidery_setup_fee"), _("{0}: Embroidery Artwork Preparation").format(label)
+		)
+		_validate_optional_positive(
+			row.get("screen_color_count"), _("{0}: Number of Colors").format(label)
+		)
+		if row.get("fabric_type") and row.fabric_type not in {"White", "Dark", "Colored"}:
+			frappe.throw(_("{0}: Select a valid Fabric Type.").format(label))
+
 		rate = round_money(row.get("rate"), precision)
-		calculated_amount = round_money(_as_decimal(row.qty) * rate, precision)
+		setup_fee = Decimal("0")
+		if row.production_type == "Embroidery":
+			setup_fee = round_money(row.get("embroidery_setup_fee"), precision)
+			stitch_count = _as_decimal(row.get("stitch_count"))
+			if stitch_count > 0:
+				raw_stitch_rate = row.get("stitch_rate_per_1000")
+				stitch_rate = round_money(
+					70 if raw_stitch_rate in (None, "") else raw_stitch_rate, precision
+				)
+				rate = round_money(stitch_count * stitch_rate / Decimal("1000"), precision)
+				_set_currency(row, "stitch_rate_per_1000", stitch_rate, precision)
+			_set_currency(row, "embroidery_setup_fee", setup_fee, precision)
+
+		calculated_amount = round_money(_as_decimal(row.qty) * rate + setup_fee, precision)
 		_set_currency(row, "rate", rate, precision)
 		_set_currency(row, "calculated_amount", calculated_amount, precision)
 		_set_currency(

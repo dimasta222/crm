@@ -229,6 +229,7 @@ import MultipleAvatar from '@/components/MultipleAvatar.vue'
 import ListBulkActions from '@/components/ListBulkActions.vue'
 import ListRows from '@/components/ListViews/ListRows.vue'
 import { isTranslatable, formatDuration } from '@/utils'
+import { translateSelectValue } from '@/utils/fieldTransforms'
 import {
   Avatar,
   ListView,
@@ -275,6 +276,7 @@ const list = defineModel('list', { type: Object })
 
 function getLabel(label, column) {
   if (column.type === 'Duration') return formatDuration(label)
+  if (column.type === 'Select') return translateSelectValue(label, column.key)
   if (column.options && isTranslatable(column.options)) return __(label)
   return label
 }
