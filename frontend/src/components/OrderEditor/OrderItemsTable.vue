@@ -131,6 +131,7 @@
 import Section from '@/components/Section.vue'
 import Link from '@/components/Controls/Link.vue'
 import { createDocument } from '@/composables/document'
+import { useDoctypeModal } from '@/composables/doctypeModal'
 import { computed, reactive, ref } from 'vue'
 import {
   Button,
@@ -150,6 +151,7 @@ const supplyOptions = [
   { label: __('Studio Product'), value: 'Studio Product' },
 ]
 const rowKey = (row) => row.name || row.item_key
+const { showModal } = useDoctypeModal()
 
 async function onStudioProductChange(row, product) {
   const key = rowKey(row)
@@ -179,11 +181,16 @@ function createStudioProduct(row) {
 }
 function openStudioProduct(row) {
   if (!row.product) return
-  window.open(
-    `/app/crm-product/${encodeURIComponent(row.product)}`,
-    '_blank',
-    'noopener',
-  )
+  showModal({
+    name: row.product,
+    doctype: 'CRM Product',
+    title: __('Product'),
+    callbacks: {
+      afterUpdate: async (product) => {
+        await onStudioProductChange(row, product?.name || row.product)
+      },
+    },
+  })
 }
 function add() {
   rows.value.push({

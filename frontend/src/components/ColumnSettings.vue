@@ -232,7 +232,7 @@ function addColumn(c) {
     align,
   }
   columns.value.push(_column)
-  rows.value.push(c.value)
+  rows.value.push(c.fieldname)
   apply(true)
 }
 
