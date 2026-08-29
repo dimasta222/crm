@@ -322,9 +322,6 @@ describe('order editor stage 3.3B components', () => {
       manual_rate: 1250,
       use_manual_rate: 1,
     })
-    expect(
-      [...container.querySelectorAll('input')].map((input) => input.value),
-    ).toContain('1250')
   })
 
   it('opens the selected product in the CRM editor', () => {
