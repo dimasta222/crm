@@ -107,7 +107,7 @@ export function getOrderCurrencyPrecision(orderTotalField, sysdefaults = {}) {
 
 export function calculateOrderPreview(doc, precision = 2) {
   precision = validPrecision(precision) ?? 2
-  const itemRows = (doc.order_items || []).map((row) => {
+  const items = (doc.order_items || []).map((row) => {
     const customerItem = row.supply_type === 'Customer Item'
     const baseRate = customerItem
       ? money(0, precision)
@@ -119,17 +119,7 @@ export function calculateOrderPreview(doc, precision = 2) {
         ? manualRate
         : baseRate
     const grossAmount = roundMoney(multiply(decimal(row.qty), rate), precision)
-    const discount = roundMoney(
-      divideBy100(multiply(grossAmount, decimal(row.discount_percentage))),
-      precision,
-    )
-    return {
-      amount: roundMoney(
-        add(grossAmount, { value: -discount.value, scale: discount.scale }),
-        precision,
-      ),
-      discount,
-    }
+    return grossAmount
   })
 
   const applications = (doc.order_applications || []).map((row) =>
@@ -156,23 +146,32 @@ export function calculateOrderPreview(doc, precision = 2) {
     ),
   )
   const itemsSubtotal = sumMoney(
-    itemRows.map((row) => row.amount),
+    items,
     precision,
   )
   const applicationsSubtotal = sumMoney(applications, precision)
   const dtfRollSubtotal = sumMoney(rolls, precision)
   const dtfPieceSubtotal = sumMoney(pieces, precision)
-  const discountAmount = sumMoney(
-    itemRows.map((row) => row.discount),
-    precision,
-  )
   const subtotal = sumMoney(
     [itemsSubtotal, applicationsSubtotal, dtfRollSubtotal, dtfPieceSubtotal],
     precision,
   )
+  const discountAmount = roundMoney(
+    divideBy100(
+      multiply(subtotal, decimal(doc.order_discount_percentage)),
+    ),
+    precision,
+  )
+  const calculatedOrderTotal = roundMoney(
+    add(subtotal, {
+      value: -discountAmount.value,
+      scale: discountAmount.scale,
+    }),
+    precision,
+  )
   const orderTotal = doc.use_manual_total
     ? money(doc.manual_order_total, precision)
-    : subtotal
+    : calculatedOrderTotal
 
   return {
     itemsSubtotal: toNumber(itemsSubtotal),
@@ -181,6 +180,7 @@ export function calculateOrderPreview(doc, precision = 2) {
     dtfPieceSubtotal: toNumber(dtfPieceSubtotal),
     discountAmount: toNumber(discountAmount),
     subtotal: toNumber(subtotal),
+    calculatedOrderTotal: toNumber(calculatedOrderTotal),
     orderTotal: toNumber(orderTotal),
   }
 }

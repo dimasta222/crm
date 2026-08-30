@@ -97,24 +97,26 @@ class TestOrderCalculations(FrappeTestCase):
 		)
 		doc = deal(
 			"Product Printing",
-			order_items=[studio_item(discount_percentage=10), customer_item],
+			order_items=[studio_item(), customer_item],
 			order_applications=[application(qty=2, rate=120)],
+			order_discount_percentage=10,
 		)
 
 		validate_and_calculate_order(doc)
 
 		self.assertEqual(doc.order_items[0].gross_amount, 1000)
-		self.assertEqual(doc.order_items[0].discount_amount, 100)
-		self.assertEqual(doc.order_items[0].amount, 900)
+		self.assertEqual(doc.order_items[0].discount_amount, 0)
+		self.assertEqual(doc.order_items[0].amount, 1000)
 		self.assertEqual(customer_item.base_rate, 0)
 		self.assertEqual(customer_item.manual_rate, 0)
 		self.assertEqual(customer_item.rate, 0)
 		self.assertEqual(customer_item.discount_percentage, 0)
 		self.assertEqual(customer_item.amount, 0)
 		self.assertEqual(doc.applications_subtotal, 240)
-		self.assertEqual(doc.subtotal, 1140)
-		self.assertEqual(doc.order_total, 1140)
-		self.assertEqual(doc.deal_value, 1140)
+		self.assertEqual(doc.subtotal, 1240)
+		self.assertEqual(doc.discount_amount, 124)
+		self.assertEqual(doc.order_total, 1116)
+		self.assertEqual(doc.deal_value, 1116)
 
 	def test_embroidery_uses_manual_rate_and_artwork_preparation(self):
 		item = studio_item(qty=32)
@@ -329,26 +331,30 @@ class TestOrderCalculations(FrappeTestCase):
 
 	def test_round_half_up_is_applied_to_rates_discount_and_amounts(self):
 		self.catalog_rates["TEST-PRODUCT"] = 0.105
-		item = studio_item(qty=3, discount_percentage=5)
+		item = studio_item(qty=3)
 		doc = product_printing(item, application(rate=0))
+		doc.order_discount_percentage = 5
 		validate_and_calculate_order(doc)
 		self.assertEqual(Decimal(str(item.rate)), Decimal("0.11"))
 		self.assertEqual(Decimal(str(item.gross_amount)), Decimal("0.33"))
-		self.assertEqual(Decimal(str(item.discount_amount)), Decimal("0.02"))
-		self.assertEqual(Decimal(str(item.amount)), Decimal("0.31"))
+		self.assertEqual(Decimal(str(item.discount_amount)), Decimal("0.00"))
+		self.assertEqual(Decimal(str(item.amount)), Decimal("0.33"))
+		self.assertEqual(Decimal(str(doc.discount_amount)), Decimal("0.02"))
+		self.assertEqual(Decimal(str(doc.order_total)), Decimal("0.31"))
 
 	def test_fractional_discount_percentage_stays_decimal(self):
 		self.mock_get_precision.return_value = 3
-		item = studio_item(qty=1, discount_percentage=Decimal("12.345"))
+		item = studio_item(qty=1)
 		doc = product_printing(item, application(rate=0))
+		doc.order_discount_percentage = Decimal("12.345")
 		validate_and_calculate_order(doc)
 
 		expected_discount_amount = Decimal("61.725")
 		expected_amount = Decimal("438.275")
-		self.assertIsInstance(item.discount_percentage, Decimal)
-		self.assertEqual(item.discount_percentage, Decimal("12.345"))
-		self.assertEqual(Decimal(str(item.discount_amount)), expected_discount_amount)
-		self.assertEqual(Decimal(str(item.amount)), expected_amount)
+		self.assertIsInstance(doc.order_discount_percentage, Decimal)
+		self.assertEqual(doc.order_discount_percentage, Decimal("12.345"))
+		self.assertEqual(Decimal(str(doc.discount_amount)), expected_discount_amount)
+		self.assertEqual(Decimal(str(doc.order_total)), expected_amount)
 
 	def test_decimal_multiplication_and_multi_line_sum_have_no_float_residue(self):
 		doc = deal(
@@ -499,7 +505,7 @@ class TestOrderCalculations(FrappeTestCase):
 			deal("DTF Pieces", dtf_piece_lines=[piece_line(qty=0)]),
 			deal("DTF Pieces", dtf_piece_lines=[piece_line(unit_price=-1)]),
 			deal("DTF Pieces", dtf_piece_lines=[piece_line(sizing_mode="Format", sheet_format="A2")]),
-			product_printing(studio_item(discount_percentage=101), application()),
+			deal("Product Printing", order_items=[studio_item()], order_discount_percentage=101),
 			product_printing(studio_item(manual_rate=-1), application()),
 			deal("DTF Roll", dtf_roll_lines=[roll_line()], manual_order_total=-1),
 		)
@@ -690,6 +696,7 @@ def deal(order_type, **values):
 		"dtf_piece_lines": [],
 		"use_manual_total": 0,
 		"manual_order_total": 0,
+		"order_discount_percentage": 0,
 		"order_total": 999999,
 		"deal_value": 999999,
 		"items_subtotal": 999999,

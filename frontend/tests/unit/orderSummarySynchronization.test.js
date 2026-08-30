@@ -9,22 +9,23 @@ describe('order summary synchronization', () => {
       order_applications: [
         { qty: 2, rate: 100, use_manual_amount: 0, manual_amount: 0 },
       ],
+      order_discount_percentage: 10,
       payments: [{ amount: 50 }],
       payment_status: 'Unpaid',
       payment_terms: 'Prepayment',
     }
 
     synchronizeOrderSummary(doc, 2)
-    expect(doc.order_total).toBe(200)
-    expect(doc.deal_value).toBe(200)
+    expect(doc.order_total).toBe(180)
+    expect(doc.deal_value).toBe(180)
     expect(doc.paid_amount).toBe(50)
-    expect(doc.balance_amount).toBe(150)
+    expect(doc.balance_amount).toBe(130)
     expect(doc.payment_status).toBe('Partially Paid')
 
     doc.order_applications[0].rate = 150
     synchronizeOrderSummary(doc, 2)
-    expect(doc.order_total).toBe(300)
-    expect(doc.balance_amount).toBe(250)
+    expect(doc.order_total).toBe(270)
+    expect(doc.balance_amount).toBe(220)
   })
 
   it('sums partial payments and marks a fully paid order', () => {

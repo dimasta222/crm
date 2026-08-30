@@ -81,6 +81,7 @@
   "applications_subtotal",
   "dtf_roll_subtotal",
   "dtf_piece_subtotal",
+  "order_discount_percentage",
   "discount_amount",
   "subtotal",
   "use_manual_total",
@@ -530,6 +531,14 @@
    "label": "DTF Piece Subtotal",
    "options": "currency",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "order_discount_percentage",
+   "fieldtype": "Percent",
+   "hidden": 1,
+   "label": "Order Discount Percentage",
+   "precision": "6"
   },
   {
    "fieldname": "discount_amount",

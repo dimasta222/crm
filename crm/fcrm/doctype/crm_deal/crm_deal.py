@@ -83,6 +83,7 @@ class CRMDeal(Document):
 		organization: DF.Link | None
 		organization_name: DF.Data | None
 		order_applications: DF.Table[CRMOrderApplication]
+		order_discount_percentage: DF.Percent
 		order_items: DF.Table[CRMOrderItem]
 		payments: DF.Table[CRMDealPayment]
 		order_type: DF.Literal["", "Product Printing", "DTF Roll", "DTF Pieces", "Combined"]

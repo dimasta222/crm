@@ -1,32 +1,22 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
-  <div class="border-t border-outline-gray-2 bg-surface-gray-1 px-3 py-3">
-    <div class="mb-2 flex items-center justify-between gap-3">
-      <div class="text-sm font-medium text-ink-gray-8">
-        {{ __('Services and applications') }}
-      </div>
-      <Button
-        :label="__('Add service')"
-        icon-left="plus"
-        size="sm"
-        variant="subtle"
-        @click="add"
-      />
-    </div>
-
-    <div v-if="rows.length" class="space-y-3">
+  <div class="bg-surface-gray-1/45 px-5 py-5">
+    <div v-if="rows.length" class="space-y-4">
       <div
         v-for="(row, index) in rows"
         :key="rowKey(row, index)"
         data-testid="order-service-card"
-        class="overflow-hidden rounded-md border border-outline-gray-2 border-l-4 border-l-outline-gray-4 bg-surface-white"
+        :data-service-tone="serviceTone(row)"
+        :style="serviceCardStyle(row)"
+        class="order-service-card overflow-hidden rounded-xl border border-outline-gray-2 border-l-[6px] bg-surface-cards"
       >
         <div
-          class="flex flex-wrap items-center justify-between gap-3 border-b border-outline-gray-2 bg-surface-gray-1 px-3 py-2.5"
+          class="order-service-header flex flex-wrap items-center justify-between gap-4 border-b border-outline-gray-2 px-4 py-4"
         >
-          <div>
-            <div class="text-sm font-medium text-ink-gray-8">
-              №{{ index + 1 }} · {{ __(row.production_type || 'Service') }}
+          <div class="min-w-0">
+            <div class="text-sm font-semibold text-ink-gray-9">
+              {{ __('Service') }} №{{ index + 1 }} ·
+              {{ __(row.production_type || 'Service') }}
             </div>
             <div
               v-if="usesPlacement(row) && row.placement"
@@ -38,7 +28,7 @@
           <div class="flex items-center gap-2">
             <div class="text-right">
               <div class="text-xs text-ink-gray-5">{{ __('Amount') }}</div>
-              <div class="font-medium text-ink-gray-8">
+              <div class="text-base font-semibold text-ink-gray-9">
                 {{ formatAmount(calculateApplicationAmount(row, precision)) }}
               </div>
             </div>
@@ -53,7 +43,7 @@
         </div>
 
         <div
-          class="grid grid-cols-1 items-start gap-3 p-3 sm:grid-cols-2 lg:grid-cols-4"
+          class="grid grid-cols-1 items-start gap-x-5 gap-y-4 p-4 sm:grid-cols-2 lg:grid-cols-4"
         >
           <div class="min-w-0">
             <div class="mb-1 h-4 whitespace-nowrap text-xs text-ink-gray-5">
@@ -136,14 +126,14 @@
             type="text"
             :label="__('Comment')"
             :placeholder="__('Comment for this service')"
-            class="sm:col-span-2"
+            class="sm:col-span-2 lg:col-span-2"
           />
         </div>
       </div>
     </div>
     <div
       v-else
-      class="rounded-md border border-dashed border-outline-gray-2 bg-surface-white px-4 py-5 text-center text-sm text-ink-gray-5"
+      class="rounded-xl border border-dashed border-outline-gray-2 bg-surface-cards px-4 py-7 text-center text-sm text-ink-gray-5"
     >
       {{ __('No applications added') }}
     </div>
@@ -164,7 +154,6 @@ const props = defineProps({
   itemKey: { type: String, default: '' },
 })
 const allRows = computed(() => props.doc.order_applications || [])
-const items = computed(() => props.doc.order_items || [])
 const rows = computed(() =>
   props.itemKey
     ? allRows.value.filter((row) => row.item_key === props.itemKey)
@@ -202,10 +191,54 @@ const fabricTypeOptions = [
   { label: __('Colored'), value: 'Colored' },
 ]
 
+const servicePalette = {
+  'DTF Printing': { tone: 'violet', accent: '#8b7cf6', glow: '#8b7cf61f' },
+  'Artwork Preparation': {
+    tone: 'amber',
+    accent: '#f2b653',
+    glow: '#f2b6531f',
+  },
+  Embroidery: { tone: 'cyan', accent: '#4fc3e8', glow: '#4fc3e81f' },
+  'Screen Printing': {
+    tone: 'green',
+    accent: '#4fd19f',
+    glow: '#4fd19f1f',
+  },
+  Sublimation: { tone: 'pink', accent: '#e875b5', glow: '#e875b51f' },
+  'Heat Transfer Printing': {
+    tone: 'orange',
+    accent: '#ef9851',
+    glow: '#ef98511f',
+  },
+  Combined: { tone: 'purple', accent: '#b07bea', glow: '#b07bea1f' },
+}
+const defaultServicePalette = {
+  tone: 'gray',
+  accent: '#999999',
+  glow: '#99999918',
+}
+
 function placementLabel(value) {
   return (
     placementOptions.find((option) => option.value === value)?.label || value
   )
+}
+
+function serviceAppearance(row) {
+  return servicePalette[row.production_type] || defaultServicePalette
+}
+
+function serviceTone(row) {
+  return serviceAppearance(row).tone
+}
+
+function serviceCardStyle(row) {
+  const appearance = serviceAppearance(row)
+  return {
+    '--service-accent': appearance.accent,
+    '--service-glow': appearance.glow,
+    borderLeftColor: appearance.accent,
+  }
 }
 
 function clearLegacyZeroDimensions(currentRows) {
@@ -254,26 +287,20 @@ function formatAmount(value) {
   }).format(value)
 }
 
-function add() {
-  const item = props.itemKey
-    ? items.value.find((candidate) => candidate.item_key === props.itemKey)
-    : items.value[0]
-  if (!item) return
-  allRows.value.push({
-    item_key: item.item_key,
-    production_type: 'DTF Printing',
-    placement: 'Chest',
-    qty: item.qty || 1,
-    rate: 0,
-    width_cm: null,
-    height_cm: null,
-    comment: '',
-  })
-}
-
 watch(rows, clearLegacyZeroDimensions, { immediate: true })
 </script>
 
 <style scoped>
 @import './orderEditor.css';
+
+.order-service-card {
+  background:
+    linear-gradient(135deg, var(--service-glow), transparent 34%),
+    rgb(var(--surface-cards));
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.07);
+}
+
+.order-service-header {
+  background: linear-gradient(90deg, var(--service-glow), transparent 68%);
+}
 </style>

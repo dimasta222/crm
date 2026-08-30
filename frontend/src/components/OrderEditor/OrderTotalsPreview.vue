@@ -1,43 +1,81 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
   <section
-    class="rounded-md border border-outline-gray-2 bg-surface-gray-1 px-3 py-2.5 text-sm"
+    data-testid="order-totals-card"
+    class="order-totals-card overflow-hidden rounded-xl border border-outline-gray-2 bg-surface-cards text-sm"
   >
-    <div class="mb-2 font-medium text-ink-gray-8">
+    <div
+      class="order-totals-header border-b border-outline-gray-2 px-5 py-4 text-base font-semibold text-ink-gray-9"
+    >
       {{ __('Preliminary calculation') }}
     </div>
-    <dl class="grid grid-cols-1 gap-x-8 gap-y-1 sm:grid-cols-2">
+
+    <div class="px-5 py-5">
+      <dl class="grid grid-cols-1 gap-x-10 gap-y-2 sm:grid-cols-2">
+        <div
+          v-for="row in totalsRows"
+          :key="row.label"
+          class="flex items-center justify-between gap-4"
+        >
+          <dt class="text-ink-gray-5">{{ __(row.label) }}</dt>
+          <dd class="font-medium text-ink-gray-8">{{ format(row.value) }}</dd>
+        </div>
+        <div
+          class="mt-1 flex items-center justify-between gap-4 border-t border-outline-gray-2 pt-3 sm:col-span-2"
+        >
+          <dt class="font-medium text-ink-gray-7">{{ __('Subtotal') }}</dt>
+          <dd class="font-semibold text-ink-gray-9">
+            {{ format(preview.subtotal) }}
+          </dd>
+        </div>
+      </dl>
+
       <div
-        v-for="row in totalsRows"
-        :key="row.label"
-        class="flex items-center justify-between gap-4"
+        class="mt-4 grid grid-cols-1 items-end gap-4 rounded-xl border border-outline-amber-1 bg-surface-amber-1/40 p-4 sm:grid-cols-2"
       >
-        <dt class="text-ink-gray-6">{{ __(row.label) }}</dt>
-        <dd class="font-medium text-ink-gray-8">{{ format(row.value) }}</dd>
+        <FormControl
+          v-model="doc.order_discount_percentage"
+          type="number"
+          min="0"
+          max="100"
+          step="0.01"
+          :label="__('Order discount, %')"
+        />
+        <div class="flex items-center justify-between gap-4 sm:justify-end">
+          <span class="text-ink-gray-5">{{ __('Discount') }}</span>
+          <span class="font-semibold text-ink-amber-3">
+            {{ format(-preview.discountAmount) }}
+          </span>
+        </div>
       </div>
+
       <div
-        class="flex items-center justify-between gap-4 border-t border-outline-gray-2 pt-1 sm:col-span-2"
+        class="mt-4 rounded-xl border border-outline-gray-2 bg-surface-gray-1/70 p-4"
       >
-        <dt class="font-medium text-ink-gray-8">{{ __('Total') }}</dt>
-        <dd class="font-semibold text-ink-gray-9">
+        <Checkbox
+          v-model="doc.use_manual_total"
+          :label="__('Set amount manually')"
+        />
+        <FormControl
+          v-if="doc.use_manual_total"
+          v-model="doc.manual_order_total"
+          class="mt-3 max-w-64"
+          type="number"
+          min="0"
+          step="0.01"
+          :label="__('Order total')"
+          :placeholder="__('Enter amount')"
+        />
+      </div>
+
+      <div
+        class="order-totals-final mt-4 flex items-center justify-between gap-4 rounded-xl border border-outline-gray-2 px-4 py-4"
+      >
+        <span class="font-semibold text-ink-gray-8">{{ __('Order total') }}</span>
+        <span class="text-xl font-semibold text-ink-gray-9">
           {{ format(preview.orderTotal) }}
-        </dd>
+        </span>
       </div>
-    </dl>
-    <div class="mt-2 border-t border-outline-gray-2 pt-2">
-      <Checkbox
-        v-model="doc.use_manual_total"
-        :label="__('Set amount manually')"
-      />
-      <FormControl
-        v-if="doc.use_manual_total"
-        v-model="doc.manual_order_total"
-        class="mt-2 max-w-48"
-        type="number"
-        min="0"
-        :label="__('Order total')"
-        :placeholder="__('Enter amount')"
-      />
     </div>
   </section>
 </template>
@@ -72,7 +110,6 @@ const totalsRows = computed(() => {
     rows.push(
       { label: 'Items cost', value: preview.value.itemsSubtotal },
       { label: 'Applications cost', value: preview.value.applicationsSubtotal },
-      { label: 'Discount', value: preview.value.discountAmount },
     )
   }
   if (['DTF Roll', 'Combined'].includes(props.doc.order_type)) {
@@ -95,3 +132,25 @@ function format(value) {
   }).format(value)
 }
 </script>
+
+<style scoped>
+.order-totals-card {
+  box-shadow: 0 14px 34px rgb(0 0 0 / 0.08);
+}
+
+.order-totals-header {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--surface-violet-1) / 0.58),
+    rgb(var(--surface-cards)) 72%
+  );
+}
+
+.order-totals-final {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--surface-violet-1) / 0.52),
+    rgb(var(--surface-blue-1) / 0.28)
+  );
+}
+</style>

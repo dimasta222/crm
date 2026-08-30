@@ -9692,6 +9692,15 @@ msgstr "Не оплачивается"
 msgid "Services and applications"
 msgstr "Услуги и нанесения"
 
+msgid "Order discount, %"
+msgstr "Скидка на заказ, %"
+
+msgid "Order Discount Percentage"
+msgstr "Процент скидки на заказ"
+
+msgid "Order Discount Percentage must be between 0 and 100."
+msgstr "Процент скидки на заказ должен быть от 0 до 100."
+
 msgid "Add service"
 msgstr "Добавить услугу"
 
@@ -9718,3 +9727,6 @@ msgstr "Цветная"
 
 msgid "Comment for this service"
 msgstr "Комментарий к этой услуге"
+
+msgid "Service"
+msgstr "Услуга"
