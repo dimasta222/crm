@@ -9555,7 +9555,7 @@ msgid "Items cost"
 msgstr "Стоимость изделий"
 
 msgid "Applications cost"
-msgstr "Стоимость нанесений"
+msgstr "Стоимость услуг и нанесений"
 
 msgid "Discount"
 msgstr "Скидка"
@@ -9685,3 +9685,36 @@ msgstr "Не удалось создать изделие."
 
 msgid "Could not move the card. The change was not saved."
 msgstr "Не удалось переместить карточку. Изменение не сохранено."
+
+msgid "Not charged"
+msgstr "Не оплачивается"
+
+msgid "Services and applications"
+msgstr "Услуги и нанесения"
+
+msgid "Add service"
+msgstr "Добавить услугу"
+
+msgid "Artwork Preparation"
+msgstr "Подготовка и правка макета"
+
+msgid "Optional"
+msgstr "Необязательно"
+
+msgid "Embroidery artwork preparation"
+msgstr "Подготовка макета для вышивки"
+
+msgid "Number of colors"
+msgstr "Количество цветов"
+
+msgid "Fabric type"
+msgstr "Тип ткани"
+
+msgid "White"
+msgstr "Белая"
+
+msgid "Colored"
+msgstr "Цветная"
+
+msgid "Comment for this service"
+msgstr "Комментарий к этой услуге"

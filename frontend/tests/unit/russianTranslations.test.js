@@ -39,7 +39,7 @@ const expectedTranslations = {
   'Add position': 'Добавить позицию',
   'Preliminary calculation': 'Предварительный расчёт',
   'Items cost': 'Стоимость изделий',
-  'Applications cost': 'Стоимость нанесений',
+  'Applications cost': 'Стоимость услуг и нанесений',
   Discount: 'Скидка',
   Total: 'Итого',
   'Set amount manually': 'Указать сумму вручную',

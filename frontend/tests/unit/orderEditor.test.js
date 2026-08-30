@@ -10,35 +10,34 @@ import {
 } from '@/utils/orderEditor'
 
 describe('order editor preview', () => {
-  it('prices embroidery from the full stitch count without rounding it up', () => {
+  it('prices embroidery from the editable rate plus artwork preparation', () => {
     const application = {
       production_type: 'Embroidery',
       stitch_count: 12500,
       stitch_rate_per_1000: 70,
       embroidery_setup_fee: 500,
       qty: 32,
+      rate: 227.5,
       use_manual_amount: 0,
     }
 
-    expect(calculateApplicationAmount(application, 2)).toBe(28500)
+    expect(calculateApplicationAmount(application, 2)).toBe(7780)
     expect(
       calculateOrderPreview({ order_applications: [application] }, 2),
-    ).toMatchObject({ applicationsSubtotal: 28500, orderTotal: 28500 })
+    ).toMatchObject({ applicationsSubtotal: 7780, orderTotal: 7780 })
   })
 
-  it('preserves an explicitly edited zero stitch rate', () => {
+  it('calculates 40 services at 227.5 as exactly 9100', () => {
     expect(
       calculateApplicationAmount(
         {
-          production_type: 'Embroidery',
-          stitch_count: 12500,
-          stitch_rate_per_1000: 0,
-          embroidery_setup_fee: 500,
-          qty: 32,
+          production_type: 'DTF Printing',
+          qty: 40,
+          rate: 227.5,
         },
         2,
       ),
-    ).toBe(500)
+    ).toBe(9100)
   })
 
   it('always prices a Customer Item at zero, ignoring its manual rate', () => {
@@ -51,7 +50,7 @@ describe('order editor preview', () => {
             base_rate: 20,
             manual_rate: 15,
             use_manual_rate: 1,
-            discount_percentage: 0,
+            discount_percentage: 35,
           },
         ],
       }),

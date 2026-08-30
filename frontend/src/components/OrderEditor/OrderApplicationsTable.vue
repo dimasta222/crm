@@ -1,48 +1,34 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
-  <Section
-    :label="__('Services and applications')"
-    :collapsible="false"
-    label-class="font-medium"
-  >
-    <template #actions>
+  <div class="border-t border-outline-gray-2 bg-surface-gray-1 px-3 py-3">
+    <div class="mb-2 flex items-center justify-between gap-3">
+      <div class="text-sm font-medium text-ink-gray-8">
+        {{ __('Services and applications') }}
+      </div>
       <Button
         :label="__('Add service')"
         icon-left="plus"
         size="sm"
         variant="subtle"
-        :disabled="!items.length"
         @click="add"
       />
-    </template>
+    </div>
 
-    <div class="order-grid mt-2 overflow-x-auto">
-      <table class="w-full min-w-[880px] text-sm">
+    <div v-if="rows.length" class="order-grid overflow-x-auto">
+      <table class="w-full min-w-[760px] text-sm">
         <thead>
           <tr>
-            <th>{{ __('Item') }}</th>
             <th>{{ __('Production type') }}</th>
             <th>{{ __('Placement') }}</th>
             <th class="w-24 text-right">{{ __('Qty') }}</th>
             <th class="w-28 text-right">{{ __('Rate') }}</th>
             <th class="w-28 text-right">{{ __('Amount') }}</th>
-            <th class="w-24" />
             <th class="w-10" />
           </tr>
         </thead>
-        <tbody v-if="rows.length">
-          <template
-            v-for="(row, index) in rows"
-            :key="rowKey(row, index)"
-          >
+        <tbody>
+          <template v-for="(row, index) in rows" :key="rowKey(row, index)">
             <tr>
-              <td class="min-w-40">
-                <Select
-                  v-model="row.item_key"
-                  :options="itemOptions"
-                  :placeholder="__('Select option')"
-                />
-              </td>
               <td class="min-w-44">
                 <Select
                   v-model="row.production_type"
@@ -67,26 +53,10 @@
                 <FormControl v-model="row.qty" type="number" min="0" />
               </td>
               <td>
-                <FormControl
-                  v-if="row.production_type !== 'Embroidery'"
-                  v-model="row.rate"
-                  type="number"
-                  min="0"
-                />
-                <span v-else class="px-2 text-sm text-ink-gray-7">
-                  {{ __('By stitches') }}
-                </span>
+                <FormControl v-model="row.rate" type="number" min="0" />
               </td>
               <td class="text-right font-medium text-ink-gray-8">
                 {{ formatAmount(calculateApplicationAmount(row, precision)) }}
-              </td>
-              <td>
-                <Button
-                  :label="__('Parameters')"
-                  size="sm"
-                  variant="ghost"
-                  @click="toggleDetails(row, index)"
-                />
               </td>
               <td>
                 <Button
@@ -94,14 +64,14 @@
                   icon="trash-2"
                   size="sm"
                   variant="ghost"
-                  @click="remove(index)"
+                  @click="remove(row)"
                 />
               </td>
             </tr>
-            <tr v-if="detailsOpen[rowKey(row, index)]">
-              <td colspan="8" class="!p-3">
+            <tr>
+              <td colspan="6" class="!p-3">
                 <div
-                  class="grid grid-cols-1 gap-3 rounded-md bg-surface-gray-1 p-3 sm:grid-cols-2 lg:grid-cols-4"
+                  class="grid grid-cols-1 gap-3 rounded-md bg-surface-white p-3 sm:grid-cols-2 lg:grid-cols-4"
                 >
                   <FormControl
                     v-if="usesDimensions(row)"
@@ -121,21 +91,6 @@
                   />
                   <FormControl
                     v-if="row.production_type === 'Embroidery'"
-                    v-model="row.stitch_count"
-                    type="number"
-                    min="0"
-                    :label="__('Stitch count')"
-                    :placeholder="__('Full stitch count')"
-                  />
-                  <FormControl
-                    v-if="row.production_type === 'Embroidery'"
-                    v-model="row.stitch_rate_per_1000"
-                    type="number"
-                    min="0"
-                    :label="__('Rate per 1,000 stitches')"
-                  />
-                  <FormControl
-                    v-if="row.production_type === 'Embroidery'"
                     v-model="row.embroidery_setup_fee"
                     type="number"
                     min="0"
@@ -149,9 +104,7 @@
                     :label="__('Number of colors')"
                     :placeholder="__('Optional')"
                   />
-                  <div
-                    v-if="row.production_type === 'Screen Printing'"
-                  >
+                  <div v-if="row.production_type === 'Screen Printing'">
                     <div class="mb-1 text-xs text-ink-gray-5">
                       {{ __('Fabric type') }}
                     </div>
@@ -174,20 +127,15 @@
           </template>
         </tbody>
       </table>
-      <div v-if="!rows.length" class="order-grid-empty">
-        {{
-          items.length
-            ? __('No applications added')
-            : __('Add an item before adding an application')
-        }}
-      </div>
     </div>
-  </Section>
+    <div v-else class="order-grid-empty">
+      {{ __('No applications added') }}
+    </div>
+  </div>
 </template>
 
 <script setup>
-import Section from '@/components/Section.vue'
-import { computed, reactive } from 'vue'
+import { computed } from 'vue'
 import { Button, FormControl, Select } from 'frappe-ui'
 import { getMeta } from '@/stores/meta'
 import {
@@ -195,10 +143,17 @@ import {
   getOrderCurrencyPrecision,
 } from '@/utils/orderEditor'
 
-const props = defineProps({ doc: { type: Object, required: true } })
-const rows = computed(() => props.doc.order_applications || [])
+const props = defineProps({
+  doc: { type: Object, required: true },
+  itemKey: { type: String, default: '' },
+})
+const allRows = computed(() => props.doc.order_applications || [])
 const items = computed(() => props.doc.order_items || [])
-const detailsOpen = reactive({})
+const rows = computed(() =>
+  props.itemKey
+    ? allRows.value.filter((row) => row.item_key === props.itemKey)
+    : allRows.value,
+)
 let editorKeySequence = 0
 const { doctypeMeta } = getMeta('CRM Deal')
 const precision = computed(() =>
@@ -208,12 +163,6 @@ const precision = computed(() =>
     ),
     window.sysdefaults,
   ),
-)
-const itemOptions = computed(() =>
-  items.value.map((item) => ({
-    label: item.item_name || item.product || item.item_key,
-    value: item.item_key,
-  })),
 )
 const productionTypeOptions = [
   'DTF Printing',
@@ -260,25 +209,11 @@ function usesDimensions(row) {
 function onProductionTypeChange(row, productionType) {
   row.production_type = productionType
   if (!usesPlacement(row)) row.placement = 'Other'
-  if (row.production_type === 'Embroidery') {
-    row.rate = 0
-    if (
-      row.stitch_rate_per_1000 == null ||
-      row.stitch_rate_per_1000 === ''
-    ) {
-      row.stitch_rate_per_1000 = 70
-    }
-  }
 }
 
-function toggleDetails(row, index) {
-  const key = rowKey(row, index)
-  detailsOpen[key] = !detailsOpen[key]
-}
-
-function remove(index) {
-  delete detailsOpen[rowKey(rows.value[index], index)]
-  rows.value.splice(index, 1)
+function remove(row) {
+  const index = allRows.value.indexOf(row)
+  if (index !== -1) allRows.value.splice(index, 1)
 }
 
 function formatAmount(value) {
@@ -291,16 +226,18 @@ function formatAmount(value) {
 }
 
 function add() {
-  const row = {
-    item_key: items.value[0].item_key,
+  const item = props.itemKey
+    ? items.value.find((candidate) => candidate.item_key === props.itemKey)
+    : items.value[0]
+  if (!item) return
+  allRows.value.push({
+    item_key: item.item_key,
     production_type: 'DTF Printing',
     placement: 'Chest',
-    qty: 1,
+    qty: item.qty || 1,
     rate: 0,
     comment: '',
-  }
-  rows.value.push(row)
-  detailsOpen[rowKey(row, rows.value.length - 1)] = true
+  })
 }
 </script>
 

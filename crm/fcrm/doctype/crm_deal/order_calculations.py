@@ -144,13 +144,15 @@ def _calculate_items(deal, precision):
 		_validate_positive(row.get("qty"), _("{0}: Quantity").format(label))
 		if row.get("supply_type") not in {"Customer Item", "Studio Product"}:
 			frappe.throw(_("{0}: Select a valid Supply Type.").format(label))
-		_validate_optional_non_negative(row.get("manual_rate"), _("{0}: Manual Rate").format(label))
 
 		if row.supply_type == "Customer Item":
 			base_rate = Decimal("0")
-			manual_rate = round_money(row.get("manual_rate"), precision)
+			manual_rate = Decimal("0")
 			rate = Decimal("0")
 		else:
+			_validate_optional_non_negative(
+				row.get("manual_rate"), _("{0}: Manual Rate").format(label)
+			)
 			if not row.get("product"):
 				frappe.throw(_("{0}: Product is required for a Studio Product.").format(label))
 			stored = _get_stored_order_item(row)
@@ -169,7 +171,11 @@ def _calculate_items(deal, precision):
 		_set_currency(row, "manual_rate", manual_rate, precision)
 		_set_currency(row, "rate", rate, precision)
 		_validate_non_negative(rate, _("{0}: Rate").format(label))
-		discount_percentage = _as_decimal(row.get("discount_percentage"))
+		discount_percentage = (
+			Decimal("0")
+			if row.supply_type == "Customer Item"
+			else _as_decimal(row.get("discount_percentage"))
+		)
 		if not 0 <= discount_percentage <= 100:
 			frappe.throw(_("{0}: Discount Percentage must be between 0 and 100.").format(label))
 		row.discount_percentage = discount_percentage
@@ -196,18 +202,14 @@ def _calculate_applications(deal, items_by_key, precision):
 		_validate_positive(row.get("qty"), _("{0}: Quantity").format(label))
 		if _as_decimal(row.qty) > _as_decimal(items_by_key[key].qty):
 			frappe.throw(_("{0}: Quantity cannot exceed the linked item quantity.").format(label))
-		_validate_optional_positive(row.get("width_cm"), _("{0}: Width").format(label))
-		_validate_optional_positive(row.get("height_cm"), _("{0}: Height").format(label))
+		_validate_optional_non_negative(row.get("width_cm"), _("{0}: Width").format(label))
+		_validate_optional_non_negative(row.get("height_cm"), _("{0}: Height").format(label))
 		_validate_non_negative(row.get("rate"), _("{0}: Rate").format(label))
 		_validate_optional_non_negative(row.get("manual_amount"), _("{0}: Manual Amount").format(label))
-		_validate_optional_positive(row.get("stitch_count"), _("{0}: Stitch Count").format(label))
-		_validate_optional_non_negative(
-			row.get("stitch_rate_per_1000"), _("{0}: Rate per 1,000 Stitches").format(label)
-		)
 		_validate_optional_non_negative(
 			row.get("embroidery_setup_fee"), _("{0}: Embroidery Artwork Preparation").format(label)
 		)
-		_validate_optional_positive(
+		_validate_optional_non_negative(
 			row.get("screen_color_count"), _("{0}: Number of Colors").format(label)
 		)
 		if row.get("fabric_type") and row.fabric_type not in {"White", "Dark", "Colored"}:
@@ -217,14 +219,6 @@ def _calculate_applications(deal, items_by_key, precision):
 		setup_fee = Decimal("0")
 		if row.production_type == "Embroidery":
 			setup_fee = round_money(row.get("embroidery_setup_fee"), precision)
-			stitch_count = _as_decimal(row.get("stitch_count"))
-			if stitch_count > 0:
-				raw_stitch_rate = row.get("stitch_rate_per_1000")
-				stitch_rate = round_money(
-					70 if raw_stitch_rate in (None, "") else raw_stitch_rate, precision
-				)
-				rate = round_money(stitch_count * stitch_rate / Decimal("1000"), precision)
-				_set_currency(row, "stitch_rate_per_1000", stitch_rate, precision)
 			_set_currency(row, "embroidery_setup_fee", setup_fee, precision)
 
 		calculated_amount = round_money(_as_decimal(row.qty) * rate + setup_fee, precision)
@@ -263,8 +257,8 @@ def _calculate_piece_lines(deal, precision):
 			row.height_cm = None
 		elif mode == "Custom Size":
 			row.sheet_format = None
-			_validate_positive(row.get("width_cm"), _("{0}: Width").format(label))
-			_validate_positive(row.get("height_cm"), _("{0}: Height").format(label))
+			_validate_optional_non_negative(row.get("width_cm"), _("{0}: Width").format(label))
+			_validate_optional_non_negative(row.get("height_cm"), _("{0}: Height").format(label))
 		else:
 			row.sheet_format = None
 			row.width_cm = None
