@@ -25,117 +25,145 @@
         :key="row.name || row.item_key || index"
         data-testid="order-item-group"
         :data-item-key="row.item_key"
-        class="overflow-hidden rounded-md border border-outline-gray-2 bg-surface-white"
+        class="overflow-hidden rounded-lg border border-outline-gray-2 bg-surface-white"
       >
-        <div class="order-grid overflow-x-auto">
-          <table class="w-full min-w-[760px] text-sm">
-            <thead>
-              <tr>
-                <th>{{ __('Supply') }}</th>
-                <th>{{ __('Name / Product') }}</th>
-                <th class="w-24 text-right">{{ __('Qty') }}</th>
-                <th class="w-32 text-right">{{ __('Rate') }}</th>
-                <th class="w-28 text-right">{{ __('Discount %') }}</th>
-                <th class="w-10" />
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="min-w-40">
-                  <Select
-                    v-model="row.supply_type"
-                    :options="supplyOptions"
-                    :placeholder="__('Select option')"
-                    @update:model-value="
-                      (supplyType) => onSupplyTypeChange(row, supplyType)
-                    "
-                  />
-                </td>
-                <td class="min-w-52">
-                  <FormControl
-                    v-model="row.item_name"
-                    type="text"
-                    :placeholder="__('Item name')"
-                  />
-                  <Link
-                    v-if="row.supply_type === 'Studio Product'"
-                    v-model="row.product"
-                    doctype="CRM Product"
-                    :selected-label="row.item_name"
-                    :placeholder="__('Select CRM Product')"
-                    class="mt-1"
-                    @update:model-value="
-                      (product) => onStudioProductChange(row, product)
-                    "
-                  />
-                  <div
-                    v-if="row.supply_type === 'Studio Product'"
-                    class="mt-1 flex flex-wrap gap-1"
-                  >
-                    <Button
-                      :label="__('Create product')"
-                      icon-left="plus"
-                      size="sm"
-                      variant="ghost"
-                      @click="createStudioProduct(row)"
-                    />
-                    <Button
-                      :label="__('Open product')"
-                      icon-left="external-link"
-                      size="sm"
-                      variant="ghost"
-                      :disabled="!row.product"
-                      @click="openStudioProduct(row)"
-                    />
-                  </div>
-                  <p
-                    v-if="studioProductErrors[rowKey(row)]"
-                    class="mt-1 text-xs text-ink-red-3"
-                    role="alert"
-                  >
-                    {{ studioProductErrors[rowKey(row)] }}
-                  </p>
-                </td>
-                <td>
-                  <FormControl v-model="row.qty" type="number" min="0" />
-                </td>
-                <td>
-                  <FormControl
-                    v-if="row.supply_type === 'Studio Product'"
-                    v-model="row.manual_rate"
-                    type="number"
-                    min="0"
-                    @input="row.use_manual_rate = 1"
-                  />
-                  <span v-else class="px-2 text-sm text-ink-gray-5">
-                    {{ __('Not charged') }}
-                  </span>
-                </td>
-                <td>
-                  <FormControl
-                    v-if="row.supply_type === 'Studio Product'"
-                    v-model="row.discount_percentage"
-                    type="number"
-                    min="0"
-                    max="100"
-                  />
-                  <span v-else class="px-2 text-sm text-ink-gray-5">—</span>
-                </td>
-                <td>
-                  <Button
-                    :tooltip="__('Delete row')"
-                    icon="trash-2"
-                    size="sm"
-                    variant="ghost"
-                    @click="remove(index)"
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div
+          class="border-b border-outline-gray-2 bg-surface-gray-1 px-4 py-3"
+        >
+          <div class="mb-3 flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <div class="text-sm font-medium text-ink-gray-8">
+                {{ __('Item') }} №{{ index + 1 }} ·
+                {{ row.item_name || __('Item name') }}
+              </div>
+              <div
+                v-if="row.product"
+                class="mt-0.5 text-xs text-ink-gray-5"
+              >
+                {{ row.product }}
+              </div>
+            </div>
+            <Button
+              :tooltip="__('Delete row')"
+              icon="trash-2"
+              size="sm"
+              variant="ghost"
+              @click="remove(index)"
+            />
+          </div>
+
+          <div
+            class="grid grid-cols-1 items-start gap-3 sm:grid-cols-2 lg:grid-cols-6"
+          >
+            <div class="min-w-0">
+              <div class="mb-1 h-4 whitespace-nowrap text-xs text-ink-gray-5">
+                {{ __('Supply') }}
+              </div>
+              <Select
+                v-model="row.supply_type"
+                :options="supplyOptions"
+                :placeholder="__('Select option')"
+                @update:model-value="
+                  (supplyType) => onSupplyTypeChange(row, supplyType)
+                "
+              />
+            </div>
+            <FormControl
+              v-model="row.item_name"
+              type="text"
+              :label="__('Name / Product')"
+              :placeholder="__('Item name')"
+              class="lg:col-span-2"
+            />
+            <FormControl
+              v-model="row.qty"
+              type="number"
+              min="0"
+              :label="__('Qty')"
+            />
+            <FormControl
+              v-if="row.supply_type === 'Studio Product'"
+              v-model="row.manual_rate"
+              type="number"
+              min="0"
+              step="0.01"
+              :label="__('Rate')"
+              @input="row.use_manual_rate = 1"
+            />
+            <FormControl
+              v-if="row.supply_type === 'Studio Product'"
+              v-model="row.discount_percentage"
+              type="number"
+              min="0"
+              max="100"
+              :label="__('Discount %')"
+            />
+            <div v-else class="min-w-0">
+              <div class="mb-1 h-4 whitespace-nowrap text-xs text-ink-gray-5">
+                {{ __('Rate') }}
+              </div>
+              <div
+                class="flex h-8 items-center rounded border border-outline-gray-2 bg-surface-white px-2 text-sm text-ink-gray-5"
+              >
+                {{ __('Not charged') }}
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="row.supply_type === 'Studio Product'"
+            class="mt-3 grid grid-cols-1 items-start gap-3 sm:grid-cols-2"
+          >
+            <div class="min-w-0">
+              <div class="mb-1 h-4 whitespace-nowrap text-xs text-ink-gray-5">
+                {{ __('Product') }}
+              </div>
+              <Link
+                v-model="row.product"
+                doctype="CRM Product"
+                :selected-label="row.item_name"
+                :placeholder="__('Select CRM Product')"
+                @update:model-value="
+                  (product) => onStudioProductChange(row, product)
+                "
+              />
+            </div>
+            <div class="flex h-full flex-wrap items-end gap-1">
+              <Button
+                :label="__('Create product')"
+                icon-left="plus"
+                size="sm"
+                variant="ghost"
+                @click="createStudioProduct(row)"
+              />
+              <Button
+                :label="__('Open product')"
+                icon-left="external-link"
+                size="sm"
+                variant="ghost"
+                :disabled="!row.product"
+                @click="openStudioProduct(row)"
+              />
+            </div>
+          </div>
+          <p
+            v-if="studioProductErrors[rowKey(row)]"
+            class="mt-2 text-xs text-ink-red-3"
+            role="alert"
+          >
+            {{ studioProductErrors[rowKey(row)] }}
+          </p>
         </div>
 
         <OrderApplicationsTable :doc="doc" :item-key="row.item_key" />
+        <div
+          class="flex items-center justify-between gap-3 border-t border-outline-gray-2 bg-surface-gray-1 px-4 py-3 text-sm"
+        >
+          <span class="text-ink-gray-6">{{ __('Total') }}</span>
+          <span class="font-medium text-ink-gray-8">
+            {{ formatAmount(groupAmount(row)) }}
+          </span>
+        </div>
       </div>
     </div>
     <div v-else class="order-grid-empty mt-2">
@@ -149,9 +177,15 @@ import Section from '@/components/Section.vue'
 import Link from '@/components/Controls/Link.vue'
 import { createDocument } from '@/composables/document'
 import { useDoctypeModal } from '@/composables/doctypeModal'
+import { getMeta } from '@/stores/meta'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { Button, createResource, FormControl, Select } from 'frappe-ui'
-import { canRemoveOrderItem, selectStudioProduct } from '@/utils/orderEditor'
+import {
+  calculateOrderPreview,
+  canRemoveOrderItem,
+  getOrderCurrencyPrecision,
+  selectStudioProduct,
+} from '@/utils/orderEditor'
 import OrderApplicationsTable from './OrderApplicationsTable.vue'
 
 const props = defineProps({ doc: { type: Object, required: true } })
@@ -164,6 +198,36 @@ const supplyOptions = [
 ]
 const rowKey = (row) => row.name || row.item_key
 const { showModal } = useDoctypeModal()
+const { doctypeMeta } = getMeta('CRM Deal')
+const precision = computed(() =>
+  getOrderCurrencyPrecision(
+    doctypeMeta.value?.fields?.find(
+      (field) => field.fieldname === 'order_total',
+    ),
+    window.sysdefaults,
+  ),
+)
+
+function groupAmount(row) {
+  return calculateOrderPreview(
+    {
+      order_items: [row],
+      order_applications: (props.doc.order_applications || []).filter(
+        (application) => application.item_key === row.item_key,
+      ),
+    },
+    precision.value,
+  ).orderTotal
+}
+
+function formatAmount(value) {
+  return new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency: props.doc.currency || 'RUB',
+    minimumFractionDigits: precision.value,
+    maximumFractionDigits: precision.value,
+  }).format(value)
+}
 
 function getStudioProduct(name) {
   return createResource({

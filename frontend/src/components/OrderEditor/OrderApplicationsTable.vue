@@ -14,128 +14,144 @@
       />
     </div>
 
-    <div v-if="rows.length" class="order-grid overflow-x-auto">
-      <table class="w-full min-w-[760px] text-sm">
-        <thead>
-          <tr>
-            <th>{{ __('Production type') }}</th>
-            <th>{{ __('Placement') }}</th>
-            <th class="w-24 text-right">{{ __('Qty') }}</th>
-            <th class="w-28 text-right">{{ __('Rate') }}</th>
-            <th class="w-28 text-right">{{ __('Amount') }}</th>
-            <th class="w-10" />
-          </tr>
-        </thead>
-        <tbody>
-          <template v-for="(row, index) in rows" :key="rowKey(row, index)">
-            <tr>
-              <td class="min-w-44">
-                <Select
-                  v-model="row.production_type"
-                  :options="productionTypeOptions"
-                  :placeholder="__('Select option')"
-                  @update:model-value="
-                    (productionType) =>
-                      onProductionTypeChange(row, productionType)
-                  "
-                />
-              </td>
-              <td class="min-w-36">
-                <Select
-                  v-if="usesPlacement(row)"
-                  v-model="row.placement"
-                  :options="placementOptions"
-                  :placeholder="__('Select option')"
-                />
-                <span v-else class="px-2 text-sm text-ink-gray-5">—</span>
-              </td>
-              <td>
-                <FormControl v-model="row.qty" type="number" min="0" />
-              </td>
-              <td>
-                <FormControl v-model="row.rate" type="number" min="0" />
-              </td>
-              <td class="text-right font-medium text-ink-gray-8">
+    <div v-if="rows.length" class="space-y-3">
+      <div
+        v-for="(row, index) in rows"
+        :key="rowKey(row, index)"
+        data-testid="order-service-card"
+        class="overflow-hidden rounded-md border border-outline-gray-2 border-l-4 border-l-outline-gray-4 bg-surface-white"
+      >
+        <div
+          class="flex flex-wrap items-center justify-between gap-3 border-b border-outline-gray-2 bg-surface-gray-1 px-3 py-2.5"
+        >
+          <div>
+            <div class="text-sm font-medium text-ink-gray-8">
+              №{{ index + 1 }} · {{ __(row.production_type || 'Service') }}
+            </div>
+            <div
+              v-if="usesPlacement(row) && row.placement"
+              class="mt-0.5 text-xs text-ink-gray-5"
+            >
+              {{ placementLabel(row.placement) }}
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="text-right">
+              <div class="text-xs text-ink-gray-5">{{ __('Amount') }}</div>
+              <div class="font-medium text-ink-gray-8">
                 {{ formatAmount(calculateApplicationAmount(row, precision)) }}
-              </td>
-              <td>
-                <Button
-                  :tooltip="__('Delete row')"
-                  icon="trash-2"
-                  size="sm"
-                  variant="ghost"
-                  @click="remove(row)"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td colspan="6" class="!p-3">
-                <div
-                  class="grid grid-cols-1 gap-3 rounded-md bg-surface-white p-3 sm:grid-cols-2 lg:grid-cols-4"
-                >
-                  <FormControl
-                    v-if="usesDimensions(row)"
-                    v-model="row.width_cm"
-                    type="number"
-                    min="0"
-                    :label="__('Width (cm)')"
-                    :placeholder="__('Optional')"
-                  />
-                  <FormControl
-                    v-if="usesDimensions(row)"
-                    v-model="row.height_cm"
-                    type="number"
-                    min="0"
-                    :label="__('Height (cm)')"
-                    :placeholder="__('Optional')"
-                  />
-                  <FormControl
-                    v-if="row.production_type === 'Embroidery'"
-                    v-model="row.embroidery_setup_fee"
-                    type="number"
-                    min="0"
-                    :label="__('Embroidery artwork preparation')"
-                  />
-                  <FormControl
-                    v-if="row.production_type === 'Screen Printing'"
-                    v-model="row.screen_color_count"
-                    type="number"
-                    min="0"
-                    :label="__('Number of colors')"
-                    :placeholder="__('Optional')"
-                  />
-                  <div v-if="row.production_type === 'Screen Printing'">
-                    <div class="mb-1 text-xs text-ink-gray-5">
-                      {{ __('Fabric type') }}
-                    </div>
-                    <Select
-                      v-model="row.fabric_type"
-                      :options="fabricTypeOptions"
-                      :placeholder="__('Select option')"
-                    />
-                  </div>
-                  <FormControl
-                    v-model="row.comment"
-                    type="text"
-                    :label="__('Comment')"
-                    :placeholder="__('Comment for this service')"
-                    class="lg:col-span-2"
-                  />
-                </div>
-              </td>
-            </tr>
-          </template>
-        </tbody>
-      </table>
+              </div>
+            </div>
+            <Button
+              :tooltip="__('Delete row')"
+              icon="trash-2"
+              size="sm"
+              variant="ghost"
+              @click="remove(row)"
+            />
+          </div>
+        </div>
+
+        <div
+          class="grid grid-cols-1 items-start gap-3 p-3 sm:grid-cols-2 lg:grid-cols-4"
+        >
+          <div class="min-w-0">
+            <div class="mb-1 h-4 whitespace-nowrap text-xs text-ink-gray-5">
+              {{ __('Production type') }}
+            </div>
+            <Select
+              v-model="row.production_type"
+              :options="productionTypeOptions"
+              :placeholder="__('Select option')"
+              @update:model-value="
+                (productionType) =>
+                  onProductionTypeChange(row, productionType)
+              "
+            />
+          </div>
+          <div v-if="usesPlacement(row)" class="min-w-0">
+            <div class="mb-1 h-4 whitespace-nowrap text-xs text-ink-gray-5">
+              {{ __('Placement') }}
+            </div>
+            <Select
+              v-model="row.placement"
+              :options="placementOptions"
+              :placeholder="__('Select option')"
+            />
+          </div>
+          <FormControl
+            v-model="row.qty"
+            type="number"
+            min="0"
+            :label="__('Qty')"
+          />
+          <FormControl
+            v-model="row.rate"
+            type="number"
+            min="0"
+            step="0.01"
+            :label="__('Rate')"
+          />
+          <FormControl
+            v-if="usesDimensions(row)"
+            v-model="row.width_cm"
+            type="number"
+            min="0"
+            :label="__('Width (cm)')"
+          />
+          <FormControl
+            v-if="usesDimensions(row)"
+            v-model="row.height_cm"
+            type="number"
+            min="0"
+            :label="__('Height (cm)')"
+          />
+          <FormControl
+            v-if="row.production_type === 'Embroidery'"
+            v-model="row.embroidery_setup_fee"
+            type="number"
+            min="0"
+            step="0.01"
+            :label="__('Embroidery artwork preparation')"
+          />
+          <FormControl
+            v-if="row.production_type === 'Screen Printing'"
+            v-model="row.screen_color_count"
+            type="number"
+            min="0"
+            :label="__('Number of colors')"
+          />
+          <div v-if="row.production_type === 'Screen Printing'" class="min-w-0">
+            <div class="mb-1 h-4 whitespace-nowrap text-xs text-ink-gray-5">
+              {{ __('Fabric type') }}
+            </div>
+            <Select
+              v-model="row.fabric_type"
+              :options="fabricTypeOptions"
+              :placeholder="__('Select option')"
+            />
+          </div>
+          <FormControl
+            v-model="row.comment"
+            type="text"
+            :label="__('Comment')"
+            :placeholder="__('Comment for this service')"
+            class="sm:col-span-2"
+          />
+        </div>
+      </div>
     </div>
-    <div v-else class="order-grid-empty">
+    <div
+      v-else
+      class="rounded-md border border-dashed border-outline-gray-2 bg-surface-white px-4 py-5 text-center text-sm text-ink-gray-5"
+    >
       {{ __('No applications added') }}
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { Button, FormControl, Select } from 'frappe-ui'
 import { getMeta } from '@/stores/meta'
 import {
@@ -185,6 +201,19 @@ const fabricTypeOptions = [
   { label: __('Dark'), value: 'Dark' },
   { label: __('Colored'), value: 'Colored' },
 ]
+
+function placementLabel(value) {
+  return (
+    placementOptions.find((option) => option.value === value)?.label || value
+  )
+}
+
+function clearLegacyZeroDimensions(currentRows) {
+  currentRows.forEach((row) => {
+    if (Number(row.width_cm) === 0) row.width_cm = null
+    if (Number(row.height_cm) === 0) row.height_cm = null
+  })
+}
 
 function rowKey(row, index) {
   if (row.name) return row.name
@@ -236,9 +265,13 @@ function add() {
     placement: 'Chest',
     qty: item.qty || 1,
     rate: 0,
+    width_cm: null,
+    height_cm: null,
     comment: '',
   })
 }
+
+watch(rows, clearLegacyZeroDimensions, { immediate: true })
 </script>
 
 <style scoped>

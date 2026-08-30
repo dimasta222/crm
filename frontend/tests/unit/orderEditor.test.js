@@ -35,7 +35,7 @@ describe('order editor preview', () => {
           qty: 40,
           rate: 227.5,
         },
-        2,
+        0,
       ),
     ).toBe(9100)
   })
