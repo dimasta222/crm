@@ -1,5 +1,6 @@
 import json
 import re
+from urllib.parse import quote
 
 import frappe
 from frappe import _
@@ -64,6 +65,43 @@ def ingest_message(
 	"""
 	if frappe.session.user == "Guest":
 		frappe.throw(_("Authentication is required"), frappe.PermissionError)
+	return _ingest_message(
+		channel=channel,
+		external_user_id=external_user_id,
+		external_chat_id=external_chat_id,
+		external_message_id=external_message_id,
+		content=content,
+		account_id=account_id,
+		sender_name=sender_name,
+		sent_at=sent_at,
+		attachment_url=attachment_url,
+		attachment_type=attachment_type,
+		raw_payload=raw_payload,
+		tracking_code=tracking_code,
+		lead_data=lead_data,
+		direction=direction,
+		handoff_code=handoff_code,
+	)
+
+
+def _ingest_message(
+	channel,
+	external_user_id,
+	external_chat_id,
+	external_message_id,
+	content=None,
+	account_id=None,
+	sender_name=None,
+	sent_at=None,
+	attachment_url=None,
+	attachment_type=None,
+	raw_payload=None,
+	tracking_code=None,
+	lead_data=None,
+	direction="Incoming",
+	handoff_code=None,
+):
+	"""Internal trusted connector entry point. Do not expose it as an API method."""
 	if channel not in SUPPORTED_CHANNELS:
 		frappe.throw(_("Unsupported communication channel: {0}").format(channel))
 	if direction not in {"Incoming", "Outgoing"}:
@@ -156,6 +194,61 @@ def get_channel_messages(reference_doctype, reference_name):
 		message.account_id = conversation.account_id
 		message.external_chat_id = conversation.external_chat_id
 	return messages
+
+
+@frappe.whitelist()
+def send_channel_message(conversation, content):
+	"""Send a text reply through the conversation's original channel."""
+	content = (content or "").strip()
+	if not content:
+		frappe.throw(_("Message cannot be empty"))
+	if len(content) > 4096:
+		frappe.throw(_("Message is too long"))
+	if not frappe.has_permission("CRM Channel Conversation", "read", conversation):
+		frappe.throw(_("Not permitted"), frappe.PermissionError)
+
+	doc = frappe.get_doc("CRM Channel Conversation", conversation)
+	if doc.channel == "Telegram":
+		from crm.integrations.telegram.client import send_text
+
+		return send_text(doc, content)
+	if doc.channel == "Avito":
+		from crm.integrations.avito.client import send_text
+
+		return send_text(doc, content)
+	frappe.throw(_("Sending messages to {0} is not configured yet").format(doc.channel))
+
+
+@frappe.whitelist()
+def configure_channel_webhooks():
+	"""Register enabled connector callbacks after an administrator saves credentials."""
+	if "System Manager" not in frappe.get_roles():
+		frappe.throw(_("Only a System Manager can configure channel webhooks"), frappe.PermissionError)
+	settings = frappe.get_single("CRM Channel Settings")
+	results = {}
+	if settings.telegram_enabled:
+		from crm.integrations.telegram.client import subscribe_webhook
+
+		secret = _ensure_channel_secret(settings, "telegram_webhook_secret")
+		url = frappe.utils.get_url("api/method/crm.integrations.telegram.webhook.receive")
+		results["telegram"] = subscribe_webhook(url, secret)
+	if settings.avito_enabled:
+		from crm.integrations.avito.client import subscribe_webhook
+
+		token = _ensure_channel_secret(settings, "avito_webhook_token")
+		url = frappe.utils.get_url("api/method/crm.integrations.avito.webhook.receive")
+		results["avito"] = subscribe_webhook(f"{url}?token={quote(token)}")
+	return results
+
+
+def _ensure_channel_secret(settings, fieldname):
+	secret = settings.get_password(fieldname)
+	if secret:
+		return secret
+	secret = frappe.generate_hash(length=40)
+	settings.set(fieldname, secret)
+	settings.save(ignore_permissions=True)
+	return secret
 
 
 def _get_or_create_identity(

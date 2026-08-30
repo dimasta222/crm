@@ -2336,6 +2336,9 @@ msgstr "Создайте свою первую задачу"
 msgid "Create {0}"
 msgstr "Создать: {0}"
 
+msgid "Ctrl+Enter to send"
+msgstr "Ctrl+Enter — отправить"
+
 #. Label of the currency (Link) field in DocType 'CRM Deal'
 #. Label of the currency (Link) field in DocType 'CRM Organization'
 #. Label of the currency (Link) field in DocType 'FCRM Settings'
@@ -3966,6 +3969,9 @@ msgstr "Не удалось отправить комментарий!"
 #: frontend/src/components/CommunicationArea.vue:260
 msgid "Failed to send email!"
 msgstr "Не удалось отправить электронное письмо!"
+
+msgid "Failed to send message"
+msgstr "Не удалось отправить сообщение"
 
 #: frontend/src/components/Settings/ERPNextSettings.vue:333
 msgid "Failed to start sync"
@@ -7285,6 +7291,9 @@ msgstr "Ответить"
 msgid "Reply All"
 msgstr "Ответить Всем"
 
+msgid "Reply via {0}"
+msgstr "Ответить через {0}"
+
 #: frontend/src/components/Modals/AboutModal.vue:65
 msgid "Report an Issue"
 msgstr "Сообщить о проблеме"
@@ -7903,6 +7912,9 @@ msgstr "Отправка комментария…"
 #: frontend/src/components/CommunicationArea.vue:258
 msgid "Sending email..."
 msgstr "Отправка письма…"
+
+msgid "Sending through {0} will be enabled after API verification."
+msgstr "Отправка через {0} будет доступна после проверки API."
 
 #. Option for the 'Type' (Select) field in DocType 'CRM Dropdown Item'
 #: crm/fcrm/doctype/crm_dropdown_item/crm_dropdown_item.json
@@ -8570,6 +8582,15 @@ msgstr "Задача"
 #: frontend/src/pages/MobileDeal.vue:464 frontend/src/pages/MobileLead.vue:309
 msgid "Tasks"
 msgstr "Задачи"
+
+msgid "Telegram bot token is not configured"
+msgstr "Токен Telegram-бота не настроен"
+
+msgid "Telegram did not accept the message"
+msgstr "Telegram не принял сообщение"
+
+msgid "Telegram integration is disabled"
+msgstr "Интеграция Telegram отключена"
 
 #: frontend/src/components/Settings/Settings.vue:210
 msgid "Telephony"
@@ -9525,6 +9546,9 @@ msgstr "Рабочий день"
 #: crm/fcrm/doctype/crm_service_level_agreement/crm_service_level_agreement.json
 msgid "Working Hours"
 msgstr "Часы работы"
+
+msgid "Write a message"
+msgstr "Напишите сообщение"
 
 #: frontend/src/components/Calendar/CalendarEventPanel.vue:531
 #: frontend/src/components/Filter.vue:597

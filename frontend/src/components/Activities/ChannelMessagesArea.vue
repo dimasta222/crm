@@ -64,6 +64,45 @@
         </div>
       </div>
     </div>
+    <div
+      v-if="activeConversation"
+      class="sticky bottom-0 mt-2 rounded-lg border border-outline-gray-2 bg-surface-cards p-3 shadow-sm"
+    >
+      <div class="mb-2 text-sm text-ink-gray-5">
+        {{ __('Reply via {0}', [activeChannel]) }}
+      </div>
+      <textarea
+        v-model="reply"
+        rows="3"
+        :placeholder="__('Write a message')"
+        class="w-full resize-none rounded-md border border-outline-gray-2 bg-surface-white px-3 py-2 text-base text-ink-gray-8 outline-none focus:border-outline-blue-2"
+        @keydown.ctrl.enter.prevent="sendReply"
+        @keydown.meta.enter.prevent="sendReply"
+      />
+      <div class="mt-2 flex items-center justify-between gap-3">
+        <span class="text-xs text-ink-gray-5">
+          {{ __('Ctrl+Enter to send') }}
+        </span>
+        <Button
+          :label="__('Send')"
+          variant="solid"
+          :loading="sending"
+          :disabled="!reply.trim() || !canReply"
+          @click="sendReply"
+        />
+      </div>
+      <div
+        v-if="!canReply"
+        class="mt-2 text-sm text-ink-amber-3"
+      >
+        {{
+          __(
+            'Sending through {0} will be enabled after API verification.',
+            [activeChannel],
+          )
+        }}
+      </div>
+    </div>
   </div>
   <Dialog
     v-model="showCodeDialog"
@@ -97,7 +136,7 @@
 <script setup>
 import { formatDate, timeAgo } from '@/utils'
 import { Button, Dialog, Tooltip, call, toast } from 'frappe-ui'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps({
   messages: { type: Array, default: () => [] },
@@ -108,6 +147,12 @@ const props = defineProps({
 const creatingCode = ref(false)
 const showCodeDialog = ref(false)
 const handoff = ref(null)
+const reply = ref('')
+const sending = ref(false)
+const activeMessage = computed(() => props.messages.at(-1) || null)
+const activeConversation = computed(() => activeMessage.value?.conversation)
+const activeChannel = computed(() => activeMessage.value?.channel || '')
+const canReply = computed(() => ['Telegram', 'Avito'].includes(activeChannel.value))
 
 async function createHandoff() {
   creatingCode.value = true
@@ -128,5 +173,27 @@ async function copyCode() {
   if (!handoff.value?.code) return
   await navigator.clipboard.writeText(handoff.value.code)
   toast.success(__('Channel link code copied'))
+}
+
+async function sendReply() {
+  const content = reply.value.trim()
+  if (
+    !content ||
+    !activeConversation.value ||
+    !canReply.value
+  )
+    return
+  sending.value = true
+  try {
+    await call('crm.api.omnichannel.send_channel_message', {
+      conversation: activeConversation.value,
+      content,
+    })
+    reply.value = ''
+  } catch (error) {
+    toast.error(error.messages?.[0] || __('Failed to send message'))
+  } finally {
+    sending.value = false
+  }
 }
 </script>
