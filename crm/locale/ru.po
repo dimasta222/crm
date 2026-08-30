@@ -9730,3 +9730,27 @@ msgstr "Комментарий к этой услуге"
 
 msgid "Service"
 msgstr "Услуга"
+
+msgid "Reply via {0}"
+msgstr "Ответить через {0}"
+
+msgid "Write a message"
+msgstr "Напишите сообщение"
+
+msgid "Ctrl+Enter to send"
+msgstr "Ctrl+Enter — отправить"
+
+msgid "Failed to send message"
+msgstr "Не удалось отправить сообщение"
+
+msgid "Sending through {0} will be enabled after API verification."
+msgstr "Отправка через {0} будет доступна после проверки API."
+
+msgid "Telegram integration is disabled"
+msgstr "Интеграция Telegram отключена"
+
+msgid "Telegram bot token is not configured"
+msgstr "Токен Telegram-бота не настроен"
+
+msgid "Telegram did not accept the message"
+msgstr "Telegram не принял сообщение"

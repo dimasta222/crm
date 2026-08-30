@@ -1,0 +1,1 @@
+"""CRM channel settings DocType."""

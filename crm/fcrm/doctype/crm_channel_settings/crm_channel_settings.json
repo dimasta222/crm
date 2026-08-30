@@ -1,0 +1,44 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-08-30 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "telegram_section",
+  "telegram_enabled",
+  "telegram_bot_username",
+  "telegram_bot_token",
+  "telegram_webhook_secret",
+  "avito_section",
+  "avito_enabled",
+  "avito_account_id",
+  "avito_client_id",
+  "avito_client_secret",
+  "avito_webhook_token"
+ ],
+ "fields": [
+  {"fieldname": "telegram_section", "fieldtype": "Section Break", "label": "Telegram Business"},
+  {"default": "0", "fieldname": "telegram_enabled", "fieldtype": "Check", "label": "Enable Telegram"},
+  {"fieldname": "telegram_bot_username", "fieldtype": "Data", "label": "Bot Username"},
+  {"fieldname": "telegram_bot_token", "fieldtype": "Password", "label": "Bot Token"},
+  {"fieldname": "telegram_webhook_secret", "fieldtype": "Password", "label": "Webhook Secret"},
+  {"fieldname": "avito_section", "fieldtype": "Section Break", "label": "Avito Business"},
+  {"default": "0", "fieldname": "avito_enabled", "fieldtype": "Check", "label": "Enable Avito"},
+  {"fieldname": "avito_account_id", "fieldtype": "Data", "label": "Avito Account ID"},
+  {"fieldname": "avito_client_id", "fieldtype": "Data", "label": "API Client ID"},
+  {"fieldname": "avito_client_secret", "fieldtype": "Password", "label": "API Client Secret"},
+  {"fieldname": "avito_webhook_token", "fieldtype": "Password", "label": "Webhook Token"}
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-08-30 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "FCRM",
+ "name": "CRM Channel Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {"read": 1, "write": 1, "role": "System Manager"}
+ ]
+}
