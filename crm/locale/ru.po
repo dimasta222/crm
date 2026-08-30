@@ -6415,6 +6415,12 @@ msgstr "Нанесения заказа"
 msgid "Order By"
 msgstr "Сортировать по"
 
+msgid "Order Discount Percentage"
+msgstr "Процент скидки на заказ"
+
+msgid "Order Discount Percentage must be between 0 and 100."
+msgstr "Процент скидки на заказ должен быть от 0 до 100."
+
 msgid "Order Item {0}"
 msgstr "Изделие заказа {0}"
 
@@ -6429,6 +6435,9 @@ msgstr "Сумма заказов"
 
 msgid "Order composition"
 msgstr "Состав заказа"
+
+msgid "Order discount, %"
+msgstr "Скидка на заказ, %"
 
 #: frontend/src/components/Settings/GeneralSettings.vue:111
 msgid "Order of activities, emails, comments and calls in the timeline"
@@ -7904,6 +7913,9 @@ msgstr "Сепаратор"
 #: crm/fcrm/doctype/crm_lead/crm_lead.json
 msgid "Series"
 msgstr "Идентификатор документа"
+
+msgid "Service"
+msgstr "Услуга"
 
 #: frontend/src/components/Layouts/AppSidebar.vue:605
 msgid "Service Level Agreement"

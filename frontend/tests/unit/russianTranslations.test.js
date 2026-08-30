@@ -40,6 +40,8 @@ const expectedTranslations = {
   'Preliminary calculation': 'Предварительный расчёт',
   'Items cost': 'Стоимость изделий',
   'Applications cost': 'Стоимость услуг и нанесений',
+  Subtotal: 'Промежуточный итог',
+  'Order discount, %': 'Скидка на заказ, %',
   Discount: 'Скидка',
   Total: 'Итого',
   'Set amount manually': 'Указать сумму вручную',
@@ -198,6 +200,13 @@ const orderEditorFiles = [
   'OrderTotalsPreview.vue',
 ]
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+const csvSourceRegExp = (source) =>
+  new RegExp(
+    source.includes(',')
+      ? `^"${escapeRegExp(source)}",`
+      : `^${escapeRegExp(source)},`,
+    'gm',
+  )
 
 describe('Russian UI terminology catalogs', () => {
   it.each(Object.entries(expectedTranslations))(
@@ -208,7 +217,7 @@ describe('Russian UI terminology catalogs', () => {
       expect(csvEntries.get(source)).toBe(translation)
       expect(poEntries.get(source)).toBe(translation)
       expect(
-        csv.match(new RegExp(`^${escapeRegExp(source)},`, 'gm')) || [],
+        csv.match(csvSourceRegExp(source)) || [],
       ).toHaveLength(1)
       expect(
         po.match(new RegExp(`^msgid "${escapeRegExp(source)}"$`, 'gm')) || [],
@@ -250,7 +259,7 @@ describe('Russian UI terminology catalogs', () => {
         `${message} is missing in ru.po`,
       ).toBeTruthy()
       expect(
-        csv.match(new RegExp(`^${escapeRegExp(message)},`, 'gm')) || [],
+        csv.match(csvSourceRegExp(message)) || [],
         `${message} is duplicated in ru.csv`,
       ).toHaveLength(1)
       expect(

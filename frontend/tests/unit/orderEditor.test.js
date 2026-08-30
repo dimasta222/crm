@@ -97,13 +97,14 @@ describe('order editor preview', () => {
           { length_m: 1, rate_per_meter: '1.005' },
           { length_m: 1, rate_per_meter: '1.005' },
         ],
+        order_discount_percentage: 10,
       }),
     ).toMatchObject({
-      itemsSubtotal: 2.28,
-      discountAmount: 0.25,
+      itemsSubtotal: 2.53,
+      discountAmount: 0.46,
       dtfRollSubtotal: 2.02,
-      subtotal: 4.3,
-      orderTotal: 4.3,
+      subtotal: 4.55,
+      orderTotal: 4.09,
     })
   })
 
@@ -112,30 +113,30 @@ describe('order editor preview', () => {
       0,
       {
         itemsSubtotal: 3,
-        discountAmount: 0,
+        discountAmount: 1,
         dtfRollSubtotal: 2,
         subtotal: 5,
-        orderTotal: 5,
+        orderTotal: 4,
       },
     ],
     [
       2,
       {
-        itemsSubtotal: 2.28,
-        discountAmount: 0.25,
+        itemsSubtotal: 2.53,
+        discountAmount: 0.46,
         dtfRollSubtotal: 2.02,
-        subtotal: 4.3,
-        orderTotal: 4.3,
+        subtotal: 4.55,
+        orderTotal: 4.09,
       },
     ],
     [
       3,
       {
-        itemsSubtotal: 2.262,
-        discountAmount: 0.251,
+        itemsSubtotal: 2.513,
+        discountAmount: 0.452,
         dtfRollSubtotal: 2.01,
-        subtotal: 4.272,
-        orderTotal: 4.272,
+        subtotal: 4.523,
+        orderTotal: 4.071,
       },
     ],
   ])(
@@ -156,6 +157,7 @@ describe('order editor preview', () => {
               { length_m: 1, rate_per_meter: '1.005' },
               { length_m: 1, rate_per_meter: '1.005' },
             ],
+            order_discount_percentage: 10,
           },
           precision,
         ),

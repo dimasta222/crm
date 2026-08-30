@@ -70,7 +70,6 @@ def validate_and_calculate_order(deal):
 	)
 	dtf_roll_subtotal = _sum_money((row.amount for row in deal.get("dtf_roll_lines") or []), precision)
 	dtf_piece_subtotal = _sum_money((row.amount for row in deal.get("dtf_piece_lines") or []), precision)
-	discount_amount = _sum_money((row.discount_amount for row in deal.get("order_items") or []), precision)
 	subtotal = _sum_money(
 		(
 			items_subtotal,
@@ -80,16 +79,24 @@ def validate_and_calculate_order(deal):
 		),
 		precision,
 	)
+	order_discount_percentage = _as_decimal(deal.get("order_discount_percentage"))
+	if not 0 <= order_discount_percentage <= 100:
+		frappe.throw(_("Order Discount Percentage must be between 0 and 100."))
+	discount_amount = round_money(
+		subtotal * order_discount_percentage / Decimal("100"), precision
+	)
+	calculated_order_total = round_money(subtotal - discount_amount, precision)
 	_set_currency(deal, "items_subtotal", items_subtotal, precision)
 	_set_currency(deal, "applications_subtotal", applications_subtotal, precision)
 	_set_currency(deal, "dtf_roll_subtotal", dtf_roll_subtotal, precision)
 	_set_currency(deal, "dtf_piece_subtotal", dtf_piece_subtotal, precision)
+	deal.order_discount_percentage = order_discount_percentage
 	_set_currency(deal, "discount_amount", discount_amount, precision)
 	_set_currency(deal, "subtotal", subtotal, precision)
 
 	_validate_optional_non_negative(deal.get("manual_order_total"), _("Manual Order Total"))
 	manual_order_total = round_money(deal.get("manual_order_total"), precision)
-	order_total = manual_order_total if deal.get("use_manual_total") else subtotal
+	order_total = manual_order_total if deal.get("use_manual_total") else calculated_order_total
 	_set_currency(deal, "manual_order_total", manual_order_total, precision)
 	_set_currency(deal, "order_total", order_total, precision)
 	_set_currency(deal, "deal_value", order_total, precision)
@@ -171,17 +178,10 @@ def _calculate_items(deal, precision):
 		_set_currency(row, "manual_rate", manual_rate, precision)
 		_set_currency(row, "rate", rate, precision)
 		_validate_non_negative(rate, _("{0}: Rate").format(label))
-		discount_percentage = (
-			Decimal("0")
-			if row.supply_type == "Customer Item"
-			else _as_decimal(row.get("discount_percentage"))
-		)
-		if not 0 <= discount_percentage <= 100:
-			frappe.throw(_("{0}: Discount Percentage must be between 0 and 100.").format(label))
-		row.discount_percentage = discount_percentage
 		gross_amount = round_money(_as_decimal(row.qty) * rate, precision)
-		discount_amount = round_money(gross_amount * discount_percentage / Decimal("100"), precision)
-		amount = round_money(gross_amount - discount_amount, precision)
+		row.discount_percentage = Decimal("0")
+		discount_amount = Decimal("0")
+		amount = gross_amount
 		_set_currency(row, "gross_amount", gross_amount, precision)
 		_set_currency(row, "discount_amount", discount_amount, precision)
 		_set_currency(row, "amount", amount, precision)

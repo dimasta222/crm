@@ -37,3 +37,4 @@ crm.patches.v1_0.add_print_studio_operational_dashboard_cards
 crm.patches.v1_0.update_print_studio_dashboard_graphs
 crm.patches.v1_0.add_print_studio_order_schema
 crm.patches.v1_0.add_deal_payment_history
+crm.patches.v1_0.migrate_item_discounts_to_order_discount

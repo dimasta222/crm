@@ -19,35 +19,58 @@
       }}
     </p>
 
-    <div v-if="rows.length" class="mt-2 space-y-3">
+    <div v-if="rows.length" class="mt-3 space-y-5">
       <div
         v-for="(row, index) in rows"
         :key="row.name || row.item_key || index"
         data-testid="order-item-group"
         :data-item-key="row.item_key"
-        class="overflow-hidden rounded-lg border border-outline-gray-2 bg-surface-white"
+        class="order-item-card overflow-hidden rounded-xl border border-outline-gray-2 bg-surface-cards"
       >
-        <div
-          class="border-b border-outline-gray-2 bg-surface-gray-1 px-4 py-3"
-        >
-          <div class="mb-3 flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <div class="text-sm font-medium text-ink-gray-8">
+        <div class="border-b border-outline-gray-2 px-5 py-5">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div class="min-w-0 flex-1">
+              <div class="truncate text-base font-semibold text-ink-gray-9">
                 {{ __('Item') }} №{{ index + 1 }} ·
                 {{ row.item_name || __('Item name') }}
               </div>
+              <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-gray-5">
+                <span>{{ __('Qty') }}: {{ row.qty || 0 }}</span>
+                <span aria-hidden="true">·</span>
+                <span v-if="row.supply_type === 'Studio Product'">
+                  {{ __('Rate') }}: {{ formatAmount(itemRate(row)) }}
+                </span>
+                <span v-else>{{ __('Not charged') }}</span>
+              </div>
+              <span
+                class="mt-3 inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium"
+                :class="supplyBadgeClass(row)"
+              >
+                {{ __(row.supply_type || 'Customer Item') }}
+              </span>
             </div>
-            <Button
-              :tooltip="__('Delete row')"
-              icon="trash-2"
-              size="sm"
-              variant="ghost"
-              @click="remove(index)"
-            />
+            <div class="flex items-center gap-1.5">
+              <Button
+                :label="__('Add service')"
+                icon-left="plus"
+                size="sm"
+                variant="subtle"
+                @click="addService(row)"
+              />
+              <Button
+                :tooltip="__('Delete row')"
+                icon="trash-2"
+                size="sm"
+                variant="ghost"
+                @click="remove(index)"
+              />
+            </div>
           </div>
+        </div>
 
+        <div class="border-b border-outline-gray-2 bg-surface-gray-1/60 px-5 py-4">
           <div
-            class="grid grid-cols-1 items-start gap-3 sm:grid-cols-2 lg:grid-cols-6"
+            class="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-5"
           >
             <div class="min-w-0">
               <div class="mb-1 h-4 whitespace-nowrap text-xs text-ink-gray-5">
@@ -63,12 +86,27 @@
               />
             </div>
             <FormControl
+              v-if="row.supply_type !== 'Studio Product'"
               v-model="row.item_name"
               type="text"
               :label="__('Name / Product')"
               :placeholder="__('Item name')"
               class="lg:col-span-2"
             />
+            <div v-else class="min-w-0 lg:col-span-2">
+              <div class="mb-1 h-4 whitespace-nowrap text-xs text-ink-gray-5">
+                {{ __('Name / Product') }}
+              </div>
+              <Link
+                v-model="row.product"
+                doctype="CRM Product"
+                :selected-label="row.item_name"
+                :placeholder="__('Select CRM Product')"
+                @update:model-value="
+                  (product) => onStudioProductChange(row, product)
+                "
+              />
+            </div>
             <FormControl
               v-model="row.qty"
               type="number"
@@ -84,20 +122,12 @@
               :label="__('Rate')"
               @input="row.use_manual_rate = 1"
             />
-            <FormControl
-              v-if="row.supply_type === 'Studio Product'"
-              v-model="row.discount_percentage"
-              type="number"
-              min="0"
-              max="100"
-              :label="__('Discount %')"
-            />
             <div v-else class="min-w-0">
               <div class="mb-1 h-4 whitespace-nowrap text-xs text-ink-gray-5">
                 {{ __('Rate') }}
               </div>
               <div
-                class="flex h-8 items-center rounded border border-outline-gray-2 bg-surface-white px-2 text-sm text-ink-gray-5"
+                class="flex h-8 items-center rounded border border-outline-gray-2 bg-surface-cards px-2 text-sm text-ink-gray-5"
               >
                 {{ __('Not charged') }}
               </div>
@@ -106,39 +136,23 @@
 
           <div
             v-if="row.supply_type === 'Studio Product'"
-            class="mt-3 grid grid-cols-1 items-start gap-3 sm:grid-cols-2"
+            class="mt-3 flex flex-wrap items-center gap-1"
           >
-            <div class="min-w-0">
-              <div class="mb-1 h-4 whitespace-nowrap text-xs text-ink-gray-5">
-                {{ __('Name / Product') }}
-              </div>
-              <Link
-                v-model="row.product"
-                doctype="CRM Product"
-                :selected-label="row.item_name"
-                :placeholder="__('Select CRM Product')"
-                @update:model-value="
-                  (product) => onStudioProductChange(row, product)
-                "
-              />
-            </div>
-            <div class="flex h-full flex-wrap items-end gap-1">
-              <Button
-                :label="__('Create product')"
-                icon-left="plus"
-                size="sm"
-                variant="ghost"
-                @click="createStudioProduct(row)"
-              />
-              <Button
-                :label="__('Open product')"
-                icon-left="external-link"
-                size="sm"
-                variant="ghost"
-                :disabled="!row.product"
-                @click="openStudioProduct(row)"
-              />
-            </div>
+            <Button
+              :label="__('Create product')"
+              icon-left="plus"
+              size="sm"
+              variant="ghost"
+              @click="createStudioProduct(row)"
+            />
+            <Button
+              :label="__('Open product')"
+              icon-left="external-link"
+              size="sm"
+              variant="ghost"
+              :disabled="!row.product"
+              @click="openStudioProduct(row)"
+            />
           </div>
           <p
             v-if="studioProductErrors[rowKey(row)]"
@@ -151,10 +165,10 @@
 
         <OrderApplicationsTable :doc="doc" :item-key="row.item_key" />
         <div
-          class="flex items-center justify-between gap-3 border-t border-outline-gray-2 bg-surface-gray-1 px-4 py-3 text-sm"
+          class="order-item-total flex items-center justify-between gap-3 border-t border-outline-gray-2 px-5 py-4"
         >
-          <span class="text-ink-gray-6">{{ __('Total') }}</span>
-          <span class="font-medium text-ink-gray-8">
+          <span class="text-sm text-ink-gray-5">{{ __('Total') }}</span>
+          <span class="text-base font-semibold text-ink-gray-9">
             {{ formatAmount(groupAmount(row)) }}
           </span>
         </div>
@@ -212,6 +226,16 @@ function groupAmount(row) {
     },
     precision.value,
   ).orderTotal
+}
+
+function itemRate(row) {
+  return Number(row.manual_rate ?? row.rate ?? row.base_rate ?? 0)
+}
+
+function supplyBadgeClass(row) {
+  return row.supply_type === 'Studio Product'
+    ? 'border-outline-green-1 bg-surface-green-2 text-ink-green-3'
+    : 'border-outline-blue-1 bg-surface-blue-1 text-ink-blue-3'
 }
 
 function formatAmount(value) {
@@ -305,6 +329,20 @@ function add() {
   })
 }
 
+function addService(row) {
+  if (!props.doc.order_applications) props.doc.order_applications = []
+  props.doc.order_applications.push({
+    item_key: row.item_key,
+    production_type: 'DTF Printing',
+    placement: 'Chest',
+    qty: row.qty || 1,
+    rate: 0,
+    width_cm: null,
+    height_cm: null,
+    comment: '',
+  })
+}
+
 function remove(index) {
   const key = rows.value[index].item_key
   if (!canRemoveOrderItem(props.doc, key)) {
@@ -322,4 +360,16 @@ onMounted(() => {
 
 <style scoped>
 @import './orderEditor.css';
+
+.order-item-card {
+  box-shadow: 0 14px 34px rgb(0 0 0 / 0.08);
+}
+
+.order-item-total {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--surface-gray-1) / 0.72),
+    rgb(var(--surface-violet-1) / 0.32)
+  );
+}
 </style>
