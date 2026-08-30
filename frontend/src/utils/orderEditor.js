@@ -38,10 +38,6 @@ function divideBy100(value) {
   return { value: value.value, scale: value.scale + 2 }
 }
 
-function divideBy1000(value) {
-  return { value: value.value, scale: value.scale + 3 }
-}
-
 function roundMoney(value, precision) {
   if (value.scale <= precision)
     return {
@@ -73,28 +69,13 @@ const manualOrCalculated = (row, calculated, precision) =>
   row.use_manual_amount ? money(row.manual_amount, precision) : calculated
 
 function applicationMoney(row, precision) {
-  let rate = money(row.rate, precision)
-  let setupFee = money(0, precision)
-  if (row.production_type === 'Embroidery') {
-    setupFee = money(row.embroidery_setup_fee, precision)
-    if (decimal(row.stitch_count).value > 0n) {
-      const stitchRate =
-        row.stitch_rate_per_1000 == null || row.stitch_rate_per_1000 === ''
-          ? 70
-          : row.stitch_rate_per_1000
-      rate = roundMoney(
-        divideBy1000(
-          multiply(decimal(row.stitch_count), money(stitchRate, precision)),
-        ),
-        precision,
-      )
-    }
-  }
+  const rate = money(row.rate, precision)
+  const setupFee =
+    row.production_type === 'Embroidery'
+      ? money(row.embroidery_setup_fee, precision)
+      : money(0, precision)
   const calculated = roundMoney(
-    add(
-      multiply(decimal(row.qty), rate),
-      setupFee,
-    ),
+    add(multiply(decimal(row.qty), rate), setupFee),
     precision,
   )
   return manualOrCalculated(row, calculated, precision)

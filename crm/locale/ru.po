@@ -557,6 +557,9 @@ msgstr "Добавить позицию"
 msgid "Add roll"
 msgstr "Добавить рулон"
 
+msgid "Add service"
+msgstr "Добавить услугу"
+
 #. Description of the 'Icon' (Code) field in DocType 'CRM Dropdown Item'
 #: crm/fcrm/doctype/crm_dropdown_item/crm_dropdown_item.json
 msgid "Add svg code or use feather icons e.g 'settings'"
@@ -883,6 +886,9 @@ msgstr "Вы уверены, что хотите отвязать {0} связа
 
 msgid "Artwork"
 msgstr "Макет"
+
+msgid "Artwork Preparation"
+msgstr "Подготовка и правка макета"
 
 #: crm/api/exchange_rate.py:144
 msgid ""
@@ -1847,6 +1853,9 @@ msgstr "Складной"
 msgid "Color"
 msgstr "Цвет"
 
+msgid "Colored"
+msgstr "Цветная"
+
 #: frontend/src/components/FieldLayoutEditor.vue:559
 msgid "Column"
 msgstr "Колонка"
@@ -1887,6 +1896,9 @@ msgstr "Для комбинированного заказа нужны как �
 #: frontend/src/components/Layouts/AppSidebar.vue:603
 msgid "Comment"
 msgstr "Комментарий"
+
+msgid "Comment for this service"
+msgstr "Комментарий к этой услуге"
 
 #: frontend/src/components/CommunicationArea.vue:275
 msgid "Comment sent"
@@ -3398,6 +3410,9 @@ msgstr "Электронная почта и подпись"
 msgid "Embroidery"
 msgstr "Вышивка"
 
+msgid "Embroidery artwork preparation"
+msgstr "Подготовка макета для вышивки"
+
 #: frontend/src/components/ListViews/ListRows.vue:12
 msgid "Empty"
 msgstr "Пустой"
@@ -3804,6 +3819,9 @@ msgstr "Настройки FCRM"
 #: frontend/src/components/EmailEditor.vue:25
 msgid "FROM"
 msgstr "ОТ"
+
+msgid "Fabric type"
+msgstr "Тип ткани"
 
 #. Option for the 'Type' (Select) field in DocType 'Lead Sync Source'
 #. Label of the facebook_section (Section Break) field in DocType 'Lead Sync
@@ -6090,6 +6108,9 @@ msgstr "Не разрешено удалять контакт из сделки"
 msgid "Not allowed to set primary contact for Deal"
 msgstr "Не разрешено назначать основное контактное лицо для сделки"
 
+msgid "Not charged"
+msgstr "Не оплачивается"
+
 #: frontend/src/components/Filter.vue:274
 #: frontend/src/components/Filter.vue:295
 #: frontend/src/components/Filter.vue:312
@@ -6220,6 +6241,9 @@ msgstr "Числовой показатель"
 #: frontend/src/components/Settings/DefaultsSettings.vue:71
 msgid "Number Format"
 msgstr "Формат номера"
+
+msgid "Number of colors"
+msgstr "Количество цветов"
 
 msgid "Number of completed orders by closure date in the selected period"
 msgstr "Количество выполненных заказов по дате закрытия за выбранный период"
@@ -6365,6 +6389,9 @@ msgstr "Открыть {0}"
 #: frontend/src/pages/Calendar.vue:95
 msgid "Operator"
 msgstr "Оператор"
+
+msgid "Optional"
+msgstr "Необязательно"
 
 #: frontend/src/components/Kanban/KanbanView.vue:228
 #: frontend/src/components/Modals/CallLogDetailModal.vue:16
@@ -7886,6 +7913,9 @@ msgstr "Соглашение об уровне обслуживания"
 #: crm/fcrm/doctype/fcrm_settings/fcrm_settings.json
 msgid "Service Provider"
 msgstr "Поставщик услуг"
+
+msgid "Services and applications"
+msgstr "Услуги и нанесения"
 
 #: frontend/src/components/Filter.vue:589
 msgid "Set"
@@ -9433,6 +9463,9 @@ msgstr "Шаблоны WhatsApp"
 #: frontend/src/components/Filter.vue:43 frontend/src/components/Filter.vue:83
 msgid "Where"
 msgstr "Где"
+
+msgid "White"
+msgstr "Белая"
 
 #: frontend/src/components/ColumnSettings.vue:109
 msgid "Width"

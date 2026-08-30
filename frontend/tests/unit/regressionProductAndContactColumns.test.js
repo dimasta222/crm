@@ -11,7 +11,7 @@ describe('product editor and contact column regressions', () => {
   it('opens an existing studio product inside CRM instead of Frappe Desk', () => {
     const component = src('components', 'OrderEditor', 'OrderItemsTable.vue')
 
-    expect(component).toContain("useDoctypeModal")
+    expect(component).toContain('useDoctypeModal')
     expect(component).toContain("doctype: 'CRM Product'")
     expect(component).toContain('name: row.product')
     expect(component).not.toContain('/app/crm-product/')
@@ -63,8 +63,7 @@ describe('product editor and contact column regressions', () => {
 
     expect(items).toContain(':selected-label="row.item_name"')
     expect(items).toContain('selectedProduct?.product_name')
-    expect(applications).toContain(
-      'label: item.item_name || item.product || item.item_key',
-    )
+    expect(items).toContain(':item-key="row.item_key"')
+    expect(applications).toContain('row.item_key === props.itemKey')
   })
 })

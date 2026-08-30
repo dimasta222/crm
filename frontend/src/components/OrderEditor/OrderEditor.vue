@@ -36,7 +36,6 @@
 
       <div class="mt-4 space-y-4">
         <OrderItemsTable v-if="showProducts" :doc="doc" />
-        <OrderApplicationsTable v-if="showProducts" :doc="doc" />
         <DtfRollTable v-if="showRolls" :doc="doc" />
         <DtfPiecesTable v-if="showPieces" :doc="doc" />
         <OrderTotalsPreview v-if="doc.order_type" :doc="doc" />
@@ -58,7 +57,6 @@ import { Select } from 'frappe-ui'
 import { incompatibleOrderCategories } from '@/utils/orderEditor'
 import DtfPiecesTable from './DtfPiecesTable.vue'
 import DtfRollTable from './DtfRollTable.vue'
-import OrderApplicationsTable from './OrderApplicationsTable.vue'
 import OrderItemsTable from './OrderItemsTable.vue'
 import OrderTotalsPreview from './OrderTotalsPreview.vue'
 

@@ -157,7 +157,8 @@ const ru = {
   'Heat Transfer Printing': 'Термоперенос',
   'Artwork Preparation': 'Подготовка и правка макета',
   Combined: 'Комбинированное нанесение',
-  Parameters: 'Параметры',
+  Optional: 'Необязательно',
+  'Comment for this service': 'Комментарий к этой услуге',
   Chest: 'Грудь',
   'Back placement': 'Спина',
   Sleeve: 'Рукав',
@@ -310,7 +311,6 @@ describe('OrderEditor Russian component UI', () => {
       expect.arrayContaining([
         { label: 'Изделие клиента', value: 'Customer Item' },
         { label: 'Товар студии', value: 'Studio Product' },
-        { label: 'Худи оверсайз', value: 'item-1780000000000' },
         { label: 'DTF-печать', value: 'DTF Printing' },
         { label: 'Шелкография', value: 'Screen Printing' },
         { label: 'Вышивка', value: 'Embroidery' },

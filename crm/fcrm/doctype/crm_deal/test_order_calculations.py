@@ -107,14 +107,16 @@ class TestOrderCalculations(FrappeTestCase):
 		self.assertEqual(doc.order_items[0].discount_amount, 100)
 		self.assertEqual(doc.order_items[0].amount, 900)
 		self.assertEqual(customer_item.base_rate, 0)
+		self.assertEqual(customer_item.manual_rate, 0)
 		self.assertEqual(customer_item.rate, 0)
+		self.assertEqual(customer_item.discount_percentage, 0)
 		self.assertEqual(customer_item.amount, 0)
 		self.assertEqual(doc.applications_subtotal, 240)
 		self.assertEqual(doc.subtotal, 1140)
 		self.assertEqual(doc.order_total, 1140)
 		self.assertEqual(doc.deal_value, 1140)
 
-	def test_embroidery_uses_full_stitch_count_without_rounding_up(self):
+	def test_embroidery_uses_manual_rate_and_artwork_preparation(self):
 		item = studio_item(qty=32)
 		print_application = application(
 			production_type="Embroidery",
@@ -122,33 +124,25 @@ class TestOrderCalculations(FrappeTestCase):
 			stitch_count=12500,
 			stitch_rate_per_1000=70,
 			embroidery_setup_fee=500,
-			rate=0,
+			rate=227.5,
 		)
 		doc = product_printing(item, print_application)
 
 		validate_and_calculate_order(doc)
 
-		self.assertEqual(Decimal(str(print_application.rate)), Decimal("875"))
+		self.assertEqual(Decimal(str(print_application.rate)), Decimal("227.5"))
 		self.assertEqual(
-			Decimal(str(print_application.calculated_amount)), Decimal("28500")
+			Decimal(str(print_application.calculated_amount)), Decimal("7780")
 		)
-		self.assertEqual(Decimal(str(doc.applications_subtotal)), Decimal("28500"))
+		self.assertEqual(Decimal(str(doc.applications_subtotal)), Decimal("7780"))
 
-	def test_embroidery_preserves_an_explicit_zero_stitch_rate(self):
-		item = studio_item(qty=2)
-		print_application = application(
-			production_type="Embroidery",
-			qty=2,
-			stitch_count=12500,
-			stitch_rate_per_1000=0,
-			embroidery_setup_fee=500,
-			rate=999,
-		)
+	def test_application_decimal_multiplication_is_exact(self):
+		item = studio_item(qty=40)
+		print_application = application(qty=40, rate=Decimal("227.5"))
 
 		validate_and_calculate_order(product_printing(item, print_application))
 
-		self.assertEqual(Decimal(str(print_application.rate)), Decimal("0"))
-		self.assertEqual(Decimal(str(print_application.calculated_amount)), Decimal("500"))
+		self.assertEqual(Decimal(str(print_application.calculated_amount)), Decimal("9100"))
 
 	def test_one_order_mixes_customer_and_studio_items_with_dtf_and_embroidery(self):
 		customer_item = row(
@@ -175,10 +169,8 @@ class TestOrderCalculations(FrappeTestCase):
 			key="ITEM-STUDIO",
 			production_type="Embroidery",
 			qty=2,
-			stitch_count=12500,
-			stitch_rate_per_1000=70,
 			embroidery_setup_fee=500,
-			rate=0,
+			rate=875,
 			comment="Логотип на груди",
 		)
 		doc = deal(
@@ -197,6 +189,22 @@ class TestOrderCalculations(FrappeTestCase):
 		self.assertEqual(dtf.comment, "На каждой футболке своё имя")
 		self.assertIsNone(dtf.get("width_cm"))
 		self.assertIsNone(dtf.get("height_cm"))
+
+	def test_optional_dimensions_accept_empty_and_legacy_zero_values(self):
+		item = studio_item(qty=2)
+		applications = [
+			application(1, width_cm=None, height_cm=None),
+			application(2, width_cm=0, height_cm=0),
+		]
+		doc = deal(
+			"Product Printing",
+			order_items=[item],
+			order_applications=applications,
+		)
+
+		validate_and_calculate_order(doc)
+
+		self.assertEqual(doc.applications_subtotal, 200)
 
 	def test_server_generates_unique_item_keys_and_retries_collision(self):
 		doc = deal(
@@ -376,6 +384,7 @@ class TestOrderCalculations(FrappeTestCase):
 			(
 				piece_line(7, "Custom Size", width_cm=12, height_cm=18, sheet_format="A4"),
 				piece_line(8, "Quantity Only", width_cm=12, height_cm=18, sheet_format="A4"),
+				piece_line(9, "Custom Size", width_cm=None, height_cm=None),
 			)
 		)
 		doc = deal("DTF Pieces", dtf_piece_lines=lines)
@@ -389,6 +398,8 @@ class TestOrderCalculations(FrappeTestCase):
 		self.assertIsNone(lines[7].sheet_format)
 		self.assertIsNone(lines[7].width_cm)
 		self.assertIsNone(lines[7].height_cm)
+		self.assertIsNone(lines[8].width_cm)
+		self.assertIsNone(lines[8].height_cm)
 
 	def test_all_literal_production_types_are_accepted(self):
 		expected_types = (
@@ -488,10 +499,6 @@ class TestOrderCalculations(FrappeTestCase):
 			deal("DTF Pieces", dtf_piece_lines=[piece_line(qty=0)]),
 			deal("DTF Pieces", dtf_piece_lines=[piece_line(unit_price=-1)]),
 			deal("DTF Pieces", dtf_piece_lines=[piece_line(sizing_mode="Format", sheet_format="A2")]),
-			deal(
-				"DTF Pieces",
-				dtf_piece_lines=[piece_line(sizing_mode="Custom Size", width_cm=0, height_cm=10)],
-			),
 			product_printing(studio_item(discount_percentage=101), application()),
 			product_printing(studio_item(manual_rate=-1), application()),
 			deal("DTF Roll", dtf_roll_lines=[roll_line()], manual_order_total=-1),

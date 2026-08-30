@@ -142,7 +142,7 @@ afterEach(() => {
 })
 
 describe('order editor stage 3.3B components', () => {
-  it('renders optional print dimensions for every application row', async () => {
+  it('always renders optional print dimensions for every application row', () => {
     const container = mount(OrderApplicationsTable, {
       order_items: [{ item_key: 'ITEM-1', item_name: 'Футболка' }],
       order_applications: [
@@ -161,14 +161,6 @@ describe('order editor stage 3.3B components', () => {
       ],
     })
 
-    const parametersButtons = [...container.querySelectorAll('button')].filter(
-      (candidate) => candidate.textContent === 'Parameters',
-    )
-    for (const parametersButton of parametersButtons) {
-      parametersButton.click()
-    }
-    await nextTick()
-
     expect(container.textContent).toContain('Width (cm)')
     expect(container.textContent).toContain('Height (cm)')
     const values = [...container.querySelectorAll('input')].map(
@@ -178,7 +170,7 @@ describe('order editor stage 3.3B components', () => {
     expect(container.querySelector('[required]')).toBeNull()
   })
 
-  it('shows compact embroidery parameters and an optional service comment', async () => {
+  it('shows manual embroidery pricing and an optional service comment', () => {
     const container = mount(OrderApplicationsTable, {
       currency: 'RUB',
       order_items: [{ item_key: 'ITEM-1', item_name: 'Футболка' }],
@@ -191,32 +183,25 @@ describe('order editor stage 3.3B components', () => {
           stitch_count: 12500,
           stitch_rate_per_1000: 70,
           embroidery_setup_fee: 500,
+          rate: 227.5,
           comment: 'На каждой футболке своё имя',
         },
       ],
     })
 
-    button(container, 'Parameters').click()
-    await nextTick()
-
-    expect(container.textContent).toContain('Stitch count')
-    expect(container.textContent).toContain('Rate per 1,000 stitches')
+    expect(container.textContent).not.toContain('Stitch count')
+    expect(container.textContent).not.toContain('Rate per 1,000 stitches')
     expect(container.textContent).toContain('Embroidery artwork preparation')
     expect(container.textContent).toContain('Comment')
     expect(
       [...container.querySelectorAll('input')].map((input) => input.value),
     ).toEqual(
-      expect.arrayContaining([
-        '12500',
-        '70',
-        '500',
-        'На каждой футболке своё имя',
-      ]),
+      expect.arrayContaining(['227.5', '500', 'На каждой футболке своё имя']),
     )
     expect(container.querySelector('[required]')).toBeNull()
   })
 
-  it('shows screen-printing colors and fabric without requiring dimensions', async () => {
+  it('shows screen-printing colors and fabric without requiring dimensions', () => {
     const container = mount(OrderApplicationsTable, {
       currency: 'RUB',
       order_items: [{ item_key: 'ITEM-1', item_name: 'Футболка' }],
@@ -232,9 +217,6 @@ describe('order editor stage 3.3B components', () => {
         },
       ],
     })
-
-    button(container, 'Parameters').click()
-    await nextTick()
 
     expect(container.textContent).toContain('Number of colors')
     expect(container.textContent).toContain('Fabric type')
@@ -380,5 +362,56 @@ describe('order editor stage 3.3B components', () => {
     expect(button(container, 'Create product')).toBeUndefined()
     expect(button(container, 'Open product')).toBeUndefined()
     expect(container.textContent).toContain('Not charged')
+    expect(container.querySelectorAll('input')).toHaveLength(2)
+  })
+
+  it('groups each service under its linked item', () => {
+    const container = mount(OrderItemsTable, {
+      currency: 'RUB',
+      order_items: [
+        {
+          item_key: 'ITEM-CUSTOMER',
+          item_name: 'Футболки клиента',
+          supply_type: 'Customer Item',
+          qty: 32,
+        },
+        {
+          item_key: 'ITEM-STUDIO',
+          item_name: 'Футболка студии',
+          supply_type: 'Studio Product',
+          qty: 1,
+        },
+      ],
+      order_applications: [
+        {
+          item_key: 'ITEM-CUSTOMER',
+          production_type: 'DTF Printing',
+          placement: 'Chest',
+          qty: 32,
+          rate: 200,
+          comment: 'Имена',
+        },
+        {
+          item_key: 'ITEM-STUDIO',
+          production_type: 'Embroidery',
+          placement: 'Chest',
+          qty: 1,
+          rate: 500,
+          comment: 'Логотип',
+        },
+      ],
+    })
+    const groups = [
+      ...container.querySelectorAll('[data-testid="order-item-group"]'),
+    ]
+    const groupValues = groups.map((group) =>
+      [...group.querySelectorAll('input')].map((input) => input.value),
+    )
+
+    expect(groups).toHaveLength(2)
+    expect(groupValues[0]).toContain('Имена')
+    expect(groupValues[0]).not.toContain('Логотип')
+    expect(groupValues[1]).toContain('Логотип')
+    expect(groupValues[1]).not.toContain('Имена')
   })
 })
