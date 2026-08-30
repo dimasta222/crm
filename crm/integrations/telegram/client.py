@@ -3,6 +3,7 @@
 import frappe
 import requests
 from frappe import _
+from frappe.exceptions import ValidationError
 
 from crm.api.omnichannel import _ingest_message
 from crm.integrations.channel_settings import value
@@ -24,9 +25,8 @@ def subscribe_webhook(url, secret):
 		)
 		response.raise_for_status()
 		result = response.json()
-	except (requests.RequestException, ValueError) as error:
-		frappe.log_error(title="Telegram webhook setup failed", message=str(error))
-		frappe.throw(_("Could not configure the Telegram webhook"))
+	except (requests.RequestException, ValueError):
+		raise ValidationError(_("Could not configure the Telegram webhook")) from None
 	if not result.get("ok"):
 		frappe.throw(result.get("description") or _("Could not configure the Telegram webhook"))
 	return result
@@ -52,9 +52,8 @@ def send_text(conversation, content):
 		)
 		response.raise_for_status()
 		result = response.json()
-	except (requests.RequestException, ValueError) as error:
-		frappe.log_error(title="Telegram message delivery failed", message=str(error))
-		frappe.throw(_("Telegram did not accept the message"))
+	except (requests.RequestException, ValueError):
+		raise ValidationError(_("Telegram did not accept the message")) from None
 	if not result.get("ok"):
 		frappe.throw(result.get("description") or _("Telegram did not accept the message"))
 
