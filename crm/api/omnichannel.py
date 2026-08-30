@@ -242,7 +242,7 @@ def configure_channel_webhooks():
 
 
 def _ensure_channel_secret(settings, fieldname):
-	secret = settings.get_password(fieldname)
+	secret = settings.get_password(fieldname, raise_exception=False)
 	if secret:
 		return secret
 	secret = frappe.generate_hash(length=40)
