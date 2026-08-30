@@ -215,14 +215,18 @@ def _calculate_applications(deal, items_by_key, precision):
 		if row.get("fabric_type") and row.fabric_type not in {"White", "Dark", "Colored"}:
 			frappe.throw(_("{0}: Select a valid Fabric Type.").format(label))
 
-		rate = round_money(row.get("rate"), precision)
+		# A unit rate must retain kopecks even when order totals are configured
+		# with zero decimal places. Round only the completed service line to the
+		# order currency precision.
+		rate_precision = max(precision, 2)
+		rate = round_money(row.get("rate"), rate_precision)
 		setup_fee = Decimal("0")
 		if row.production_type == "Embroidery":
 			setup_fee = round_money(row.get("embroidery_setup_fee"), precision)
 			_set_currency(row, "embroidery_setup_fee", setup_fee, precision)
 
 		calculated_amount = round_money(_as_decimal(row.qty) * rate + setup_fee, precision)
-		_set_currency(row, "rate", rate, precision)
+		_set_currency(row, "rate", rate, rate_precision)
 		_set_currency(row, "calculated_amount", calculated_amount, precision)
 		_set_currency(
 			row, "amount", _manual_or_calculated_amount(row, calculated_amount, precision), precision

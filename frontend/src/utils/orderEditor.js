@@ -69,7 +69,10 @@ const manualOrCalculated = (row, calculated, precision) =>
   row.use_manual_amount ? money(row.manual_amount, precision) : calculated
 
 function applicationMoney(row, precision) {
-  const rate = money(row.rate, precision)
+  // Unit rates retain at least kopeck precision even when order totals are
+  // displayed as whole rubles. Only the completed line is rounded to the
+  // order currency precision.
+  const rate = money(row.rate, Math.max(precision, 2))
   const setupFee =
     row.production_type === 'Embroidery'
       ? money(row.embroidery_setup_fee, precision)
