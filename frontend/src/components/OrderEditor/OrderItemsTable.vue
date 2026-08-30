@@ -36,12 +36,6 @@
                 {{ __('Item') }} №{{ index + 1 }} ·
                 {{ row.item_name || __('Item name') }}
               </div>
-              <div
-                v-if="row.product"
-                class="mt-0.5 text-xs text-ink-gray-5"
-              >
-                {{ row.product }}
-              </div>
             </div>
             <Button
               :tooltip="__('Delete row')"
@@ -116,7 +110,7 @@
           >
             <div class="min-w-0">
               <div class="mb-1 h-4 whitespace-nowrap text-xs text-ink-gray-5">
-                {{ __('Product') }}
+                {{ __('Name / Product') }}
               </div>
               <Link
                 v-model="row.product"
