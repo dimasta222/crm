@@ -2,11 +2,15 @@
 
 import frappe
 import requests
+from urllib3.util import connection as urllib3_connection
 from frappe import _
 from frappe.exceptions import ValidationError
 
 from crm.api.omnichannel import _ingest_message
 from crm.integrations.channel_settings import value
+
+# The server has no working IPv6 route; force Telegram API calls through IPv4.
+urllib3_connection.HAS_IPV6 = False
 
 
 def subscribe_webhook(url, secret):
