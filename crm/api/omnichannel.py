@@ -7,7 +7,7 @@ from frappe import _
 from frappe.utils import add_to_date, get_datetime, now_datetime
 
 from crm.api.tracking import apply_first_touch
-
+from crm.integrations.utils import make_message_key, normalize_external_datetime
 
 SUPPORTED_CHANNELS = {"Telegram", "Avito", "MAX", "Email", "Phone", "Website"}
 HANDOFF_CODE_PATTERN = re.compile(r"\bCRM-[A-Z0-9]{8}\b", re.IGNORECASE)
@@ -111,10 +111,13 @@ def _ingest_message(
 		handoff_code = match.group(0).upper() if match else None
 
 	account_id = account_id or "default"
-	message_key = f"{channel}:{account_id}:{external_message_id}".lower()
+	message_key = make_message_key(channel, account_id, external_chat_id, external_message_id)
 	existing_message = frappe.db.exists("CRM Channel Message", {"message_key": message_key})
 	if existing_message:
 		return _result(existing_message)
+	normalized_sent_at = normalize_external_datetime(sent_at)
+	if sent_at not in (None, "") and normalized_sent_at is None:
+		frappe.throw(_("Message timestamp is invalid"))
 
 	identity = _get_or_create_identity(
 		channel,
@@ -134,7 +137,7 @@ def _ingest_message(
 			"external_message_id": external_message_id,
 			"direction": direction,
 			"sender_name": sender_name,
-			"sent_at": sent_at or now_datetime(),
+			"sent_at": normalized_sent_at or now_datetime(),
 			"delivery_status": "Delivered",
 			"content": content,
 			"attachment_url": attachment_url,

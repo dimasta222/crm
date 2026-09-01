@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 import hmac
-from datetime import datetime, timezone
 
 import frappe
 from frappe import _
 
 from crm.api.omnichannel import _ingest_message
 from crm.integrations.channel_settings import value
+from crm.integrations.utils import normalize_external_datetime
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
@@ -39,6 +39,11 @@ def receive():
 		if not external_user_id:
 			return {"ok": True, "ignored": True}
 
+	raw_sent_at = message.get("created")
+	sent_at = normalize_external_datetime(raw_sent_at)
+	if raw_sent_at in (None, "") or sent_at is None:
+		return {"ok": True, "ignored": True, "reason": "invalid_timestamp"}
+
 	content = message.get("content") or {}
 	result = _ingest_message(
 		channel="Avito",
@@ -48,9 +53,7 @@ def receive():
 		external_message_id=str(message_id),
 		content=_message_text(message.get("type"), content),
 		sender_name=None,
-		sent_at=datetime.fromtimestamp(int(message["created"]), timezone.utc)
-		if message.get("created")
-		else None,
+		sent_at=sent_at,
 		attachment_url=_attachment_url(message.get("type"), content),
 		attachment_type=_attachment_type(message.get("type")),
 		raw_payload=payload,
@@ -121,6 +124,4 @@ def _image_area(size):
 
 
 def _attachment_type(message_type):
-	return {"image": "Image", "file": "File", "video": "Video", "voice": "Voice"}.get(
-		message_type
-	)
+	return {"image": "Image", "file": "File", "video": "Video", "voice": "Voice"}.get(message_type)

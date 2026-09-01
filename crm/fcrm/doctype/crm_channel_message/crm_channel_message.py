@@ -4,13 +4,18 @@
 import frappe
 from frappe.model.document import Document
 
+from crm.integrations.utils import make_message_key
+
 
 class CRMChannelMessage(Document):
 	def validate(self):
 		conversation = frappe.get_cached_doc("CRM Channel Conversation", self.conversation)
-		self.message_key = (
-			f"{conversation.channel}:{conversation.account_id or ''}:{self.external_message_id or self.name}"
-		).lower()
+		self.message_key = make_message_key(
+			conversation.channel,
+			conversation.account_id,
+			conversation.external_chat_id,
+			self.external_message_id or self.name,
+		)
 
 	def after_insert(self):
 		frappe.db.set_value(
