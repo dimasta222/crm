@@ -16,6 +16,9 @@ export default defineConfig(async ({ mode }) => {
         devOptions: {
           enabled: true,
         },
+        workbox: {
+          maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
+        },
         manifest: {
           display: 'standalone',
           name: 'Frappe CRM',
