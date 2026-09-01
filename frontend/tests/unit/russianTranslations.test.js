@@ -16,15 +16,15 @@ const expectedTranslations = {
   Refunded: 'Возврат',
   Cancelled: 'Отменено',
   'Not specified': 'Не указан',
-  Deal: 'Заказ',
-  Deals: 'Заказы',
-  'Create Deal': 'Создать заказ',
-  'Convert to Deal': 'Преобразовать в заказ',
-  'Open Deal': 'Открыть заказ',
-  'Ongoing Deals': 'Текущие заказы',
-  'Won Deals': 'Выполненные заказы',
-  'Deal Owner': 'Ответственный за заказ',
-  'Deal Value': 'Стоимость заказа',
+  Deal: 'Сделка',
+  Deals: 'Сделки',
+  'Create Deal': 'Создать сделку',
+  'Convert to Deal': 'Преобразовать в сделку',
+  'Open Deal': 'Открыть сделку',
+  'Ongoing Deals': 'Текущие сделки',
+  'Won Deals': 'Выполненные сделки',
+  'Deal Owner': 'Ответственный за сделку',
+  'Deal Value': 'Стоимость сделки',
   'Order composition': 'Состав заказа',
   'Order type': 'Тип заказа',
   'Select order type': 'Выберите тип заказа',
@@ -160,12 +160,16 @@ function parseCsv(input) {
 
 function parsePo(input) {
   const entries = new Map()
+  const counts = new Map()
   let currentKey = null
   let msgid = ''
   let msgstr = ''
 
   function flush() {
-    if (msgid) entries.set(msgid, msgstr)
+    if (msgid) {
+      entries.set(msgid, msgstr)
+      counts.set(msgid, (counts.get(msgid) || 0) + 1)
+    }
     currentKey = null
     msgid = ''
     msgstr = ''
@@ -186,11 +190,11 @@ function parsePo(input) {
       if (currentKey === 'msgstr') msgstr += continuation
     }
   }
-  return entries
+  return { entries, counts }
 }
 
 const csvEntries = parseCsv(csv)
-const poEntries = parsePo(po)
+const { entries: poEntries, counts: poEntryCounts } = parsePo(po)
 const orderEditorFiles = [
   'OrderEditor.vue',
   'OrderItemsTable.vue',
@@ -216,18 +220,29 @@ describe('Russian UI terminology catalogs', () => {
       expect(poEntries.has(source)).toBe(true)
       expect(csvEntries.get(source)).toBe(translation)
       expect(poEntries.get(source)).toBe(translation)
-      expect(
-        csv.match(csvSourceRegExp(source)) || [],
-      ).toHaveLength(1)
-      expect(
-        po.match(new RegExp(`^msgid "${escapeRegExp(source)}"$`, 'gm')) || [],
-      ).toHaveLength(1)
+      expect(csv.match(csvSourceRegExp(source)) || []).toHaveLength(1)
+      expect(poEntryCounts.get(source) || 0).toBe(1)
     },
   )
 
-  it('does not retain user-facing Russian Deal terminology', () => {
-    expect(csv).not.toMatch(/[Сс]делк/)
-    expect(po).not.toMatch(/[Сс]делк/)
+  it('uses Сделка terminology for user-facing Deal labels', () => {
+    const dealSources = [
+      'Deal',
+      'Deals',
+      'Create Deal',
+      'Convert to Deal',
+      'Open Deal',
+      'Ongoing Deals',
+      'Won Deals',
+      'Deal Owner',
+      'Deal Value',
+    ]
+    for (const source of dealSources) {
+      expect(csvEntries.get(source)).toMatch(/[Сс]делк/)
+      expect(poEntries.get(source)).toMatch(/[Сс]делк/)
+      expect(csvEntries.get(source)).not.toMatch(/[Зз]аказ/)
+      expect(poEntries.get(source)).not.toMatch(/[Зз]аказ/)
+    }
   })
 
   it.each(Object.entries(existingSelectTranslations))(
@@ -263,22 +278,40 @@ describe('Russian UI terminology catalogs', () => {
         `${message} is duplicated in ru.csv`,
       ).toHaveLength(1)
       expect(
-        po.match(new RegExp(`^msgid "${escapeRegExp(message)}"$`, 'gm')) || [],
+        poEntryCounts.get(message) || 0,
         `${message} is duplicated in ru.po`,
-      ).toHaveLength(1)
+      ).toBe(1)
     }
   })
 
-  it.each([
-    'src/components/Layouts/AppSidebar.vue',
-    'src/components/Mobile/MobileSidebar.vue',
-  ])(
-    'keeps raw Deals routing and translates only the %s menu label',
-    (file) => {
-      const source = readFileSync(resolve(process.cwd(), file), 'utf8')
-      expect(source).toMatch(/label:\s*['"]Deals['"]/)
-      expect(source).toMatch(/to:\s*['"]Deals['"]/)
-      expect(source).toContain(':label="__(link.label)"')
-    },
-  )
+  it('does not translate Deal sources as orders', () => {
+    for (const [source, translation] of csvEntries) {
+      if (/\bdeals?\b/i.test(source)) {
+        expect(translation, `${source} in ru.csv`).not.toMatch(/[Зз]аказ/)
+      }
+    }
+    for (const [source, translation] of poEntries) {
+      if (/\bdeals?\b/i.test(source)) {
+        expect(translation, `${source} in ru.po`).not.toMatch(/[Зз]аказ/)
+      }
+    }
+  })
+
+  it('keeps raw Deals routing in the shared desktop and mobile sidebar', () => {
+    const appSidebar = readFileSync(
+      resolve(process.cwd(), 'src/components/Layouts/AppSidebar.vue'),
+      'utf8',
+    )
+    const mobileSidebar = readFileSync(
+      resolve(process.cwd(), 'src/components/Mobile/MobileSidebar.vue'),
+      'utf8',
+    )
+    expect(appSidebar).toMatch(/label:\s*['"]Deals['"]/)
+    expect(appSidebar).toMatch(/to:\s*['"]Deals['"]/)
+    expect(appSidebar).toContain(':label="__(link.label)"')
+    expect(mobileSidebar).toContain('<AppSidebar mobile />')
+    expect(mobileSidebar).toContain(
+      "import AppSidebar from '@/components/Layouts/AppSidebar.vue'",
+    )
+  })
 })

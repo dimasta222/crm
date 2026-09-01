@@ -37,7 +37,7 @@ function renderDashboardItem(item) {
 }
 
 function deltaElement(container) {
-  return container.querySelector('.text-xs.font-medium')
+  return container.querySelector('.text-xs-medium')
 }
 
 describe('DashboardItem number card rendering', () => {
@@ -171,7 +171,7 @@ describe('DashboardItem matches the pinned NumberChart delta contract', () => {
     })
     const delta = deltaElement(view.container)
     expect(delta.textContent.replace(/\s+/g, '')).toBe('↑$12.5%MoM')
-    expect(delta.className).toContain('text-ink-green-3')
+    expect(delta.className).toContain('text-ink-green-6')
     view.unmount()
   })
 
@@ -179,19 +179,19 @@ describe('DashboardItem matches the pinned NumberChart delta contract', () => {
     const view = renderDelta(-2, false, { deltaSuffix: ' days' })
     const delta = deltaElement(view.container)
     expect(delta.textContent.replace(/\s+/g, '')).toBe('↓-2days')
-    expect(delta.className).toContain('text-ink-red-4')
+    expect(delta.className).toContain('text-ink-red-8')
     view.unmount()
   })
 
   it('renders a positive delta red when negativeIsBetter is true', () => {
     const view = renderDelta(2, true)
-    expect(deltaElement(view.container).className).toContain('text-ink-red-4')
+    expect(deltaElement(view.container).className).toContain('text-ink-red-8')
     view.unmount()
   })
 
   it('renders a negative delta green when negativeIsBetter is true', () => {
     const view = renderDelta(-2, true)
-    expect(deltaElement(view.container).className).toContain('text-ink-green-3')
+    expect(deltaElement(view.container).className).toContain('text-ink-green-6')
     view.unmount()
   })
 

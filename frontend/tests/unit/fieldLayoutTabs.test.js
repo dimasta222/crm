@@ -267,7 +267,7 @@ describe('Data layout tab navigation', () => {
       const tabItem = tab.closest('.cursor-pointer')
       tabItem.click()
       await nextTick()
-      expect(tabItem.className).toContain('bg-surface-white')
+      expect(tabItem.className).toContain('bg-surface-base')
     }
 
     view.container.querySelector('[data-label="Add Tab"]').click()

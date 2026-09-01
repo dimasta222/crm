@@ -181,7 +181,7 @@ msgstr "Ведущий требует либо имя человека, либо
 
 #: crm/fcrm/doctype/crm_channel_conversation/crm_channel_conversation.py:13
 msgid "A conversation must be linked to a lead, contact, or deal"
-msgstr "Переписка должна быть связана с лидом, контактом или заказом."
+msgstr "Переписка должна быть связана с лидом, контактом или сделкой."
 
 #: crm/lead_syncing/doctype/lead_sync_source/lead_sync_source.py:49
 msgid "A lead sync source is already enabled for this Facebook Lead Form!"
@@ -687,7 +687,7 @@ msgstr "Произошла ошибка при обновлении докуме
 #: crm/fcrm/doctype/crm_external_identity/crm_external_identity.py:13
 msgid "An external identity must be linked to a lead, contact, or deal"
 msgstr ""
-"Внешний идентификатор должен быть связан с лидом, контактом или заказом."
+"Внешний идентификатор должен быть связан с лидом, контактом или сделкой."
 
 #. Description of the 'Favicon' (Attach) field in DocType 'FCRM Settings'
 #: crm/fcrm/doctype/fcrm_settings/fcrm_settings.json
@@ -766,7 +766,7 @@ msgid "Applications Subtotal"
 msgstr "Итого по нанесениям"
 
 msgid "Applications cost"
-msgstr "Стоимость нанесений"
+msgstr "Стоимость услуг и нанесений"
 
 #: frontend/src/components/Kanban/KanbanSettings.vue:94
 #: frontend/src/components/Kanban/KanbanView.vue:46
@@ -1142,7 +1142,7 @@ msgstr "Средняя стоимость текущих и выигранных
 
 #: crm/fcrm/doctype/crm_dashboard/crm_dashboard.py:16
 msgid "Average deal value of ongoing and won deals"
-msgstr "Средний чек текущих и выполненных заказов"
+msgstr "Средний чек текущих и выполненных сделок"
 
 #: crm/api/dashboard.py:365
 msgid "Average deal value of won deals"
@@ -1164,7 +1164,7 @@ msgstr "Среднее время от создания лида до закры
 
 #: crm/fcrm/doctype/crm_dashboard/crm_dashboard.py:16
 msgid "Average value of won deals"
-msgstr "Средний чек выполненных заказов"
+msgstr "Средний чек выполненных сделок"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:81
 msgid "Avg Deal Value"
@@ -1338,12 +1338,12 @@ msgstr "Панель управления CRM"
 #. Name of a DocType
 #: crm/fcrm/doctype/crm_deal/crm_deal.json
 msgid "CRM Deal"
-msgstr "CRM Сделка"
+msgstr "Сделка CRM"
 
 #. Name of a DocType
 #: crm/fcrm/doctype/crm_deal_status/crm_deal_status.json
 msgid "CRM Deal Status"
-msgstr "CRM Статус сделки"
+msgstr "Статус сделки CRM"
 
 #. Name of a DocType
 #: crm/fcrm/doctype/crm_dropdown_item/crm_dropdown_item.json
@@ -2423,7 +2423,7 @@ msgid "Custom Range"
 msgstr "Пользовательский диапазон"
 
 msgid "Custom Size"
-msgstr "Произвольный размер"
+msgstr "Свой размер"
 
 #: frontend/src/components/Layouts/AppSidebar.vue:616
 msgid "Custom Statuses"
@@ -2434,7 +2434,7 @@ msgid "Customer Created Successfully"
 msgstr "Клиент успешно создан"
 
 msgid "Customer Item"
-msgstr "Изделие заказчика"
+msgstr "Изделие клиента"
 
 msgid "Customer's Vendor"
 msgstr "Поставщик клиента"
@@ -2596,7 +2596,7 @@ msgstr "Сделка"
 #: frontend/src/pages/MobileOrganization.vue:488
 #: frontend/src/pages/Organization.vue:518
 msgid "Deal Owner"
-msgstr "Владелец сделки"
+msgstr "Ответственный за сделку"
 
 #. Label of the deal_status (Link) field in DocType 'ERPNext CRM Settings'
 #: crm/fcrm/doctype/erpnext_crm_settings/erpnext_crm_settings.json
@@ -2989,7 +2989,7 @@ msgstr "Скидка"
 #. Label of the discount_percentage (Percent) field in DocType 'CRM Products'
 #: crm/fcrm/doctype/crm_products/crm_products.json
 msgid "Discount %"
-msgstr "Скидка %"
+msgstr "Скидка, %"
 
 #. Label of the discount_amount (Currency) field in DocType 'CRM Products'
 #: crm/fcrm/doctype/crm_products/crm_products.json
@@ -4334,7 +4334,7 @@ msgid "Hang Up"
 msgstr "Завершить звонок"
 
 msgid "Heat Transfer Printing"
-msgstr "Термопечать"
+msgstr "Термоперенос"
 
 msgid "Height"
 msgstr "Высота"
@@ -5473,7 +5473,7 @@ msgstr "Требуются обязательные поля: {0}"
 #. Option for the 'Telephony Medium' (Select) field in DocType 'CRM Call Log'
 #: crm/fcrm/doctype/crm_call_log/crm_call_log.json
 msgid "Manual"
-msgstr "Руководство"
+msgstr "Вручную"
 
 msgid "Manual Amount"
 msgstr "Сумма вручную"
@@ -6539,7 +6539,7 @@ msgstr "Организатор"
 #: frontend/src/pages/PersonaForm.vue:65 frontend/src/pages/PersonaForm.vue:82
 #: frontend/src/pages/PersonaForm.vue:103
 msgid "Other"
-msgstr "Другие"
+msgstr "Другое"
 
 #: frontend/src/components/Layouts/AppSidebar.vue:599
 msgid "Other Features"
@@ -8920,7 +8920,7 @@ msgstr "Слишком много неудачных попыток. Повто�
 #: crm/fcrm/doctype/crm_deal/crm_deal.json
 #: crm/fcrm/doctype/crm_lead/crm_lead.json
 msgid "Total"
-msgstr "Общий"
+msgstr "Итого"
 
 #. Label of the total_holidays (Int) field in DocType 'CRM Holiday List'
 #: crm/fcrm/doctype/crm_holiday_list/crm_holiday_list.json
@@ -8952,11 +8952,11 @@ msgstr "Общее количество незавершенных сделок"
 
 #: crm/fcrm/doctype/crm_dashboard/crm_dashboard.py:16
 msgid "Total number of ongoing deals"
-msgstr "Общее количество текущих заказов"
+msgstr "Общее количество текущих сделок"
 
 #: crm/fcrm/doctype/crm_dashboard/crm_dashboard.py:16
 msgid "Total number of won deals"
-msgstr "Общее количество выполненных заказов"
+msgstr "Общее количество выполненных сделок"
 
 #: crm/api/dashboard.py:307
 msgid "Total number of won deals based on its closure date"
@@ -9523,7 +9523,7 @@ msgstr "Выиграно"
 
 #: frontend/src/components/Dashboard/AddChartModal.vue:79
 msgid "Won Deals"
-msgstr "Выигранные сделки"
+msgstr "Выполненные сделки"
 
 #: crm/api/dashboard.py:306
 msgid "Won deals"

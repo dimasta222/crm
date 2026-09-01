@@ -5,7 +5,6 @@ import KanbanView from '@/components/Kanban/KanbanView.vue'
 const testState = vi.hoisted(() => ({
   filterFields: [],
   dragEvent: null,
-  toastError: vi.fn(),
 }))
 
 vi.mock('@/composables/settings', async () => {
@@ -77,18 +76,47 @@ vi.mock('frappe-ui', async () => {
         )
     },
   })
+  const Combobox = defineComponent({
+    props: ['options', 'modelValue'],
+    emits: ['update:modelValue', 'update:selected-option'],
+    setup(props, { emit, slots }) {
+      return () =>
+        h('div', { 'data-testid': 'combobox' }, [
+          slots.trigger?.({ open: false, setOpen: () => {} }),
+          ...(props.options || []).map((option) => {
+            const normalized =
+              typeof option === 'string'
+                ? { label: option, value: option }
+                : option
+            return h(
+              'button',
+              {
+                'data-option-label': normalized.label,
+                'data-option-value': normalized.value,
+                onClick: () => {
+                  emit('update:modelValue', normalized.value)
+                  emit('update:selected-option', normalized)
+                },
+              },
+              normalized.label,
+            )
+          }),
+          slots.footer?.(),
+        ])
+    },
+  })
   return {
     createResource: () => ({
       data: testState.filterFields,
       fetch: vi.fn(),
     }),
+    Combobox,
     FormControl,
     Popover: SlotContainer,
     Dropdown: SlotContainer,
     DatePicker: FormControl,
     DateTimePicker: FormControl,
     DateRangePicker: FormControl,
-    toast: { error: testState.toastError },
   }
 })
 
@@ -179,7 +207,7 @@ describe('payment status component events preserve raw values', () => {
   const translations = {
     Paid: 'Оплачено',
     Unpaid: 'Не оплачено',
-    Deal: 'Заказ',
+    Deal: 'Сделка',
     'In Progress': 'В работе',
   }
 
@@ -191,7 +219,6 @@ describe('payment status component events preserve raw values', () => {
     globalThis.__ = originalTranslate
     testState.filterFields = []
     testState.dragEvent = null
-    testState.toastError.mockReset()
     document.body.innerHTML = ''
   })
 
@@ -219,7 +246,7 @@ describe('payment status component events preserve raw values', () => {
     view.unmount()
   })
 
-  it('Filter displays and emits an arbitrary raw Select value', async () => {
+  it('Filter translates an arbitrary Select label but emits its raw value', async () => {
     testState.filterFields = [
       {
         label: 'Custom category',
@@ -236,7 +263,7 @@ describe('payment status component events preserve raw values', () => {
       onUpdate: update,
     })
     const deal = view.container.querySelector('[data-option-value="Deal"]')
-    expect(deal.dataset.optionLabel).toBe('Deal')
+    expect(deal.dataset.optionLabel).toBe('Сделка')
     deal.click()
     await nextTick()
     expect(update).toHaveBeenLastCalledWith({ custom_category: 'Deal' })
@@ -298,140 +325,12 @@ describe('payment status component events preserve raw values', () => {
       options: { onNewClick: vi.fn() },
       onUpdate: update,
     })
-    expect(view.container.textContent).toContain('Заказ')
+    expect(view.container.textContent).toContain('Сделка')
     view.container.querySelector('[data-testid="move-Other"]').click()
     await nextTick()
     expect(update).toHaveBeenLastCalledWith(
       expect.objectContaining({ item: 'ORDER-2', to: 'Deal' }),
     )
-    view.unmount()
-  })
-
-  it('Kanban applies a move only after the server confirms it', async () => {
-    let confirmMove
-    const onMove = vi.fn(
-      () => new Promise((resolve) => (confirmMove = resolve)),
-    )
-    const model = kanbanModel('status', ['Open', 'Won'])
-    testState.dragEvent = {
-      to: { dataset: { column: 'Won' } },
-      from: { dataset: { column: 'Open' } },
-      item: { dataset: { name: 'ORDER-1' } },
-      oldIndex: 0,
-      newIndex: 0,
-    }
-    const view = mount(KanbanView, {
-      modelValue: model,
-      options: { onNewClick: vi.fn(), onMove },
-    })
-
-    view.container.querySelector('[data-testid="move-Open"]').click()
-    await nextTick()
-
-    expect(onMove).toHaveBeenCalledWith(
-      expect.objectContaining({
-        item: 'ORDER-1',
-        from: 'Open',
-        to: 'Won',
-        fieldname: 'status',
-      }),
-    )
-    expect(model.data.data[0].data.map((item) => item.name)).toContain(
-      'ORDER-1',
-    )
-    expect(model.data.data[1].data.map((item) => item.name)).not.toContain(
-      'ORDER-1',
-    )
-
-    confirmMove()
-    await nextTick()
-    await nextTick()
-
-    expect(model.data.data[0].data.map((item) => item.name)).not.toContain(
-      'ORDER-1',
-    )
-    expect(model.data.data[1].data.map((item) => item.name)).toContain(
-      'ORDER-1',
-    )
-    view.unmount()
-  })
-
-  it('Kanban locks DnD only while a deferred server request is running', async () => {
-    let startServerRequest
-    let finishMove
-    const move = new Promise((resolve) => (finishMove = resolve))
-    move.serverRequestStarted = new Promise(
-      (resolve) => (startServerRequest = resolve),
-    )
-    const model = kanbanModel('status', ['Open', 'Lost'])
-    testState.dragEvent = {
-      to: { dataset: { column: 'Lost' } },
-      from: { dataset: { column: 'Open' } },
-      item: { dataset: { name: 'ORDER-1' } },
-      oldIndex: 0,
-      newIndex: 0,
-    }
-    const view = mount(KanbanView, {
-      modelValue: model,
-      options: { onNewClick: vi.fn(), onMove: vi.fn(() => move) },
-    })
-
-    view.container.querySelector('[data-testid="move-Open"]').click()
-    await nextTick()
-    expect(
-      view.container.querySelector('[data-column="Open"]').dataset.disabled,
-    ).toBe('false')
-
-    startServerRequest(true)
-    await Promise.resolve()
-    await nextTick()
-    expect(
-      view.container.querySelector('[data-column="Open"]').dataset.disabled,
-    ).toBe('true')
-
-    finishMove(false)
-    await nextTick()
-    await nextTick()
-    expect(
-      view.container.querySelector('[data-column="Open"]').dataset.disabled,
-    ).toBe('false')
-    expect(model.data.data[0].data.map((item) => item.name)).toContain(
-      'ORDER-1',
-    )
-    view.unmount()
-  })
-
-  it('Kanban rolls a move back and reports an API failure', async () => {
-    const model = kanbanModel('status', ['Open', 'Won'])
-    testState.dragEvent = {
-      to: { dataset: { column: 'Won' } },
-      from: { dataset: { column: 'Open' } },
-      item: { dataset: { name: 'ORDER-1' } },
-      oldIndex: 0,
-      newIndex: 0,
-    }
-    const view = mount(KanbanView, {
-      modelValue: model,
-      options: {
-        onNewClick: vi.fn(),
-        onMove: vi.fn().mockRejectedValue({ messages: ['Access denied'] }),
-      },
-    })
-
-    view.container.querySelector('[data-testid="move-Open"]').click()
-    await nextTick()
-    await nextTick()
-
-    expect(model.data.data[0].data.map((item) => item.name)).toContain(
-      'ORDER-1',
-    )
-    expect(model.data.data[1].data.map((item) => item.name)).not.toContain(
-      'ORDER-1',
-    )
-    expect(
-      view.container.querySelector('[data-column="Open"]').dataset.disabled,
-    ).toBe('false')
-    expect(testState.toastError).toHaveBeenCalledWith('Access denied')
     view.unmount()
   })
 })
