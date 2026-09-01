@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
   <section
-    class="mb-6 rounded-lg border border-outline-gray-2 bg-surface-white px-4 py-3"
+    class="mb-6 rounded-lg border border-outline-gray-2 bg-surface-base px-4 py-3"
   >
     <Section
       :label="__('Order composition')"

@@ -15,7 +15,7 @@
 }
 
 .order-grid td {
-  @apply border-r border-t border-outline-elevation-2 bg-surface-white p-1 align-top text-ink-gray-8 last:border-r-0;
+  @apply border-r border-t border-outline-elevation-2 bg-surface-base p-1 align-top text-ink-gray-8 last:border-r-0;
 }
 
 .order-grid tbody tr:last-child td:first-child {
@@ -27,5 +27,5 @@
 }
 
 .order-grid-empty {
-  @apply border-t border-outline-elevation-2 bg-surface-white px-4 py-6 text-center text-sm text-ink-gray-5;
+  @apply border-t border-outline-elevation-2 bg-surface-base px-4 py-6 text-center text-sm text-ink-gray-5;
 }

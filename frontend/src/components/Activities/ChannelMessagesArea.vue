@@ -66,7 +66,7 @@
     </div>
     <div
       v-if="activeConversation"
-      class="sticky bottom-0 mt-2 rounded-lg border border-outline-gray-2 bg-surface-cards p-3 shadow-sm"
+      class="sticky bottom-0 mt-2 rounded-lg border border-outline-gray-2 bg-surface-elevation-1 p-3 shadow-sm"
     >
       <div class="mb-2 text-sm text-ink-gray-5">
         {{ __('Reply via {0}', [activeChannel]) }}
@@ -75,7 +75,7 @@
         v-model="reply"
         rows="3"
         :placeholder="__('Write a message')"
-        class="w-full resize-none rounded-md border border-outline-gray-2 bg-surface-white px-3 py-2 text-base text-ink-gray-8 outline-none focus:border-outline-blue-2"
+        class="w-full resize-none rounded-md border border-outline-gray-2 bg-surface-base px-3 py-2 text-base text-ink-gray-8 outline-none focus:border-outline-blue-2"
         @keydown.ctrl.enter.prevent="sendReply"
         @keydown.meta.enter.prevent="sendReply"
       />

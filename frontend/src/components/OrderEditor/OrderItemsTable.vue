@@ -25,7 +25,7 @@
         :key="row.name || row.item_key || index"
         data-testid="order-item-group"
         :data-item-key="row.item_key"
-        class="order-item-card overflow-hidden rounded-xl border border-outline-gray-2 bg-surface-cards"
+        class="order-item-card overflow-hidden rounded-xl border border-outline-gray-2 bg-surface-elevation-1"
       >
         <div class="border-b border-outline-gray-2 px-5 py-5">
           <div class="flex flex-wrap items-start justify-between gap-4">
@@ -127,7 +127,7 @@
                 {{ __('Rate') }}
               </div>
               <div
-                class="flex h-8 items-center rounded border border-outline-gray-2 bg-surface-cards px-2 text-sm text-ink-gray-5"
+                class="flex h-8 items-center rounded border border-outline-gray-2 bg-surface-elevation-1 px-2 text-sm text-ink-gray-5"
               >
                 {{ __('Not charged') }}
               </div>

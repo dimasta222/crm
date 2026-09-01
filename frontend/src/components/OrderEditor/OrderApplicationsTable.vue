@@ -8,7 +8,7 @@
         data-testid="order-service-card"
         :data-service-tone="serviceTone(row)"
         :style="serviceCardStyle(row)"
-        class="order-service-card overflow-hidden rounded-xl border border-outline-gray-2 border-l-[6px] bg-surface-cards"
+        class="order-service-card overflow-hidden rounded-xl border border-outline-gray-2 border-l-[6px] bg-surface-elevation-1"
       >
         <div
           class="order-service-header flex flex-wrap items-center justify-between gap-4 border-b border-outline-gray-2 px-4 py-4"
@@ -133,7 +133,7 @@
     </div>
     <div
       v-else
-      class="rounded-xl border border-dashed border-outline-gray-2 bg-surface-cards px-4 py-7 text-center text-sm text-ink-gray-5"
+      class="rounded-xl border border-dashed border-outline-gray-2 bg-surface-elevation-1 px-4 py-7 text-center text-sm text-ink-gray-5"
     >
       {{ __('No applications added') }}
     </div>
@@ -296,7 +296,7 @@ watch(rows, clearLegacyZeroDimensions, { immediate: true })
 .order-service-card {
   background:
     linear-gradient(135deg, var(--service-glow), transparent 34%),
-    rgb(var(--surface-cards));
+    rgb(var(--surface-elevation-1));
   box-shadow: 0 10px 28px rgb(0 0 0 / 0.07);
 }
 

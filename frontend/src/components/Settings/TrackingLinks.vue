@@ -38,7 +38,7 @@
         <div
           v-for="link in links.data"
           :key="link.name"
-          class="grid grid-cols-[2fr_1fr_1.4fr_0.7fr_0.7fr_5rem] items-center gap-3 rounded px-3 py-3 hover:bg-surface-menu-bar"
+          class="grid grid-cols-[2fr_1fr_1.4fr_0.7fr_0.7fr_5rem] items-center gap-3 rounded px-3 py-3 hover:bg-surface-sidebar"
         >
           <button class="min-w-0 text-left" @click="openForm(link)">
             <div class="truncate font-medium text-ink-gray-8">

@@ -2,7 +2,7 @@
 <template>
   <section
     data-testid="order-totals-card"
-    class="order-totals-card overflow-hidden rounded-xl border border-outline-gray-2 bg-surface-cards text-sm"
+    class="order-totals-card overflow-hidden rounded-xl border border-outline-gray-2 bg-surface-elevation-1 text-sm"
   >
     <div
       class="order-totals-header border-b border-outline-gray-2 px-5 py-4 text-base font-semibold text-ink-gray-9"
@@ -142,7 +142,7 @@ function format(value) {
   background: linear-gradient(
     90deg,
     rgb(var(--surface-violet-1) / 0.58),
-    rgb(var(--surface-cards)) 72%
+    rgb(var(--surface-elevation-1)) 72%
   );
 }
 
