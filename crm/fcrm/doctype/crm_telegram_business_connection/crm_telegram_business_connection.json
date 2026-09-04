@@ -1,0 +1,170 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "hash",
+ "creation": "2026-09-03 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "business_username",
+  "is_enabled",
+  "sync_status",
+  "last_synced_at",
+  "connection_section",
+  "connection_id",
+  "business_user_id",
+  "user_chat_id",
+  "business_first_name",
+  "business_last_name",
+  "connected_at",
+  "last_event_at",
+  "disabled_at",
+  "rights_section",
+  "can_read_messages",
+  "can_reply",
+  "rights_json",
+  "last_sync_error_type"
+ ],
+ "fields": [
+  {
+   "fieldname": "business_username",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Business Username",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Enabled",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sync_status",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Sync Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_synced_at",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Last Synced At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "connection_section",
+   "fieldtype": "Section Break",
+   "label": "Connection"
+  },
+  {
+   "fieldname": "connection_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Connection ID",
+   "read_only": 1,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "business_user_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Business User ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "user_chat_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "User Chat ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "business_first_name",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Business First Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "business_last_name",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Business Last Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "connected_at",
+   "fieldtype": "Datetime",
+   "label": "Connected At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_event_at",
+   "fieldtype": "Datetime",
+   "label": "Last Event At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "disabled_at",
+   "fieldtype": "Datetime",
+   "label": "Disabled At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rights_section",
+   "fieldtype": "Section Break",
+   "label": "Rights"
+  },
+  {
+   "default": "0",
+   "fieldname": "can_read_messages",
+   "fieldtype": "Check",
+   "label": "Can Read Messages",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "can_reply",
+   "fieldtype": "Check",
+   "label": "Can Reply",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rights_json",
+   "fieldtype": "Code",
+   "hidden": 1,
+   "label": "Business Bot Rights",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_sync_error_type",
+   "fieldtype": "Data",
+   "label": "Last Sync Error Type",
+   "read_only": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-09-03 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "FCRM",
+ "name": "CRM Telegram Business Connection",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager"
+  }
+ ],
+ "search_fields": "business_username,sync_status",
+ "sort_field": "last_synced_at",
+ "sort_order": "DESC",
+ "states": []
+}
